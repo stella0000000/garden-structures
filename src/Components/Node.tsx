@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 const Node = ({ value }: { value: number }) => {
   return (
     <div>
