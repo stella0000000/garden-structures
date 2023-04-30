@@ -1,7 +1,7 @@
 ## 𝓈ℴ𝒻𝓉𝓌𝒶𝓇ℯ ℊ𝒶𝓇𝒹ℯ𝓃𝒾𝓃ℊ
 
 ### `Motivation`<br>
-Ben, Stella, and Zack met during Daily Leetcode at the Recurse Center. Ben was a cool and generous algorithm sensei. Stella and Zack were largely project-based, with backgrounds in atmospheric dynamics/teaching and art/writing, respectively.<br><br>
+Ben, Stella, and Zack met at the Recurse Center. Ben was a cool and generous algorithm sensei. Stella and Zack were largely project-based, with backgrounds in atmospheric dynamics/teaching and art/writing, respectively.<br><br>
 
 After her first algorithm interview, Stella reflected on the experience, and was curious to ascertain a framework to acquire a deeper understanding of data structures and algorithms. She noticed the paper flowers she made behind her desk resembled doubly linked lists. Were the flower petals nodes of a circularly linked list?<br><br>
 
