@@ -1,4 +1,4 @@
-## Software gardening
+## 𝓈ℴ𝒻𝓉𝓌𝒶𝓇ℯ ℊ𝒶𝓇𝒹ℯ𝓃𝒾𝓃ℊ
 
 ### `Motivation`<br>
 Ben, Stella, and Zack met during Daily Leetcode at the Recurse Center. Ben was a cool and generous algorithm sensei. Stella and Zack were largely project-based, with backgrounds in atmospheric dynamics and art/writing, respectively.<br><br>
