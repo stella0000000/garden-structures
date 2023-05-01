@@ -156,21 +156,22 @@ export class BinarySearchTreeNode {
         return root.left
       } else {
         // find min from right subtree, ie. successor
-        let minNode = this.minValueNode(root.right)
-        root.val = minNode.val
-        root.right = this.deleteNode(root.right, minNode.val)
+        let successor = this.findSuccessor(root.right)
+        // update the subtree where successor is now at currRoot
+        // get deleted branch FIRST, before you add
+        // subtree without successor
+        successor.right = this.deleteNode(root.right, successor.val) // subtree sans successor
+        successor.left = root.left
+        return successor
       }
     }
 
     return root
   }
 
-  minValueNode(root: BinarySearchTreeNode): BinarySearchTreeNode {
+  findSuccessor(root: BinarySearchTreeNode): BinarySearchTreeNode {
     let curr = root
-    while (curr && curr.left) {
-      curr = curr.left
-    }
-
+    while (curr && curr.left) curr = curr.left
     return curr
   }
 }
