@@ -1,4 +1,5 @@
 ## 𝓈ℴ𝒻𝓉𝓌𝒶𝓇ℯ ℊ𝒶𝓇𝒹ℯ𝓃𝒾𝓃ℊ
+<i>Though data structures & algorithms are constrained by definition, can we consider them through our own lenses, and converge on the same equation / solution?</i>
 
 ### `Motivation`<br>
 Ben, Stella, and Zack met at the Recurse Center. Ben was a cool and generous algorithm sensei. Stella and Zack were largely project-based, with backgrounds in atmospheric dynamics/teaching and art/writing, respectively.<br><br>
