@@ -1,15 +1,14 @@
-export class LinkedListNode {
-  value: number;
-  next: LinkedListNode | null;
+export class LinkedList {
+  dummyHead: LinkedListNode;
 
-  constructor(value: number) {
-    this.value = value;
-    this.next = null;
+  constructor() {
+    this.dummyHead = new LinkedListNode(-1);
   }
 
   append(value: number) {
     const newNode = new LinkedListNode(value);
-    let current = this as LinkedListNode;
+    let current = this.dummyHead;
+
     while (current.next) {
       current = current.next;
     }
@@ -18,8 +17,9 @@ export class LinkedListNode {
 
   // get the node at index
   get(index: number) {
-    let currentIndex = 0;
-    let currentNode = this as LinkedListNode | null;
+    let currentIndex = -1;
+    let currentNode: LinkedListNode | null = this.dummyHead;
+
     while (currentIndex != index && currentNode) {
       currentNode = currentNode.next;
       currentIndex += 1;
@@ -36,8 +36,8 @@ export class LinkedListNode {
 
   // non-spliced delete, everything after the node falls off
   delete(index: number) {
-    let current = this as LinkedListNode;
-    let currentIndex = 0;
+    let current = this.dummyHead;
+    let currentIndex = -1;
     while (currentIndex != index && current.next) {
       current = current.next;
       currentIndex += 1;
@@ -45,14 +45,33 @@ export class LinkedListNode {
   }
 
   // update node at index
-
   intoArray(): number[] {
     const out = [];
-    let current = this as LinkedListNode | null;
+    let current = this.dummyHead.next;
     while (current) {
       out.push(current.value);
       current = current.next;
     }
     return out;
+  }
+}
+
+export const LinkedListFromArray = (inputArray: number[]): LinkedList => {
+  const list = new LinkedList();
+
+  for (let value of inputArray) {
+    list.append(value);
+  }
+
+  return list;
+};
+
+class LinkedListNode {
+  value: number;
+  next: LinkedListNode | null;
+
+  constructor(value: number) {
+    this.value = value;
+    this.next = null;
   }
 }

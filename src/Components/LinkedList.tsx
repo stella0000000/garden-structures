@@ -1,21 +1,41 @@
-import { LinkedListNode } from "../DataStructures/LinkedList";
+import { LinkedList, LinkedListFromArray } from "../DataStructures/LinkedList";
+import { useState } from "react";
 import Node from "./Node";
 
-const LinkedList = () => {
-  const root = new LinkedListNode(1);
-  root.append(2);
-  root.append(3);
-  root.append(4);
-  console.log(root);
+const LinkedListDemo = () => {
+  const root = new LinkedList();
+  root.append(10);
+  root.append(15);
+  root.append(9);
 
-  const values = root.intoArray();
-  console.log({ values });
+  const [values, setValues] = useState(root.intoArray());
 
   const children = values.map((nodeValue, index) => (
     <Node value={nodeValue} key={index} />
   ));
 
-  return <div>{children}</div>;
+  const handleAppend = () => {
+    let newLinkedList = LinkedListFromArray(values);
+    newLinkedList.append(10);
+    setValues(newLinkedList.intoArray());
+  };
+
+  return (
+    <>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column-reverse",
+          flexWrap: "wrap",
+        }}
+      >
+        {children}
+      </div>
+      <div style={{ position: "absolute", top: 0, right: 0 }}>
+        <button onClick={handleAppend}>append</button>
+      </div>
+    </>
+  );
 };
 
-export default LinkedList;
+export default LinkedListDemo;

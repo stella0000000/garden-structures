@@ -1,11 +1,11 @@
 import "./App.css";
-import LinkedList from "./Components/LinkedList";
+import LinkedListDemo from "./Components/LinkedList";
 
 function App() {
   return (
     <>
       <div className="card">
-        <LinkedList />
+        <LinkedListDemo />
       </div>
     </>
   );
