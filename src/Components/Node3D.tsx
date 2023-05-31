@@ -1,4 +1,3 @@
-import { ThreeElements, useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 
 type Node3DProps = {
@@ -7,7 +6,7 @@ type Node3DProps = {
 };
 
 const Node3D = (props: Node3DProps) => {
-  const { value, position } = props;
+  const { position } = props;
   const meshRef = useRef<THREE.Mesh>(null!);
   // useFrame((state, delta) => (meshRef.current.rotation.x += delta));
 

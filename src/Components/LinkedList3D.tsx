@@ -1,8 +1,8 @@
-import { useRef, useState } from "react";
-import { Canvas, useFrame, ThreeElements } from "@react-three/fiber";
+import { useState } from "react";
+import { Canvas } from "@react-three/fiber";
 import { LinkedList, LinkedListFromArray } from "../DataStructures/LinkedList";
 import Node3D from "./Node3D";
-import { Stats, OrbitControls } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 
 const LinkedList3D = () => {
   const root = new LinkedList();
