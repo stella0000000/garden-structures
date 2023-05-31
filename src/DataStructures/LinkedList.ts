@@ -38,10 +38,11 @@ export class LinkedList {
   delete(index: number) {
     let current = this.dummyHead;
     let currentIndex = -1;
-    while (currentIndex != index && current.next) {
+    while (currentIndex != index - 1 && current.next) {
       current = current.next;
       currentIndex += 1;
     }
+    current.next = null;
   }
 
   // update node at index

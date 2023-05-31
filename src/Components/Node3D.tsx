@@ -14,7 +14,7 @@ const Node3D = (props: Node3DProps) => {
   return (
     <mesh ref={meshRef} scale={1} position={position}>
       {/* args are radiusTop, radiusBottom, height */}
-      <cylinderGeometry args={[1, 1, 3]} />
+      <cylinderGeometry args={[1, 1, value]} />
       <meshStandardMaterial wireframe={true} color={"green"} />
     </mesh>
   );

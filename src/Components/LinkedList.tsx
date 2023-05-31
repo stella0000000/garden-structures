@@ -5,8 +5,8 @@ import Node from "./Node";
 const LinkedListDemo = () => {
   const root = new LinkedList();
   root.append(10);
-  root.append(15);
-  root.append(9);
+  root.append(16);
+  root.append(8);
 
   const [values, setValues] = useState(root.intoArray());
 
