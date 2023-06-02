@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { createPortal } from "react-dom";
 import { LinkedList, LinkedListFromArray } from "../DataStructures/LinkedList";
 import Node3D from "./Node3D";
 
-const BambooStalk = () => {
-  const root = new LinkedList();
-  root.append(10);
-  root.append(15);
-  root.append(9);
+type BambooStalkProps = {
+  root: LinkedList;
+  positionOffsets: [number, number, number];
+};
+
+const BambooStalk = (props: BambooStalkProps) => {
+  const { root, positionOffsets } = props;
 
   let cumulativeHeight = 0;
 
@@ -19,7 +20,11 @@ const BambooStalk = () => {
       <Node3D
         value={nodeValue}
         key={index}
-        position={[0, cumulativeHeight + 0.5 * nodeValue, 0]}
+        position={[
+          positionOffsets[0],
+          positionOffsets[1] + cumulativeHeight + 0.5 * nodeValue,
+          positionOffsets[2],
+        ]}
       />
     );
     cumulativeHeight += nodeValue;
