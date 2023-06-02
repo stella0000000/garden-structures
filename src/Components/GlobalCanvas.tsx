@@ -52,7 +52,7 @@ const GlobalCanvas: React.FC = () => {
 
   // renders the appropriate JSX for each plant in the PlantData based on type
   const children = () => {
-    return plantData?.map((plant, index) => {
+    return plantData?.map((plant) => {
       switch (plant.kind) {
         case "BambooStalkData": {
           // sets x offset for this BambooStalk based on its index in the plantData array
