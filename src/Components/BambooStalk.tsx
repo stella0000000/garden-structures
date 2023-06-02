@@ -13,6 +13,15 @@ const BambooStalk = (props: BambooStalkProps) => {
   let cumulativeHeight = 0;
 
   const [values, setValues] = useState(root.intoArray());
+  const [activeNode, setActiveNode] = useState(-1);
+
+  const deselectAllNodes = () => {
+    setActiveNode(-1);
+  };
+
+  const selectNode = (key: number) => {
+    setActiveNode(key);
+  };
 
   const children: React.ReactNode[] = [];
   values.forEach((nodeValue, index) => {
@@ -25,6 +34,13 @@ const BambooStalk = (props: BambooStalkProps) => {
           positionOffsets[1] + cumulativeHeight + 0.5 * nodeValue,
           positionOffsets[2],
         ]}
+        rotation={[0, 0, 0]}
+        cylinderArgs={[1, 1, nodeValue]}
+        isSelected={activeNode === index}
+        deselectAllNodes={deselectAllNodes}
+        selectNode={() => selectNode(index)}
+        selectedColor={"rgb(173, 140, 57)"}
+        defaultColor={"green"}
       />
     );
     cumulativeHeight += nodeValue;
