@@ -1,18 +1,26 @@
-import { useState } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useState, useRef } from "react";
 import { LinkedList, LinkedListFromArray } from "../DataStructures/LinkedList";
 import Node3D from "./Node3D";
+import { useControl } from "react-three-gui";
+import { BambooControl } from "./BambooControl";
 
 const BambooStalk = () => {
-  const root = new LinkedList();
-  root.append(10);
-  root.append(15);
-  root.append(9);
+  const [values, setValues] = useState([10, 15, 9]);
+  const rootRef = useRef<LinkedList>();
 
+  useControl("Test", {
+    type: "custom",
+    value: values,
+    component: BambooControl,
+    onChange: (value: number[]) => setValues(value),
+  });
+
+  useEffect(() => {
+    rootRef.current = LinkedListFromArray(values);
+  }, [values]);
+
+  // loop through values, accumulating height and pushing children for rendering
   let cumulativeHeight = 0;
-
-  const [values, setValues] = useState(root.intoArray());
-
   const children: React.ReactNode[] = [];
   values.forEach((nodeValue, index) => {
     children.push(
@@ -25,36 +33,7 @@ const BambooStalk = () => {
     cumulativeHeight += nodeValue;
   });
 
-  const handleAppend = () => {
-    let newLinkedList = LinkedListFromArray(values);
-    newLinkedList.append(Math.random() * 10);
-    setValues(newLinkedList.intoArray());
-  };
-
-  const handlePop = () => {
-    console.log({ values });
-    const len = values.length;
-    let newLinkedList = LinkedListFromArray(values);
-    console.log({ newLinkedList });
-    newLinkedList.delete(len - 1);
-    console.log({ newLinkedList });
-    setValues(newLinkedList.intoArray());
-  };
-
-  return (
-    <>
-      {/* {createPortal(
-        <div style={{ position: "fixed", top: 0, left: 0 }}>
-          bamboocontrols
-          <button onClick={() => handleAppend()}>Add a bamboo section</button>
-          <button onClick={() => handlePop()}>Remove a bamboo section</button>
-        </div>,
-        document.body
-      )} */}
-
-      {children}
-    </>
-  );
+  return <>{children}</>;
 };
 
 export default BambooStalk;
