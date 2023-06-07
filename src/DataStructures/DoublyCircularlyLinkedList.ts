@@ -1,152 +1,158 @@
 export class DoublyCircularlyLinkedList {
-  dummyHead: LinkedListNode
-  length: number
+  dummyHead: LinkedListNode;
+  length: number;
 
   constructor() {
-    this.dummyHead = new LinkedListNode(-1)
-    this.length = 0
+    this.dummyHead = new LinkedListNode(-1);
+    this.length = 0;
   }
 
   // print the contents of circularly linked list
   toString(): string {
-    let curr = this.dummyHead.next
-    let head = curr
+    let curr = this.dummyHead.next;
+    let head = curr;
 
-    const out: number[] = []
+    const out: number[] = [];
     if (curr) {
-      out.push(curr.value)
-      curr = curr.next
+      out.push(curr.value);
+      curr = curr.next;
     } else {
-      return "This circularly linked list is empty."
+      return "This circularly linked list is empty.";
     }
 
     while (curr !== head && curr) {
-      out.push(curr.value)
-      curr = curr.next
+      out.push(curr.value);
+      curr = curr.next;
     }
-    return out.toString()
+    return out.toString();
   }
 
   append(value: number) {
-    const newNode = new LinkedListNode(value)
-    let current = this.dummyHead.next
+    const newNode = new LinkedListNode(value);
+    let current = this.dummyHead.next;
 
     if (!current) {
-      this.dummyHead.next = newNode
-      newNode.prev = newNode
-      newNode.next = newNode
+      this.dummyHead.next = newNode;
+      newNode.prev = newNode;
+      newNode.next = newNode;
     } else {
-      let prev = current.prev as LinkedListNode
-      prev.next = newNode
-      newNode.prev = prev
-      current.prev = newNode
-      newNode.next = current
+      let prev = current.prev as LinkedListNode;
+      prev.next = newNode;
+      newNode.prev = prev;
+      current.prev = newNode;
+      newNode.next = current;
     }
 
-    this.length++
+    this.length++;
     // keep dummyNode outside the cycle
     // append to "end" => node before entry
   }
 
   // get value of node at index
   getValue(index: number) {
-    if (this.length === 0) return null
+    if (this.length === 0) return null;
 
-    let idx = index % this.length
-    let curr = this.dummyHead.next // idx 0
-    
+    let idx = index % this.length;
+    let curr = this.dummyHead.next; // idx 0
+
     while (idx > 0 && curr) {
-      curr = curr.next
-      idx--
+      curr = curr.next;
+      idx--;
     }
 
-    return curr ? curr.value : null
+    return curr ? curr.value : null;
   }
 
   getNode(index: number) {
-    if (this.length === 0) return null
+    if (this.length === 0) return null;
 
-    let idx = index % this.length
-    let curr = this.dummyHead.next // idx 0
-    
+    let idx = index % this.length;
+    let curr = this.dummyHead.next; // idx 0
+
     while (idx > 0 && curr) {
-      curr = curr.next
-      idx--
+      curr = curr.next;
+      idx--;
     }
 
-    return curr ? curr : null
+    return curr ? curr : null;
   }
 
   // non-spliced delete, everything after the node falls off
   delete(index: number) {
-    let nodeToDelete = this.getNode(index)
-    if (!nodeToDelete) return null
+    let nodeToDelete = this.getNode(index);
+    if (!nodeToDelete) return null;
 
     // if we're deleting the head, we need to reassign head
     if (nodeToDelete === this.dummyHead.next) {
-      this.dummyHead.next = this.dummyHead.next.next
+      this.dummyHead.next = this.dummyHead.next.next;
     }
 
     // check if length of list === 1
     if (this.length === 1) {
-      this.dummyHead.next = null
+      this.dummyHead.next = null;
     } else {
       // nodeToDelete.prev's next = nodeToDelete.next
       // nodeToDelete.next's prev = nodeToDelete.prev
-      let prev = nodeToDelete.prev as LinkedListNode
-      prev.next = nodeToDelete.next
-      let next = nodeToDelete.next as LinkedListNode
-      next.prev = prev
+      let prev = nodeToDelete.prev as LinkedListNode;
+      prev.next = nodeToDelete.next;
+      let next = nodeToDelete.next as LinkedListNode;
+      next.prev = prev;
     }
 
-    this.length--
+    this.length--;
 
-    return this.dummyHead.next
+    return this.dummyHead.next;
   }
 
   // update node at index
   intoArray(): number[] {
-    let curr = this.dummyHead.next
-    let head = curr
+    let curr = this.dummyHead.next;
+    let head = curr;
 
-    const out: number[] = []
-    
+    const out: number[] = [];
+
     if (curr) {
-      out.push(curr.value)
-      curr = curr.next
+      out.push(curr.value);
+      curr = curr.next;
     } else {
-      return []
+      return [];
     }
 
     while (curr !== head && curr) {
-      out.push(curr.value)
-      curr = curr.next
+      out.push(curr.value);
+      curr = curr.next;
     }
-    return out
+    return out;
   }
 }
 
-export const LinkedListFromArray = (inputArray: number[]): DoublyCircularlyLinkedList => {
-  const list = new DoublyCircularlyLinkedList()
+export const CircularlyLinkedListFromArray = (
+  inputArray: number[]
+): DoublyCircularlyLinkedList => {
+  const list = new DoublyCircularlyLinkedList();
 
-  for (let i=0; i<inputArray.length; i++) {
-    if (i === 0) {
-      list.append(inputArray[i])
-    }
-  }
+  // for (let i = 0; i < inputArray.length; i++) {
+  //   if (i === 0) {
+  //     list.append(inputArray[i]);
+  //   }
+  // }
 
-  return list
+  inputArray.forEach((element) => {
+    list.append(element);
+  });
+
+  return list;
 };
 
 class LinkedListNode {
-  value: number
-  prev: LinkedListNode | null
-  next: LinkedListNode | null
+  value: number;
+  prev: LinkedListNode | null;
+  next: LinkedListNode | null;
 
   constructor(value: number) {
-    this.value = value
-    this.prev = null
-    this.next = null
+    this.value = value;
+    this.prev = null;
+    this.next = null;
   }
 }
 
