@@ -1,5 +1,6 @@
 import { ThreeEvent } from "@react-three/fiber";
 import { useRef, useState } from "react";
+import * as THREE from "three";
 
 type Node3DProps = {
   value: number;
@@ -12,6 +13,7 @@ type Node3DProps = {
   selectNode: () => void;
   deselectAllPlants: () => void;
   selectPlant: () => void;
+  materialOverride: THREE.Material | null;
 };
 
 const Node3D = (props: Node3DProps) => {
@@ -25,6 +27,7 @@ const Node3D = (props: Node3DProps) => {
     isSelected,
     cylinderArgs,
     defaultColor,
+    materialOverride,
   } = props;
   const meshRef = useRef<THREE.Mesh>(null!);
   const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
@@ -35,6 +38,13 @@ const Node3D = (props: Node3DProps) => {
       scale={1}
       position={position}
       rotation={rotation}
+      material={
+        materialOverride ||
+        new THREE.MeshBasicMaterial({
+          wireframe: true,
+          color: isSelected ? "white" : isHighlighted ? "grey" : defaultColor,
+        })
+      }
       onPointerEnter={(e: ThreeEvent<PointerEvent>) => {
         e.stopPropagation();
         setIsHighlighted(true);
@@ -55,11 +65,17 @@ const Node3D = (props: Node3DProps) => {
       }}
     >
       {/* args are radiusTop, radiusBottom, height */}
-      <cylinderGeometry args={cylinderArgs} />
-      <meshStandardMaterial
-        wireframe={true}
-        color={isSelected ? "white" : isHighlighted ? "grey" : defaultColor}
-      />
+      {materialOverride ? (
+        <cylinderGeometry args={cylinderArgs} />
+      ) : (
+        <>
+          <cylinderGeometry args={cylinderArgs} />
+          <meshStandardMaterial
+            wireframe={true}
+            color={isSelected ? "white" : isHighlighted ? "grey" : defaultColor}
+          />
+        </>
+      )}
     </mesh>
   );
 };

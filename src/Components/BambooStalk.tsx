@@ -26,6 +26,29 @@ const BambooStalk = (props: BambooStalkProps) => {
   }, [activeItem]);
 
   const children: React.ReactNode[] = [];
+  children.push(
+    <Node3D
+      value={2}
+      key={-1}
+      position={[
+        positionOffsets[0],
+        positionOffsets[1],
+        positionOffsets[2] + 0.3,
+      ]}
+      rotation={[0, 0, 0]}
+      cylinderArgs={[1, 2, 1]}
+      isSelected={false}
+      defaultColor={"brown"}
+      deselectAllPlants={deselectAllPlants}
+      deselectAllNodes={() => {
+        deselectAllItems();
+        deselectAllPlants();
+      }}
+      selectPlant={selectPlant}
+      selectNode={deselectAllItems}
+      materialOverride={null}
+    />
+  );
   values.forEach((nodeValue, index) => {
     children.push(
       <Node3D
@@ -44,6 +67,7 @@ const BambooStalk = (props: BambooStalkProps) => {
         defaultColor={"green"}
         deselectAllNodes={deselectAllItems}
         selectNode={() => selectItem(index)}
+        materialOverride={null}
       />
     );
     cumulativeHeight += nodeValue;

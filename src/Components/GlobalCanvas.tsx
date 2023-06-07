@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { LinkedList, LinkedListFromArray } from "../DataStructures/LinkedList";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, Plane } from "@react-three/drei";
 import BambooStalk from "./BambooStalk";
 import {
   CircularlyLinkedListFromArray,
@@ -9,6 +9,7 @@ import {
 } from "../DataStructures/DoublyCircularlyLinkedList";
 import Flower from "./Flower";
 import useActiveItem from "../Hooks/useActiveItem";
+import * as THREE from "three";
 
 /* plant data is stored at the topmost level as a React antipattern,
  * until we figure out a better way to integrate ui controls inside the canvas
@@ -68,10 +69,20 @@ const initialTestingState: PlantCollection = [
   testingFlower1,
 ];
 
+const texture = new THREE.TextureLoader().load("dirt.jpeg");
+texture.wrapS = THREE.RepeatWrapping;
+texture.wrapT = THREE.RepeatWrapping;
+texture.repeat.set(4, 4);
+
+const dirtMaterial = new THREE.MeshBasicMaterial({
+  map: texture,
+  color: "rgb(135, 111, 89)",
+});
+
 const GlobalCanvas: React.FC = () => {
   const [plantData, setPlantData] =
     useState<PlantCollection>(initialTestingState);
-  const { activeItem, selectItem, deselectAllItems } = useActiveItem()
+  const { activeItem, selectItem, deselectAllItems } = useActiveItem();
 
   // renders the appropriate JSX for each plant in the PlantData based on type
   const children = () => {
@@ -114,10 +125,15 @@ const GlobalCanvas: React.FC = () => {
     <>
       <Canvas>
         <OrbitControls />
-        <ambientLight />
-        <pointLight />
+        <ambientLight intensity={1} />
+        <directionalLight intensity={1}></directionalLight>
         <camera position={[0, 5, -5]} />
         {children()}
+        <Plane
+          args={[20, 20]}
+          rotation={[-1.57, 0, 0]}
+          material={dirtMaterial}
+        ></Plane>
       </Canvas>
     </>
   );

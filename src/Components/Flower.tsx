@@ -32,10 +32,30 @@ const Flower = (props: FlowerProps) => {
     console.log("activeNodeIndex" + activeItem);
   }, [activeItem]);
 
-  const operations = {};
-
   const children: React.ReactNode[] = [];
-
+  children.push(
+    <Node3D
+      value={2}
+      key={-1}
+      position={[
+        positionOffsets[0],
+        positionOffsets[1],
+        positionOffsets[2] + 0.3,
+      ]}
+      rotation={[1.5708, 0, 0]}
+      cylinderArgs={[1, 2, 0.5]}
+      isSelected={false}
+      defaultColor={"yellow"}
+      deselectAllPlants={deselectAllPlants}
+      deselectAllNodes={() => {
+        deselectAllItems();
+        deselectAllPlants();
+      }}
+      selectPlant={selectPlant}
+      selectNode={deselectAllItems}
+      materialOverride={null}
+    />
+  );
   values.forEach((nodeValue, index) => {
     children.push(
       <Node3D
@@ -58,6 +78,7 @@ const Flower = (props: FlowerProps) => {
         defaultColor="rgb(255,0,174)"
         deselectAllPlants={deselectAllPlants}
         selectPlant={selectPlant}
+        materialOverride={null}
         // unhighlightAllPlants={unhighlightAllPlants}
         // unhighlightAllNodes={unhighlightAllItems}
         // highlightPlant={highlightPlant}
@@ -68,24 +89,9 @@ const Flower = (props: FlowerProps) => {
 
   return (
     <>
-      <mesh
-        position={[
-          positionOffsets[0],
-          positionOffsets[1],
-          positionOffsets[2] + 0.3,
-        ]}
-        rotation={[1.5708, 0, 0]}
-      >
-        <cylinderGeometry args={[1, 2, 0.5]} />
-        <meshStandardMaterial wireframe={true} color={"yellow"} />
-      </mesh>
       {children}
       {isActive && (
-        <ControlPanel
-          data={root}
-          activeNodeId={activeItem}
-          operations={operations}
-        />
+        <ControlPanel data={root} activeNodeId={activeItem} operations={{}} />
       )}
     </>
   );
