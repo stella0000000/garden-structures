@@ -1,29 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DoublyCircularlyLinkedList } from "../DataStructures/DoublyCircularlyLinkedList";
 import Node3D from "./Node3D";
+import useActiveItem from "../Hooks/useActiveItem";
 
 type FlowerProps = {
   root: DoublyCircularlyLinkedList;
   positionOffsets: [number, number, number];
   rotationOffsets: [number, number, number];
+  selectPlant: () => void;
+  deselectAllPlants: () => void;
+  isActive: boolean;
 };
 
 const Flower = (props: FlowerProps) => {
-  const { root, positionOffsets, rotationOffsets } = props;
+  const { root,
+          positionOffsets,
+          rotationOffsets,
+          selectPlant,
+          deselectAllPlants,
+          isActive
+        } = props;
 
   const [values, setValues] = useState(root.intoArray());
-  console.log({ root });
-  console.log({ values });
+  const { activeItem, selectItem, deselectAllItems } = useActiveItem()
+  // console.log({ root });
+  // console.log({ values });
 
-  const [activeNode, setActiveNode] = useState(-1);
-
-  const deselectAllNodes = () => {
-    setActiveNode(-1);
-  };
-
-  const selectNode = (key: number) => {
-    setActiveNode(key);
-  };
+  useEffect(() => {
+    console.log('activeNodeIndex' + activeItem)
+  }, [activeItem])
 
   const children: React.ReactNode[] = [];
   children.push(
@@ -40,9 +45,11 @@ const Flower = (props: FlowerProps) => {
       isSelected={false}
       defaultColor={"yellow"}
       selectedColor={"gray"}
-      deselectAllNodes={deselectAllNodes}
-      selectNode={() => {}}
-    />
+      deselectAllPlants={deselectAllPlants}
+      deselectAllNodes={deselectAllItems}
+      selectPlant={selectPlant}
+      selectNode={deselectAllItems}
+      />
   );
   values.forEach((nodeValue, index) => {
     children.push(
@@ -51,23 +58,26 @@ const Flower = (props: FlowerProps) => {
         key={index}
         position={[
           positionOffsets[0] +
-            (nodeValue * 2 - 1.5) *
-              Math.cos(((2 * Math.PI) / root.length) * index),
+          (nodeValue * 2 - 1.5) *
+          Math.cos(((2 * Math.PI) / root.length) * index),
           positionOffsets[1] +
-            (nodeValue * 2 - 1.5) *
-              Math.sin(((2 * Math.PI) / root.length) * index),
+          (nodeValue * 2 - 1.5) *
+          Math.sin(((2 * Math.PI) / root.length) * index),
           positionOffsets[2] + (index % 2 == 0 ? 0.05 : -0.05),
         ]}
-        /**
-         *
-         */
         rotation={[1.5708, 0, 0]}
         cylinderArgs={[nodeValue, nodeValue, 0.1]}
-        isSelected={activeNode === index}
-        deselectAllNodes={deselectAllNodes}
-        selectNode={() => selectNode(index)}
+        isSelected={isActive && activeItem === index}
+        deselectAllNodes={deselectAllItems}
+        selectNode={() => selectItem(index)}
         defaultColor="rgb(255,0,174)"
         selectedColor={"white"}
+        deselectAllPlants={deselectAllItems}
+        selectPlant={selectPlant}
+        // unhighlightAllPlants={unhighlightAllPlants}
+        // unhighlightAllNodes={unhighlightAllItems}
+        // highlightPlant={highlightPlant}
+        // highlightNode={highlightAllItems}
       />
     );
   });
