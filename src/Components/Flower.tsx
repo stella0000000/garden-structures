@@ -32,6 +32,8 @@ const Flower = (props: FlowerProps) => {
     console.log("activeNodeIndex" + activeItem);
   }, [activeItem]);
 
+  const operations = {};
+
   const children: React.ReactNode[] = [];
 
   values.forEach((nodeValue, index) => {
@@ -78,7 +80,13 @@ const Flower = (props: FlowerProps) => {
         <meshStandardMaterial wireframe={true} color={"yellow"} />
       </mesh>
       {children}
-      {isActive && <ControlPanel data={root} activeNodeId={activeItem} />}
+      {isActive && (
+        <ControlPanel
+          data={root}
+          activeNodeId={activeItem}
+          operations={operations}
+        />
+      )}
     </>
   );
 };

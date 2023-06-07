@@ -12,16 +12,33 @@ const Button = styled.button`
 type ControlPanelProps = {
   data: LinkedList | DoublyCircularlyLinkedList;
   activeNodeId: number;
+  operations: {
+    [key: string]: () => void;
+  };
 };
 
 const ControlPanel = (props: ControlPanelProps) => {
-  const { activeNodeId } = props;
+  const { activeNodeId, operations } = props;
+
   console.log(props);
 
   return (
     <Html>
-      <Button>add node</Button>
-      <Button>delete node</Button>
+      {Object.keys(operations).map((opName) => {
+        const operation = operations[opName];
+        return (
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              operation();
+            }}
+            onDoubleClick={(e) => e.stopPropagation()}
+          >
+            {opName}
+          </Button>
+        );
+      })}
+
       {activeNodeId}
     </Html>
   );

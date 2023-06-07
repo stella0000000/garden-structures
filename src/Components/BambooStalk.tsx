@@ -65,6 +65,11 @@ const BambooStalk = (props: BambooStalkProps) => {
     setValues(newLinkedList.intoArray());
   };
 
+  const operations = {
+    append: handleAppend,
+    pop: handlePop,
+  };
+
   return (
     <>
       {/* {createPortal(
@@ -78,7 +83,13 @@ const BambooStalk = (props: BambooStalkProps) => {
 
       {children}
 
-      {isActive && <ControlPanel data={root} activeNodeId={activeItem} />}
+      {isActive && (
+        <ControlPanel
+          data={root}
+          activeNodeId={activeItem}
+          operations={operations}
+        />
+      )}
     </>
   );
 };
