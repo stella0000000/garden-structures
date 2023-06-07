@@ -13,16 +13,17 @@ type BambooStalkProps = {
 };
 
 const BambooStalk = (props: BambooStalkProps) => {
-  const { root, positionOffsets, selectPlant, deselectAllPlants, isActive } = props;
-  const { activeItem, selectItem, deselectAllItems } = useActiveItem()
+  const { root, positionOffsets, selectPlant, deselectAllPlants, isActive } =
+    props;
+  const { activeItem, selectItem, deselectAllItems } = useActiveItem();
 
   let cumulativeHeight = 0;
 
   const [values, setValues] = useState<number[]>(root.intoArray());
 
   useEffect(() => {
-    console.log('activeNodeIndex' + activeItem)
-  }, [activeItem])
+    console.log("activeNodeIndex" + activeItem);
+  }, [activeItem]);
 
   const children: React.ReactNode[] = [];
   values.forEach((nodeValue, index) => {
@@ -40,7 +41,6 @@ const BambooStalk = (props: BambooStalkProps) => {
         isSelected={isActive && activeItem === index}
         deselectAllPlants={deselectAllPlants}
         selectPlant={selectPlant}
-        selectedColor={"rgb(173, 140, 57)"}
         defaultColor={"green"}
         deselectAllNodes={deselectAllItems}
         selectNode={() => selectItem(index)}
@@ -77,7 +77,8 @@ const BambooStalk = (props: BambooStalkProps) => {
       )} */}
 
       {children}
-      <ControlPanel data={root} />
+
+      {isActive && <ControlPanel data={root} activeNodeId={activeItem} />}
     </>
   );
 };

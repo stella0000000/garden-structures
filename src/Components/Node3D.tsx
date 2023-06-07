@@ -8,7 +8,6 @@ type Node3DProps = {
   cylinderArgs: [number, number, number];
   isSelected: boolean;
   defaultColor: string;
-  selectedColor: string;
   deselectAllNodes: () => void;
   selectNode: () => void;
   deselectAllPlants: () => void;
@@ -26,10 +25,9 @@ const Node3D = (props: Node3DProps) => {
     isSelected,
     cylinderArgs,
     defaultColor,
-    selectedColor,
   } = props;
   const meshRef = useRef<THREE.Mesh>(null!);
-  const [isHighlighted, setIsHighlighted] = useState<boolean>(false)
+  const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
 
   return (
     <mesh
@@ -43,7 +41,7 @@ const Node3D = (props: Node3DProps) => {
       }}
       onPointerLeave={(e: ThreeEvent<PointerEvent>) => {
         e.stopPropagation();
-        setIsHighlighted(false)
+        setIsHighlighted(false);
       }}
       onPointerMissed={(e: MouseEvent) => {
         e.stopPropagation();
@@ -60,7 +58,7 @@ const Node3D = (props: Node3DProps) => {
       <cylinderGeometry args={cylinderArgs} />
       <meshStandardMaterial
         wireframe={true}
-        color={isSelected ? 'white' : (isHighlighted ? 'grey' : defaultColor)}
+        color={isSelected ? "white" : isHighlighted ? "grey" : defaultColor}
       />
     </mesh>
   );
