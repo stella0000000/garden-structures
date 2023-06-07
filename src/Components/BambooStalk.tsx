@@ -1,27 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LinkedList, LinkedListFromArray } from "../DataStructures/LinkedList";
 import Node3D from "./Node3D";
+import ControlPanel from "./ControlPanel";
+import useActiveItem from "../Hooks/useActiveItem";
 
 type BambooStalkProps = {
   root: LinkedList;
   positionOffsets: [number, number, number];
+  selectPlant: () => void;
+  deselectAllPlants: () => void;
+  isActive: boolean;
 };
 
 const BambooStalk = (props: BambooStalkProps) => {
-  const { root, positionOffsets } = props;
+  const { root, positionOffsets, selectPlant, deselectAllPlants, isActive } = props;
+  const { activeItem, selectItem, deselectAllItems } = useActiveItem()
 
   let cumulativeHeight = 0;
 
-  const [values, setValues] = useState(root.intoArray());
-  const [activeNode, setActiveNode] = useState(-1);
+  const [values, setValues] = useState<number[]>(root.intoArray());
 
-  const deselectAllNodes = () => {
-    setActiveNode(-1);
-  };
-
-  const selectNode = (key: number) => {
-    setActiveNode(key);
-  };
+  useEffect(() => {
+    console.log('activeNodeIndex' + activeItem)
+  }, [activeItem])
 
   const children: React.ReactNode[] = [];
   values.forEach((nodeValue, index) => {
@@ -36,11 +37,13 @@ const BambooStalk = (props: BambooStalkProps) => {
         ]}
         rotation={[0, 0, 0]}
         cylinderArgs={[1, 1, nodeValue]}
-        isSelected={activeNode === index}
-        deselectAllNodes={deselectAllNodes}
-        selectNode={() => selectNode(index)}
+        isSelected={isActive && activeItem === index}
+        deselectAllPlants={deselectAllPlants}
+        selectPlant={selectPlant}
         selectedColor={"rgb(173, 140, 57)"}
         defaultColor={"green"}
+        deselectAllNodes={deselectAllItems}
+        selectNode={() => selectItem(index)}
       />
     );
     cumulativeHeight += nodeValue;
@@ -74,6 +77,7 @@ const BambooStalk = (props: BambooStalkProps) => {
       )} */}
 
       {children}
+      <ControlPanel data={root} />
     </>
   );
 };

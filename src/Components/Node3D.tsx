@@ -1,6 +1,5 @@
 import { ThreeEvent } from "@react-three/fiber";
-import { useRef } from "react";
-import { Euler } from "three";
+import { useRef, useState } from "react";
 
 type Node3DProps = {
   value: number;
@@ -12,6 +11,8 @@ type Node3DProps = {
   selectedColor: string;
   deselectAllNodes: () => void;
   selectNode: () => void;
+  deselectAllPlants: () => void;
+  selectPlant: () => void;
 };
 
 const Node3D = (props: Node3DProps) => {
@@ -20,12 +21,15 @@ const Node3D = (props: Node3DProps) => {
     rotation,
     deselectAllNodes,
     selectNode,
+    deselectAllPlants,
+    selectPlant,
     isSelected,
     cylinderArgs,
     defaultColor,
     selectedColor,
   } = props;
   const meshRef = useRef<THREE.Mesh>(null!);
+  const [isHighlighted, setIsHighlighted] = useState<boolean>(false)
 
   return (
     <mesh
@@ -35,22 +39,28 @@ const Node3D = (props: Node3DProps) => {
       rotation={rotation}
       onPointerEnter={(e: ThreeEvent<PointerEvent>) => {
         e.stopPropagation();
-        selectNode();
+        setIsHighlighted(true);
       }}
       onPointerLeave={(e: ThreeEvent<PointerEvent>) => {
         e.stopPropagation();
+        setIsHighlighted(false)
+      }}
+      onPointerMissed={(e: MouseEvent) => {
+        e.stopPropagation();
+        isSelected && deselectAllPlants();
         isSelected && deselectAllNodes();
       }}
       onPointerDown={(e: ThreeEvent<PointerEvent>) => {
         e.stopPropagation();
-        console.log("pointerDown");
+        selectPlant();
+        selectNode();
       }}
     >
       {/* args are radiusTop, radiusBottom, height */}
       <cylinderGeometry args={cylinderArgs} />
       <meshStandardMaterial
         wireframe={true}
-        color={isSelected ? selectedColor : defaultColor}
+        color={isSelected ? 'white' : (isHighlighted ? 'grey' : defaultColor)}
       />
     </mesh>
   );

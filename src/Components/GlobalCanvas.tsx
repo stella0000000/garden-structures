@@ -1,13 +1,14 @@
-import { useRef, useState } from "react";
-import { Canvas, useFrame, ThreeElements } from "@react-three/fiber";
+import { useState } from "react";
+import { Canvas } from "@react-three/fiber";
 import { LinkedList, LinkedListFromArray } from "../DataStructures/LinkedList";
-import { Stats, OrbitControls } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 import BambooStalk from "./BambooStalk";
 import {
   CircularlyLinkedListFromArray,
   DoublyCircularlyLinkedList,
 } from "../DataStructures/DoublyCircularlyLinkedList";
 import Flower from "./Flower";
+import useActiveItem from "../Hooks/useActiveItem";
 
 /* plant data is stored at the topmost level as a React antipattern,
  * until we figure out a better way to integrate ui controls inside the canvas
@@ -70,15 +71,22 @@ const initialTestingState: PlantCollection = [
 const GlobalCanvas: React.FC = () => {
   const [plantData, setPlantData] =
     useState<PlantCollection>(initialTestingState);
+  const { activeItem, selectItem, deselectAllItems } = useActiveItem()
 
   // renders the appropriate JSX for each plant in the PlantData based on type
   const children = () => {
-    return plantData?.map((plant) => {
+    return plantData?.map((plant, index) => {
       switch (plant.kind) {
         case "BambooStalkData": {
           // sets x offset for this BambooStalk based on its index in the plantData array
           return (
-            <BambooStalk root={plant.data} positionOffsets={plant.position} />
+            <BambooStalk
+              root={plant.data}
+              positionOffsets={plant.position}
+              selectPlant={() => selectItem(index)}
+              deselectAllPlants={deselectAllItems}
+              isActive={activeItem === index}
+            />
           );
         }
         case "FlowerData": {
@@ -88,6 +96,9 @@ const GlobalCanvas: React.FC = () => {
               root={plant.data}
               positionOffsets={plant.position}
               rotationOffsets={plant.rotation}
+              selectPlant={() => selectItem(index)}
+              deselectAllPlants={deselectAllItems}
+              isActive={activeItem === index}
             />
           );
         }
