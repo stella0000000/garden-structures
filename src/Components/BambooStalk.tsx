@@ -15,17 +15,18 @@ type BambooStalkProps = {
 const BambooStalk = (props: BambooStalkProps) => {
   const { root, positionOffsets, selectPlant, deselectAllPlants, isActive } =
     props;
-  const { activeItem, selectItem, deselectAllItems } = useActiveItem();
+  const { activeItem: activeNode, selectItem: selectNode, deselectAllItems: deselectAllNodes } = useActiveItem();
 
   let cumulativeHeight = 0;
 
   const [values, setValues] = useState<number[]>(root.intoArray());
 
   useEffect(() => {
-    console.log("activeNodeIndex" + activeItem);
-  }, [activeItem]);
+    console.log("activeNodeIndex" + activeNode);
+  }, [activeNode]);
 
   const children: React.ReactNode[] = [];
+  // root node
   children.push(
     <Node3D
       value={2}
@@ -41,15 +42,16 @@ const BambooStalk = (props: BambooStalkProps) => {
       defaultColor={"brown"}
       deselectAllPlants={deselectAllPlants}
       deselectAllNodes={() => {
-        deselectAllItems();
+        deselectAllNodes();
         deselectAllPlants();
       }}
       selectPlant={selectPlant}
-      selectNode={deselectAllItems}
+      selectNode={deselectAllNodes}
       materialOverride={null}
     />
   );
   values.forEach((nodeValue, index) => {
+    // plant nodes
     children.push(
       <Node3D
         value={nodeValue}
@@ -61,12 +63,12 @@ const BambooStalk = (props: BambooStalkProps) => {
         ]}
         rotation={[0, 0, 0]}
         cylinderArgs={[1, 1, nodeValue]}
-        isSelected={isActive && activeItem === index}
+        isSelected={isActive && activeNode === index}
         deselectAllPlants={deselectAllPlants}
         selectPlant={selectPlant}
         defaultColor={"green"}
-        deselectAllNodes={deselectAllItems}
-        selectNode={() => selectItem(index)}
+        deselectAllNodes={deselectAllNodes}
+        selectNode={() => selectNode(index)}
         materialOverride={null}
       />
     );
@@ -80,38 +82,51 @@ const BambooStalk = (props: BambooStalkProps) => {
   };
 
   const handlePop = () => {
-    console.log({ values });
     const len = values.length;
     let newLinkedList = LinkedListFromArray(values);
-    console.log({ newLinkedList });
     newLinkedList.delete(len - 1);
-    console.log({ newLinkedList });
     setValues(newLinkedList.intoArray());
   };
 
-  const operations = {
+  const handleInsert = (index: number) => {
+    let newLinkedList = LinkedListFromArray(values)
+    newLinkedList.insertAtIndex(index, Math.random() * 10)
+    setValues(newLinkedList.intoArray())
+  }
+
+  const handleDelete = (index: number) => {
+    let newLinkedList = LinkedListFromArray(values)
+    newLinkedList.delete(index) // tumbly
+    setValues(newLinkedList.intoArray())
+  }
+
+  const handleDeleteAtIndex = (index: number) => {
+    let newLinkedList = LinkedListFromArray(values)
+    newLinkedList.deleteAtIndex(index)
+    setValues(newLinkedList.intoArray())
+  }
+
+  const plantOperations = {
     append: handleAppend,
     pop: handlePop,
   };
 
+  const nodeOperations = {
+    insert: handleInsert,
+    delete: handleDelete,
+    deleteAtIndex: handleDeleteAtIndex,
+  }
+
   return (
     <>
-      {/* {createPortal(
-        <div style={{ position: "fixed", top: 0, left: 0 }}>
-          bamboocontrols
-          <button onClick={() => handleAppend()}>Add a bamboo section</button>
-          <button onClick={() => handlePop()}>Remove a bamboo section</button>
-        </div>,
-        document.body
-      )} */}
-
       {children}
 
       {isActive && (
         <ControlPanel
           data={root}
-          activeNodeId={activeItem}
-          operations={operations}
+          activeNodeId={activeNode}
+          plantOperations={plantOperations}
+          nodeOperations={nodeOperations}
         />
       )}
     </>

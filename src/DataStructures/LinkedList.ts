@@ -34,7 +34,34 @@ export class LinkedList {
     }
   }
 
+  insertAtIndex(index: number, value: number) {
+    let current = this.dummyHead
+    let currentIndex = -1
+
+    while (currentIndex !== index - 1 && current.next) {
+      current = current.next
+      currentIndex++
+    }
+
+    let next = current.next
+    current.next = new LinkedListNode(value)
+    current.next.next = next
+  }
+
+  deleteAtIndex(index: number) {
+    let current = this.dummyHead
+    let currentIndex = -1
+
+    while (currentIndex !== index - 1 && current.next) {
+      current = current.next
+      currentIndex++
+    }
+
+    current.next = current.next?.next || null
+  }
+
   // non-spliced delete, everything after the node falls off
+  // tumbly
   delete(index: number) {
     let current = this.dummyHead;
     let currentIndex = -1;

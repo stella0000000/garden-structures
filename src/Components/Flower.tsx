@@ -25,12 +25,10 @@ const Flower = (props: FlowerProps) => {
 
   const [values, setValues] = useState(root.intoArray());
   const { activeItem, selectItem, deselectAllItems } = useActiveItem();
-  // console.log({ root });
-  // console.log({ values });
 
-  useEffect(() => {
-    console.log("activeNodeIndex" + activeItem);
-  }, [activeItem]);
+  // useEffect(() => {
+  //   console.log("activeNodeIndex" + activeItem);
+  // }, [activeItem]);
 
   const children: React.ReactNode[] = [];
   children.push(
@@ -91,7 +89,12 @@ const Flower = (props: FlowerProps) => {
     <>
       {children}
       {isActive && (
-        <ControlPanel data={root} activeNodeId={activeItem} operations={{}} />
+        <ControlPanel
+          data={root}
+          activeNodeId={activeItem}
+          plantOperations={{}}
+          nodeOperations={{}}
+        />
       )}
     </>
   );

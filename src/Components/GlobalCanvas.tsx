@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Canvas } from "@react-three/fiber";
+import { useEffect, useState } from "react";
+import { Canvas, ThreeEvent } from "@react-three/fiber";
 import { LinkedList, LinkedListFromArray } from "../DataStructures/LinkedList";
-import { OrbitControls, Plane } from "@react-three/drei";
+import { Box, OrbitControls, Plane } from "@react-three/drei";
 import BambooStalk from "./BambooStalk";
 import {
   CircularlyLinkedListFromArray,
@@ -82,7 +82,11 @@ const dirtMaterial = new THREE.MeshBasicMaterial({
 const GlobalCanvas: React.FC = () => {
   const [plantData, setPlantData] =
     useState<PlantCollection>(initialTestingState);
-  const { activeItem, selectItem, deselectAllItems } = useActiveItem();
+  const { activeItem: activePlant, selectItem: selectPlant, deselectAllItems: deselectAllPlants } = useActiveItem();
+
+  useEffect(() => {
+    console.log({ activePlant })
+  }, [activePlant])
 
   // renders the appropriate JSX for each plant in the PlantData based on type
   const children = () => {
@@ -92,11 +96,12 @@ const GlobalCanvas: React.FC = () => {
           // sets x offset for this BambooStalk based on its index in the plantData array
           return (
             <BambooStalk
+              key={index}
               root={plant.data}
               positionOffsets={plant.position}
-              selectPlant={() => selectItem(index)}
-              deselectAllPlants={deselectAllItems}
-              isActive={activeItem === index}
+              selectPlant={() => selectPlant(index)}
+              deselectAllPlants={deselectAllPlants}
+              isActive={activePlant === index}
             />
           );
         }
@@ -104,12 +109,13 @@ const GlobalCanvas: React.FC = () => {
           // TODO: UNIMPLEMENTED: component for rendering flowers
           return (
             <Flower
+              key={index}
               root={plant.data}
               positionOffsets={plant.position}
               rotationOffsets={plant.rotation}
-              selectPlant={() => selectItem(index)}
-              deselectAllPlants={deselectAllItems}
-              isActive={activeItem === index}
+              selectPlant={() => selectPlant(index)}
+              deselectAllPlants={deselectAllPlants}
+              isActive={activePlant === index}
             />
           );
         }
@@ -128,6 +134,17 @@ const GlobalCanvas: React.FC = () => {
         <ambientLight intensity={1} />
         <directionalLight intensity={1}></directionalLight>
         <camera position={[0, 5, -5]} />
+        {/* World box for missed click events */}
+        <Box
+          args={[75,75,75]}
+          visible={true}
+          onPointerDown={(e: ThreeEvent<PointerEvent>) => {
+            e.stopPropagation()
+            deselectAllPlants()
+            console.log('BOX')
+          }}
+          material={new THREE.MeshLambertMaterial({color: 0xffffff, transparent: true, opacity: 0, side: THREE.BackSide})}
+        />
         {children()}
         <Plane
           args={[20, 20]}

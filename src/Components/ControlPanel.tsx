@@ -1,4 +1,3 @@
-import { ScreenSpace } from "@react-three/drei";
 import { DoublyCircularlyLinkedList } from "../DataStructures/DoublyCircularlyLinkedList";
 import { LinkedList } from "../DataStructures/LinkedList";
 import { Html } from "@react-three/drei";
@@ -12,25 +11,40 @@ const Button = styled.button`
 type ControlPanelProps = {
   data: LinkedList | DoublyCircularlyLinkedList;
   activeNodeId: number;
-  operations: {
-    [key: string]: () => void;
-  };
+  plantOperations: Record<string, () => void>        // an object - key: string, value: function
+  nodeOperations: Record<string, (index: number) => void>
 };
 
 const ControlPanel = (props: ControlPanelProps) => {
-  const { activeNodeId, operations } = props;
-
-  console.log(props);
+  const { activeNodeId, plantOperations, nodeOperations } = props;
 
   return (
-    <Html>
-      {Object.keys(operations).map((opName) => {
-        const operation = operations[opName];
+    // fix position
+    <Html position={[30, -5, -1]}>
+      {Object.keys(plantOperations).map((opName, index) => {
+        const operation = plantOperations[opName];
         return (
           <Button
-            onClick={(e) => {
+            key={index}
+            onPointerDown={(e) => {
               e.stopPropagation();
               operation();
+            }}
+            onDoubleClick={(e) => e.stopPropagation()}
+          >
+            {opName}
+          </Button>
+        );
+      })}
+
+      {activeNodeId !== -1 && Object.keys(nodeOperations).map((opName, index) => {
+        const operation = nodeOperations[opName];
+        return (
+          <Button
+            key={index}
+            onPointerDown={(e) => {
+              e.stopPropagation();
+              operation(activeNodeId);
             }}
             onDoubleClick={(e) => e.stopPropagation()}
           >
