@@ -100,8 +100,6 @@ export class DoublyCircularlyLinkedList {
     }
 
     this.length--;
-
-    return this.dummyHead.next;
   }
 
   // update node at index

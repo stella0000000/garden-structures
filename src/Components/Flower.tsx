@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { DoublyCircularlyLinkedList } from "../DataStructures/DoublyCircularlyLinkedList";
+import { DoublyCircularlyLinkedList, CircularlyLinkedListFromArray } from "../DataStructures/DoublyCircularlyLinkedList";
 import Node3D from "./Node3D";
 import useActiveItem from "../Hooks/useActiveItem";
 import ControlPanel from "./ControlPanel";
@@ -23,12 +23,23 @@ const Flower = (props: FlowerProps) => {
     isActive,
   } = props;
 
+  // 0 1 2 3
+  // 0   2 3
+  // [0, _, 1, 2]
+
+
+  // [1, 2, 3, 4, 5, 6]
+  // delete @ idx 1
+  // [1, _, 3, 4, 5, 6]
+
   const [values, setValues] = useState(root.intoArray());
   const { activeItem, selectItem, deselectAllItems } = useActiveItem();
+  const [history, setHistory] = useState<number[]>(values)
 
   // useEffect(() => {
-  //   console.log("activeNodeIndex" + activeItem);
-  // }, [activeItem]);
+  //   console.log({activeItem});
+  //   console.log({history})
+  // }, [activeItem, history]);
 
   const children: React.ReactNode[] = [];
   children.push(
@@ -54,7 +65,7 @@ const Flower = (props: FlowerProps) => {
       materialOverride={null}
     />
   );
-  values.forEach((nodeValue, index) => {
+  history.forEach((nodeValue, index) => {
     children.push(
       <Node3D
         value={nodeValue}
@@ -85,6 +96,47 @@ const Flower = (props: FlowerProps) => {
     );
   });
 
+  const handleAppend = () => {
+    let newLinkedList = CircularlyLinkedListFromArray(values);
+    newLinkedList.append(3);
+    setValues(newLinkedList.intoArray());
+  };
+
+  // const handlePop = () => {
+  //   const len = values.length;
+  //   let newLinkedList = CircularlyLinkedListFromArray(values);
+  //   newLinkedList.delete(len - 1);
+  //   setValues(newLinkedList.intoArray());
+  // };
+
+  // const handleInsert = (index: number) => {
+  //   let newLinkedList = CircularlyLinkedListFromArray(values)
+  //   newLinkedList.insertAtIndex(index, Math.random() * 10)
+  //   setValues(newLinkedList.intoArray())
+  // }
+
+  // no tumbly delete for flowers
+  // only deleting at index
+  const handleDeleteAtIndex = (index: number) => {
+    let newLinkedList = CircularlyLinkedListFromArray(values)
+    newLinkedList.delete(index)
+    setHistory((newHistory) => {
+      newHistory[index] = -999
+      return newHistory
+    })
+    setValues(newLinkedList.intoArray())
+  }
+
+  const plantOperations = {
+    append: handleAppend,
+    // pop: handlePop,
+  };
+
+  const nodeOperations = {
+    // insert: handleInsert,
+    deleteAtIndex: handleDeleteAtIndex,
+  }
+
   return (
     <>
       {children}
@@ -92,8 +144,8 @@ const Flower = (props: FlowerProps) => {
         <ControlPanel
           data={root}
           activeNodeId={activeItem}
-          plantOperations={{}}
-          nodeOperations={{}}
+          plantOperations={plantOperations}
+          nodeOperations={nodeOperations}
         />
       )}
     </>
