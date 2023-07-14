@@ -1,11 +1,18 @@
 import { useState } from "react";
-import { DoublyCircularlyLinkedList, CircularlyLinkedListFromArray } from "../DataStructures/DoublyCircularlyLinkedList";
+import {
+  DoublyCircularlyLinkedList,
+  CircularlyLinkedListFromArray,
+} from "../DataStructures/DoublyCircularlyLinkedList";
 import Node3D from "./Node3D";
 import useActiveItem from "../Hooks/useActiveItem";
 import ControlPanel from "./ControlPanel";
+import { GardenReducerAction } from "../Reducers/gardenReducer";
+import { FlowerData } from "./GlobalCanvas";
 
 type FlowerProps = {
   root: DoublyCircularlyLinkedList;
+  index: number;
+  gardenDispatch: React.Dispatch<GardenReducerAction>;
   positionOffsets: [number, number, number];
   rotationOffsets: [number, number, number];
   selectPlant: () => void;
@@ -17,10 +24,12 @@ const Flower = (props: FlowerProps) => {
   const {
     root,
     positionOffsets,
-    // rotationOffsets,
+    rotationOffsets,
     selectPlant,
     deselectAllPlants,
     isActive,
+    gardenDispatch,
+    index,
   } = props;
 
   // 0 1 2 3
@@ -40,6 +49,8 @@ const Flower = (props: FlowerProps) => {
   // }, [activeItem, history]);
 
   const children: React.ReactNode[] = [];
+
+  // central hub node of the flower
   children.push(
     <Node3D
       value={2}
@@ -63,6 +74,8 @@ const Flower = (props: FlowerProps) => {
       materialOverride={null}
     />
   );
+
+  // petal nodes of the flower
   values.forEach((nodeValue, index) => {
     children.push(
       <Node3D
@@ -97,8 +110,18 @@ const Flower = (props: FlowerProps) => {
   const handleAppend = () => {
     let newLinkedList = CircularlyLinkedListFromArray(values);
     newLinkedList.append(2);
-    console.log({ history })
+    console.log({ history });
     setValues(newLinkedList.intoArray());
+  };
+
+  const handleMove = () => {
+    const action: GardenReducerAction = {
+      type: "modifyPlant",
+      payload: {
+        index,
+      },
+    };
+    gardenDispatch(action);
   };
 
   // const handleInsert = (index: number) => {
@@ -111,19 +134,20 @@ const Flower = (props: FlowerProps) => {
   // only plucking petal at index
   // they love me they love me not
   const handleDeleteAtIndex = (index: number) => {
-    let newLinkedList = CircularlyLinkedListFromArray(values)
-    newLinkedList.setValue(index, 0)
-    setValues(newLinkedList.intoArray())
-  }
+    let newLinkedList = CircularlyLinkedListFromArray(values);
+    newLinkedList.setValue(index, 0);
+    setValues(newLinkedList.intoArray());
+  };
 
   const plantOperations = {
     append: handleAppend,
+    move: handleMove,
   };
 
   const nodeOperations = {
     // insert: handleInsert,
     deleteAtIndex: handleDeleteAtIndex,
-  }
+  };
 
   return (
     <>

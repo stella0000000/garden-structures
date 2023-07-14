@@ -3,9 +3,12 @@ import { LinkedList, LinkedListFromArray } from "../DataStructures/LinkedList";
 import Node3D from "./Node3D";
 import ControlPanel from "./ControlPanel";
 import useActiveItem from "../Hooks/useActiveItem";
+import { GardenReducerAction } from "../Hooks/Reducers/gardenReducer";
 
 type BambooStalkProps = {
   root: LinkedList;
+  index: number;
+  gardenDispatch: React.Dispatch<GardenReducerAction>;
   positionOffsets: [number, number, number];
   selectPlant: () => void;
   deselectAllPlants: () => void;
@@ -13,17 +16,12 @@ type BambooStalkProps = {
 };
 
 const BambooStalk = (props: BambooStalkProps) => {
-  const {
-    root,
-    positionOffsets,
-    selectPlant,
-    deselectAllPlants,
-    isActive
-  } = props;
+  const { root, positionOffsets, selectPlant, deselectAllPlants, isActive } =
+    props;
   const {
     activeItem: activeNode,
     selectItem: selectNode,
-    deselectAllItems: deselectAllNodes
+    deselectAllItems: deselectAllNodes,
   } = useActiveItem();
 
   let cumulativeHeight = 0;
@@ -97,22 +95,22 @@ const BambooStalk = (props: BambooStalkProps) => {
   };
 
   const handleInsert = (index: number) => {
-    let newLinkedList = LinkedListFromArray(values)
-    newLinkedList.insertAtIndex(index, Math.random() * 10)
-    setValues(newLinkedList.intoArray())
-  }
+    let newLinkedList = LinkedListFromArray(values);
+    newLinkedList.insertAtIndex(index, Math.random() * 10);
+    setValues(newLinkedList.intoArray());
+  };
 
   const handleDelete = (index: number) => {
-    let newLinkedList = LinkedListFromArray(values)
-    newLinkedList.delete(index) // tumbly
-    setValues(newLinkedList.intoArray())
-  }
+    let newLinkedList = LinkedListFromArray(values);
+    newLinkedList.delete(index); // tumbly
+    setValues(newLinkedList.intoArray());
+  };
 
   const handleDeleteAtIndex = (index: number) => {
-    let newLinkedList = LinkedListFromArray(values)
-    newLinkedList.deleteAtIndex(index)
-    setValues(newLinkedList.intoArray())
-  }
+    let newLinkedList = LinkedListFromArray(values);
+    newLinkedList.deleteAtIndex(index);
+    setValues(newLinkedList.intoArray());
+  };
 
   const plantOperations = {
     append: handleAppend,
@@ -123,7 +121,7 @@ const BambooStalk = (props: BambooStalkProps) => {
     insert: handleInsert,
     delete: handleDelete,
     deleteAtIndex: handleDeleteAtIndex,
-  }
+  };
 
   return (
     <>

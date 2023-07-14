@@ -3,6 +3,7 @@ import { DoublyCircularlyLinkedList } from "../DataStructures/DoublyCircularlyLi
 import { LinkedList } from "../DataStructures/LinkedList";
 import { Html } from "@react-three/drei";
 import styled from "styled-components";
+import { GardenReducerAction } from "../Hooks/Reducers/gardenReducer";
 
 const Button = styled.button`
   width: 150px;
@@ -33,12 +34,8 @@ type ControlPanelProps = {
 };
 
 const ControlPanel = (props: ControlPanelProps) => {
-  const {
-    activeNodeId,
-    plantOperations,
-    nodeOperations
-  } = props;
-  
+  const { activeNodeId, plantOperations, nodeOperations } = props;
+
   const [controlsHeight, setControlsHeight] = useState(0);
 
   const positionRef = useRef<HTMLDivElement>(null);

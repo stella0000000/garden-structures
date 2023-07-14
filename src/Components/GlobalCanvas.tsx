@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
 import { Canvas, ThreeEvent } from "@react-three/fiber";
 import { LinkedList, LinkedListFromArray } from "../DataStructures/LinkedList";
 import { Box, OrbitControls, Plane } from "@react-three/drei";
@@ -10,6 +10,7 @@ import {
 import Flower from "./Flower";
 import useActiveItem from "../Hooks/useActiveItem";
 import * as THREE from "three";
+import gardenReducer from "../Hooks/Reducers/gardenReducer";
 
 /* plant data is stored at the topmost level as a React antipattern,
  * until we figure out a better way to integrate ui controls inside the canvas
@@ -19,20 +20,20 @@ type Transform3D = {
   rotation: [number, number, number];
 };
 
-type BambooStalk = {
+export type BambooStalk = {
   kind: "BambooStalkData";
   data: LinkedList;
 };
 
-type BambooStalkData = BambooStalk & Transform3D;
+export type BambooStalkData = BambooStalk & Transform3D;
 
-type Flower = {
+export type Flower = {
   kind: "FlowerData";
   data: DoublyCircularlyLinkedList;
 };
-type FlowerData = Flower & Transform3D;
+export type FlowerData = Flower & Transform3D;
 
-type PlantCollection = (BambooStalkData | FlowerData)[];
+export type PlantCollection = (BambooStalkData | FlowerData)[];
 
 // dummy values for use during local testing
 const testingBamboo: BambooStalkData = {
@@ -80,16 +81,16 @@ const dirtMaterial = new THREE.MeshBasicMaterial({
 });
 
 const GlobalCanvas: React.FC = () => {
-  const [plantData] = useState<PlantCollection>(initialTestingState);
+  const [plantData, dispatch] = useReducer(gardenReducer, initialTestingState);
   const {
     activeItem: activePlant,
     selectItem: selectPlant,
-    deselectAllItems: deselectAllPlants
+    deselectAllItems: deselectAllPlants,
   } = useActiveItem();
 
   useEffect(() => {
-    console.log({ activePlant })
-  }, [activePlant])
+    console.log(plantData[3]);
+  }, [plantData]);
 
   // renders the appropriate JSX for each plant in the PlantData based on type
   const children = () => {
@@ -100,6 +101,8 @@ const GlobalCanvas: React.FC = () => {
           return (
             <BambooStalk
               key={index}
+              index={index}
+              gardenDispatch={dispatch}
               root={plant.data}
               positionOffsets={plant.position}
               selectPlant={() => selectPlant(index)}
@@ -113,6 +116,8 @@ const GlobalCanvas: React.FC = () => {
           return (
             <Flower
               key={index}
+              index={index}
+              gardenDispatch={dispatch}
               root={plant.data}
               positionOffsets={plant.position}
               rotationOffsets={plant.rotation}
@@ -139,14 +144,21 @@ const GlobalCanvas: React.FC = () => {
         <camera position={[0, 5, -5]} />
         {/* World box for missed click events */}
         <Box
-          args={[75,75,75]}
+          args={[75, 75, 75]}
           visible={true}
           onPointerDown={(e: ThreeEvent<PointerEvent>) => {
-            e.stopPropagation()
-            deselectAllPlants()
-            console.log('BOX')
+            e.stopPropagation();
+            deselectAllPlants();
+            console.log("BOX");
           }}
-          material={new THREE.MeshLambertMaterial({color: 0xffffff, transparent: true, opacity: 0, side: THREE.BackSide})}
+          material={
+            new THREE.MeshLambertMaterial({
+              color: 0xffffff,
+              transparent: true,
+              opacity: 0,
+              side: THREE.BackSide,
+            })
+          }
         />
         {children()}
         <Plane
