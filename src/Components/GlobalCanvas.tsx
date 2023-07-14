@@ -9,15 +9,16 @@ import {
 } from "../DataStructures/DoublyCircularlyLinkedList";
 import Flower from "./Flower";
 import useActiveItem from "../Hooks/useActiveItem";
-import * as THREE from "three";
 import gardenReducer from "../Hooks/Reducers/gardenReducer";
+import * as THREE from "three";
+import { Vector3 } from "three";
 
 /* plant data is stored at the topmost level as a React antipattern,
  * until we figure out a better way to integrate ui controls inside the canvas
  */
 type Transform3D = {
-  position: [number, number, number];
-  rotation: [number, number, number];
+  position: Vector3;
+  rotation: Vector3;
 };
 
 export type BambooStalk = {
@@ -39,28 +40,28 @@ export type PlantCollection = (BambooStalkData | FlowerData)[];
 const testingBamboo: BambooStalkData = {
   kind: "BambooStalkData",
   data: LinkedListFromArray([2, 8, 12, 2]),
-  position: [0, 0, 0],
-  rotation: [0, 0, 0],
+  position: new Vector3(0, 0, 0),
+  rotation: new Vector3(0, 0, 0),
 };
 
 const testingBamboo2: BambooStalkData = {
   kind: "BambooStalkData",
   data: LinkedListFromArray([4, 6, 8, 2]),
-  position: [4, 0, 1],
-  rotation: [0, 0, 0],
+  position: new Vector3(4, 0, 1),
+  rotation: new Vector3(0, 0, 0),
 };
 const testingBamboo3: BambooStalkData = {
   kind: "BambooStalkData",
   data: LinkedListFromArray([2, 6, 4, 2]),
-  position: [2, 0, 2],
-  rotation: [0, 0, 0],
+  position: new Vector3(2, 0, 2),
+  rotation: new Vector3(0, 0, 0),
 };
 
 const testingFlower1: FlowerData = {
   kind: "FlowerData",
   data: CircularlyLinkedListFromArray([2, 2, 2, 2, 2, 2]),
-  position: [12, 4, 2],
-  rotation: [1.5708, 0, 0],
+  position: new Vector3(12, 4, 2),
+  rotation: new Vector3(1.5708, 0, 0),
 };
 
 const initialTestingState: PlantCollection = [
@@ -104,7 +105,8 @@ const GlobalCanvas: React.FC = () => {
               index={index}
               gardenDispatch={dispatch}
               root={plant.data}
-              positionOffsets={plant.position}
+              position={plant.position}
+              rotation={plant.rotation}
               selectPlant={() => selectPlant(index)}
               deselectAllPlants={deselectAllPlants}
               isActive={activePlant === index}
@@ -119,8 +121,8 @@ const GlobalCanvas: React.FC = () => {
               index={index}
               gardenDispatch={dispatch}
               root={plant.data}
-              positionOffsets={plant.position}
-              rotationOffsets={plant.rotation}
+              position={plant.position}
+              rotation={plant.rotation}
               selectPlant={() => selectPlant(index)}
               deselectAllPlants={deselectAllPlants}
               isActive={activePlant === index}
@@ -149,7 +151,6 @@ const GlobalCanvas: React.FC = () => {
           onPointerDown={(e: ThreeEvent<PointerEvent>) => {
             e.stopPropagation();
             deselectAllPlants();
-            console.log("BOX");
           }}
           material={
             new THREE.MeshLambertMaterial({

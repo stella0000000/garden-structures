@@ -29,7 +29,7 @@ const PositionWrap = styled.div`
 type ControlPanelProps = {
   data: LinkedList | DoublyCircularlyLinkedList;
   activeNodeId: number;
-  plantOperations: Record<string, () => void>; // an object - key: string, value: function
+  plantOperations: Record<string, (...args: any[]) => void>; // an object - key: string, value: function
   nodeOperations: Record<string, (index: number) => void>;
 };
 

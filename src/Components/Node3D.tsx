@@ -1,11 +1,12 @@
 import { ThreeEvent } from "@react-three/fiber";
 import { useRef, useState } from "react";
 import * as THREE from "three";
+import { Vector3 } from "three";
 
 type Node3DProps = {
   value: number;
-  position: [number, number, number];
-  rotation: [number, number, number];
+  position: Vector3;
+  rotation: Vector3;
   cylinderArgs: [number, number, number];
   isSelected: boolean;
   defaultColor: string;
@@ -37,7 +38,7 @@ const Node3D = (props: Node3DProps) => {
       ref={meshRef}
       scale={1}
       position={position}
-      rotation={rotation}
+      rotation={[rotation.x, rotation.y, rotation.z]}
       material={
         materialOverride ||
         new THREE.MeshBasicMaterial({
