@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DoublyCircularlyLinkedList, CircularlyLinkedListFromArray } from "../DataStructures/DoublyCircularlyLinkedList";
 import Node3D from "./Node3D";
 import useActiveItem from "../Hooks/useActiveItem";
@@ -17,7 +17,7 @@ const Flower = (props: FlowerProps) => {
   const {
     root,
     positionOffsets,
-    rotationOffsets,
+    // rotationOffsets,
     selectPlant,
     deselectAllPlants,
     isActive,

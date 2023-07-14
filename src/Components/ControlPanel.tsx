@@ -51,7 +51,7 @@ const ControlPanel = (props: ControlPanelProps) => {
     // fix position
     <Html
       //fullscreen
-      calculatePosition={(thingy) => {
+      calculatePosition={() => {
         return [0, window.innerHeight - controlsHeight, 0];
       }}
     >

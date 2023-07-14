@@ -80,7 +80,7 @@ const dirtMaterial = new THREE.MeshBasicMaterial({
 });
 
 const GlobalCanvas: React.FC = () => {
-  const [plantData, setPlantData] =
+  const [plantData] =
     useState<PlantCollection>(initialTestingState);
   const { activeItem: activePlant, selectItem: selectPlant, deselectAllItems: deselectAllPlants } = useActiveItem();
 

@@ -1,0 +1,6 @@
+- BST
+- Trees
+- Graphs
+
+Backend
+- database
