@@ -6,8 +6,7 @@ import {
 import Node3D from "./Node3D";
 import useActiveItem from "../Hooks/useActiveItem";
 import ControlPanel from "./ControlPanel";
-import { GardenReducerAction } from "../Reducers/gardenReducer";
-import { FlowerData } from "./GlobalCanvas";
+import { GardenReducerAction } from "../Hooks/Reducers/gardenReducer";
 
 type FlowerProps = {
   root: DoublyCircularlyLinkedList;
