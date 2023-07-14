@@ -33,8 +33,12 @@ type ControlPanelProps = {
 };
 
 const ControlPanel = (props: ControlPanelProps) => {
-  const { activeNodeId, plantOperations, nodeOperations } = props;
-
+  const {
+    activeNodeId,
+    plantOperations,
+    nodeOperations
+  } = props;
+  
   const [controlsHeight, setControlsHeight] = useState(0);
 
   const positionRef = useRef<HTMLDivElement>(null);

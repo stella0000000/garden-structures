@@ -13,12 +13,20 @@ type BambooStalkProps = {
 };
 
 const BambooStalk = (props: BambooStalkProps) => {
-  const { root, positionOffsets, selectPlant, deselectAllPlants, isActive } =
-    props;
-  const { activeItem: activeNode, selectItem: selectNode, deselectAllItems: deselectAllNodes } = useActiveItem();
+  const {
+    root,
+    positionOffsets,
+    selectPlant,
+    deselectAllPlants,
+    isActive
+  } = props;
+  const {
+    activeItem: activeNode,
+    selectItem: selectNode,
+    deselectAllItems: deselectAllNodes
+  } = useActiveItem();
 
   let cumulativeHeight = 0;
-
   const [values, setValues] = useState<number[]>(root.intoArray());
 
   useEffect(() => {
