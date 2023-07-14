@@ -63,6 +63,22 @@ export class DoublyCircularlyLinkedList {
     return curr ? curr.value : null;
   }
 
+  setValue(index: number, newValue: number) {
+    if (this.length === 0) return;
+
+    let idx = index % this.length;
+    let curr = this.dummyHead.next; // idx 0
+
+    while (idx > 0 && curr) {
+      curr = curr.next;
+      idx--;
+    }
+
+    if (!curr) return;
+    
+    curr.value = newValue;
+  }
+
   getNode(index: number) {
     if (this.length === 0) return null;
 

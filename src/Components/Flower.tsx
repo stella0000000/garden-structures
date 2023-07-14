@@ -27,14 +27,12 @@ const Flower = (props: FlowerProps) => {
   // 0   2 3
   // [0, _, 1, 2]
 
-
   // [1, 2, 3, 4, 5, 6]
   // delete @ idx 1
   // [1, _, 3, 4, 5, 6]
 
   const [values, setValues] = useState(root.intoArray());
   const { activeItem, selectItem, deselectAllItems } = useActiveItem();
-  const [history, setHistory] = useState<number[]>(values)
 
   // useEffect(() => {
   //   console.log({activeItem});
@@ -65,7 +63,7 @@ const Flower = (props: FlowerProps) => {
       materialOverride={null}
     />
   );
-  history.forEach((nodeValue, index) => {
+  values.forEach((nodeValue, index) => {
     children.push(
       <Node3D
         value={nodeValue}
@@ -73,10 +71,10 @@ const Flower = (props: FlowerProps) => {
         position={[
           positionOffsets[0] +
             (nodeValue * 2 - 1.5) *
-              Math.cos(((2 * Math.PI) / root.length) * index),
+              Math.cos(((2 * Math.PI) / values.length) * index),
           positionOffsets[1] +
             (nodeValue * 2 - 1.5) *
-              Math.sin(((2 * Math.PI) / root.length) * index),
+              Math.sin(((2 * Math.PI) / values.length) * index),
           positionOffsets[2] + (index % 2 == 0 ? 0.05 : -0.05),
         ]}
         rotation={[1.5708, 0, 0]}
@@ -98,16 +96,10 @@ const Flower = (props: FlowerProps) => {
 
   const handleAppend = () => {
     let newLinkedList = CircularlyLinkedListFromArray(values);
-    newLinkedList.append(3);
+    newLinkedList.append(2);
+    console.log({ history })
     setValues(newLinkedList.intoArray());
   };
-
-  // const handlePop = () => {
-  //   const len = values.length;
-  //   let newLinkedList = CircularlyLinkedListFromArray(values);
-  //   newLinkedList.delete(len - 1);
-  //   setValues(newLinkedList.intoArray());
-  // };
 
   // const handleInsert = (index: number) => {
   //   let newLinkedList = CircularlyLinkedListFromArray(values)
@@ -116,20 +108,16 @@ const Flower = (props: FlowerProps) => {
   // }
 
   // no tumbly delete for flowers
-  // only deleting at index
+  // only plucking petal at index
+  // they love me they love me not
   const handleDeleteAtIndex = (index: number) => {
     let newLinkedList = CircularlyLinkedListFromArray(values)
-    newLinkedList.delete(index)
-    setHistory((newHistory) => {
-      newHistory[index] = -999
-      return newHistory
-    })
+    newLinkedList.setValue(index, 0)
     setValues(newLinkedList.intoArray())
   }
 
   const plantOperations = {
     append: handleAppend,
-    // pop: handlePop,
   };
 
   const nodeOperations = {
