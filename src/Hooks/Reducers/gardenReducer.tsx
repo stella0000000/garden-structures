@@ -24,7 +24,7 @@ export default function gardenReducer(
   plantCollection: PlantCollection,
   action: GardenReducerAction
 ) {
-  if (action.type == "movePlant") {
+  if (action.type === "movePlant") {
     // if we are modifying a plant, the new plant should exist in the payload
     if (action.payload.index === undefined) {
       throw Error(

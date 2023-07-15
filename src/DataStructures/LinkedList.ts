@@ -26,7 +26,7 @@ export class LinkedList {
     }
 
     // weve found the node at index
-    if (currentIndex == index) {
+    if (currentIndex === index) {
       return currentNode;
     } else {
       // weve run out of nodes before finding the node at index

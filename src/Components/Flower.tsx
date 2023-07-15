@@ -6,7 +6,7 @@ import {
 import Node3D from "./Node3D";
 import useActiveItem from "../Hooks/useActiveItem";
 import ControlPanel from "./ControlPanel";
-import { GardenReducerAction } from "../Hooks/Reducers/gardenReducer";
+import { Direction, GardenReducerAction } from "../Hooks/Reducers/gardenReducer";
 import { Vector3 } from "three";
 
 type FlowerProps = {
@@ -41,7 +41,11 @@ const Flower = (props: FlowerProps) => {
   // [1, _, 3, 4, 5, 6]
 
   const [values, setValues] = useState(root.intoArray());
-  const { activeItem, selectItem, deselectAllItems } = useActiveItem();
+  const {
+    activeItem,
+    selectItem,
+    deselectAllItems
+  } = useActiveItem();
 
   // useEffect(() => {
   //   console.log({activeItem});
@@ -80,7 +84,7 @@ const Flower = (props: FlowerProps) => {
         position={position.add(new Vector3(
           (nodeValue * 2 - 1.5) * Math.cos(((2 * Math.PI) / values.length) * index),
           (nodeValue * 2 - 1.5) * Math.sin(((2 * Math.PI) / values.length) * index),
-          (index % 2 == 0 ? 0.05 : -0.05),
+          (index % 2 === 0 ? 0.05 : -0.05),
         ))}
         
         rotation={rotation.add(new Vector3(1.5708, 0, 0))}
@@ -107,11 +111,12 @@ const Flower = (props: FlowerProps) => {
     setValues(newLinkedList.intoArray());
   };
 
-  const handleMove = () => {
+  const handleMove = (direction: Direction) => {
     const action: GardenReducerAction = {
       type: "movePlant",
       payload: {
         index,
+        direction
       },
     };
     gardenDispatch(action);
@@ -132,9 +137,12 @@ const Flower = (props: FlowerProps) => {
     setValues(newLinkedList.intoArray());
   };
 
+  const moveOperations = {
+    move: (direction: Direction) => handleMove(direction),
+  }
+  
   const plantOperations = {
     append: handleAppend,
-    move: handleMove,
   };
 
   const nodeOperations = {
@@ -149,6 +157,7 @@ const Flower = (props: FlowerProps) => {
         <ControlPanel
           data={root}
           activeNodeId={activeItem}
+          moveOperations={moveOperations}
           plantOperations={plantOperations}
           nodeOperations={nodeOperations}
         />

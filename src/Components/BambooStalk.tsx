@@ -124,10 +124,13 @@ const BambooStalk = (props: BambooStalkProps) => {
     setValues(newLinkedList.intoArray());
   };
 
+  const moveOperations = {
+    move: (direction: Direction) => handleMove(direction),
+  }
+
   const plantOperations = {
     append: handleAppend,
     pop: handlePop,
-    move: handleMove,
   };
 
   const nodeOperations = {
@@ -144,6 +147,7 @@ const BambooStalk = (props: BambooStalkProps) => {
         <ControlPanel
           data={root}
           activeNodeId={activeNode}
+          moveOperations={moveOperations}
           plantOperations={plantOperations}
           nodeOperations={nodeOperations}
         />
