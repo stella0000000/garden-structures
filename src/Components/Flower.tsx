@@ -6,7 +6,10 @@ import {
 import Node3D from "./Node3D";
 import useActiveItem from "../Hooks/useActiveItem";
 import ControlPanel from "./ControlPanel";
-import { Direction, GardenReducerAction } from "../Hooks/Reducers/gardenReducer";
+import {
+  Direction,
+  GardenReducerAction,
+} from "../Hooks/Reducers/gardenReducer";
 import { Vector3 } from "three";
 
 type FlowerProps = {
@@ -41,11 +44,7 @@ const Flower = (props: FlowerProps) => {
   // [1, _, 3, 4, 5, 6]
 
   const [values, setValues] = useState(root.intoArray());
-  const {
-    activeItem,
-    selectItem,
-    deselectAllItems
-  } = useActiveItem();
+  const { activeItem, selectItem, deselectAllItems } = useActiveItem();
 
   // useEffect(() => {
   //   console.log({activeItem});
@@ -54,13 +53,15 @@ const Flower = (props: FlowerProps) => {
 
   const children: React.ReactNode[] = [];
 
+  console.log(`flower rotation: ${[rotation.x, rotation.y, rotation.z]}`);
+
   // central hub node of the flower
   children.push(
     <Node3D
       value={2}
       key={-1}
-      position={position.add(new Vector3(0, 0, 0.3))}
-      rotation={rotation.add(new Vector3(1.5708, 0, 0))}
+      position={position.clone().add(new Vector3(0, 0, 0.3))}
+      rotation={rotation.clone().add(new Vector3(0, 1.5708, 0))}
       cylinderArgs={[1, 2, 0.5]}
       isSelected={false}
       defaultColor={"yellow"}
@@ -81,13 +82,18 @@ const Flower = (props: FlowerProps) => {
       <Node3D
         value={nodeValue}
         key={index}
-        position={position.add(new Vector3(
-          (nodeValue * 2 - 1.5) * Math.cos(((2 * Math.PI) / values.length) * index),
-          (nodeValue * 2 - 1.5) * Math.sin(((2 * Math.PI) / values.length) * index),
-          (index % 2 === 0 ? 0.05 : -0.05),
-        ))}
-        
-        rotation={rotation.add(new Vector3(1.5708, 0, 0))}
+        position={position
+          .clone()
+          .add(
+            new Vector3(
+              (nodeValue * 2 - 1.5) *
+                Math.cos(((2 * Math.PI) / values.length) * index),
+              (nodeValue * 2 - 1.5) *
+                Math.sin(((2 * Math.PI) / values.length) * index),
+              index % 2 === 0 ? 0.05 : -0.05
+            )
+          )}
+        rotation={rotation.clone().add(new Vector3(0, 1.5708, 0))}
         cylinderArgs={[nodeValue, nodeValue, 0.1]}
         isSelected={isActive && activeItem === index}
         deselectAllNodes={deselectAllItems}
@@ -116,7 +122,7 @@ const Flower = (props: FlowerProps) => {
       type: "movePlant",
       payload: {
         index,
-        direction
+        direction,
       },
     };
     gardenDispatch(action);
@@ -139,8 +145,8 @@ const Flower = (props: FlowerProps) => {
 
   const moveOperations = {
     move: (direction: Direction) => handleMove(direction),
-  }
-  
+  };
+
   const plantOperations = {
     append: handleAppend,
   };

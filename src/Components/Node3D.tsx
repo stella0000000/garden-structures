@@ -1,7 +1,7 @@
 import { ThreeEvent } from "@react-three/fiber";
 import { useRef, useState } from "react";
 import * as THREE from "three";
-import { Vector3 } from "three";
+import { Euler, Vector3 } from "three";
 
 type Node3DProps = {
   value: number;
@@ -38,7 +38,7 @@ const Node3D = (props: Node3DProps) => {
       ref={meshRef}
       scale={1}
       position={position}
-      rotation={[rotation.x, rotation.y, rotation.z]}
+      rotation={new Euler(rotation.x, rotation.y, rotation.z)}
       material={
         materialOverride ||
         new THREE.MeshBasicMaterial({

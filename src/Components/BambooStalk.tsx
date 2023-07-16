@@ -3,7 +3,10 @@ import { LinkedList, LinkedListFromArray } from "../DataStructures/LinkedList";
 import Node3D from "./Node3D";
 import ControlPanel from "./ControlPanel";
 import useActiveItem from "../Hooks/useActiveItem";
-import { Direction, GardenReducerAction } from "../Hooks/Reducers/gardenReducer";
+import {
+  Direction,
+  GardenReducerAction,
+} from "../Hooks/Reducers/gardenReducer";
 import { Vector3 } from "three";
 
 type BambooStalkProps = {
@@ -18,14 +21,15 @@ type BambooStalkProps = {
 };
 
 const BambooStalk = (props: BambooStalkProps) => {
-  const { root,
+  const {
+    root,
     position,
     rotation,
     selectPlant,
     deselectAllPlants,
     isActive,
     gardenDispatch,
-    index
+    index,
   } = props;
   const {
     activeItem: activeNode,
@@ -46,8 +50,8 @@ const BambooStalk = (props: BambooStalkProps) => {
     <Node3D
       value={2}
       key={-1}
-      position={position.add(new Vector3(0, 0, 0.3))}
-      rotation={rotation.add(new Vector3(0, 0, 0))}
+      position={position.clone().add(new Vector3(0, 0, 0.3))}
+      rotation={rotation}
       cylinderArgs={[1, 2, 1]}
       isSelected={false}
       defaultColor={"brown"}
@@ -67,8 +71,10 @@ const BambooStalk = (props: BambooStalkProps) => {
       <Node3D
         value={nodeValue}
         key={index}
-        position={position.add(new Vector3(0, cumulativeHeight + 0.5 * nodeValue, 0))}
-        rotation={rotation.add(new Vector3(0, 0, 0))}
+        position={position
+          .clone()
+          .add(new Vector3(0, cumulativeHeight + 0.5 * nodeValue, 0))}
+        rotation={rotation.clone().add(new Vector3(0, 0, 0))}
         cylinderArgs={[1, 1, nodeValue]}
         isSelected={isActive && activeNode === index}
         deselectAllPlants={deselectAllPlants}
@@ -87,12 +93,12 @@ const BambooStalk = (props: BambooStalkProps) => {
       type: "movePlant",
       payload: {
         index,
-        direction
+        direction,
       },
     };
     gardenDispatch(action);
   };
-  
+
   const handleAppend = () => {
     let newLinkedList = LinkedListFromArray(values);
     newLinkedList.append(Math.random() * 10);
@@ -126,7 +132,7 @@ const BambooStalk = (props: BambooStalkProps) => {
 
   const moveOperations = {
     move: (direction: Direction) => handleMove(direction),
-  }
+  };
 
   const plantOperations = {
     append: handleAppend,
