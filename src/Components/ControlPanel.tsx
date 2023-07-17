@@ -100,6 +100,7 @@ type ControlPanelProps = {
   plantOperations: Record<string, () => void>;
     // an object - key: string, value: function
   nodeOperations: Record<string, (index: number) => void>;
+  // handleKeyDown: (e: any) => void;
 };
 
 const ControlPanel = (props: ControlPanelProps) => {
@@ -107,7 +108,8 @@ const ControlPanel = (props: ControlPanelProps) => {
     activeNodeId,
     moveOperations,
     plantOperations,
-    nodeOperations
+    nodeOperations,
+    // handleKeyDown
   } = props;
   const [controlsHeight, setControlsHeight] = useState(0);
   const [controlsWidth, setControlsWidth] = useState(0);
@@ -132,7 +134,9 @@ const ControlPanel = (props: ControlPanelProps) => {
       calculatePosition={() => {
         return [0, window.innerHeight - 200, 0]
       }}>
-        <ArrowWrap>
+        <ArrowWrap
+          // onKeyDown={(e) => handleKeyDown(e)}
+        >
           <Arrow
             onPointerDown={(e) => {
               e.stopPropagation();
