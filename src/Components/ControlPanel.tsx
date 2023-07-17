@@ -22,6 +22,11 @@ const Button = styled.button`
     opacity: 0.3;
     pointer-events: none;
   }
+
+  @media only screen and (max-width: 700px) {
+    height: 30px;
+    font-size: 12px;
+  }
 `;
 
 const PositionWrap = styled.div`
@@ -29,12 +34,15 @@ const PositionWrap = styled.div`
   gap: 10px;
   margin: -50px -10px;
   width: 300px;
-  height: 100px;
   justify-content: center;
   align-items: center;
-  /* height: 300px; */
-  /* border: 1px solid red; */
   flex-wrap: wrap;
+  /* border: 1px solid red; */
+
+  @media only screen and (max-width: 700px) {
+    margin: -50px 10px;
+    width: 150px;
+  }
 `;
 
 const Arrow = styled.button`
@@ -42,7 +50,6 @@ const Arrow = styled.button`
   border-radius: 100px;
   text-align: center;
   font-size: 30px;
-  font-weight: 500px;
   margin: 0px;
   padding: 0px;
   width: 60px;
@@ -54,6 +61,14 @@ const Arrow = styled.button`
   &:hover {
     border: 1px solid #ddff00;
   }
+
+  @media only screen and (max-width: 700px) {
+    font-size: 20px;
+    width: 40px;
+    height: 40px;
+    width: 40px;
+    height: 40px;
+  }
 `
 
 const ArrowWrap = styled.div`
@@ -61,6 +76,10 @@ const ArrowWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  
+  @media only screen and (max-width: 700px) {
+    margin: 35px 25px;
+  }
 `
 
 const LeftRightWrap = styled.div`
@@ -68,6 +87,10 @@ const LeftRightWrap = styled.div`
   flex-direction: row;
   justify-content: space-between;
   width: 190px;
+
+  @media only screen and (max-width: 700px) {
+    width: 125px;
+  }
 `
 
 type ControlPanelProps = {
