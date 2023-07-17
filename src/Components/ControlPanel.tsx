@@ -40,7 +40,7 @@ const PositionWrap = styled.div`
   /* border: 1px solid red; */
 
   @media only screen and (max-width: 700px) {
-    margin: 100px;
+    margin: -100px;
     width: 150px;
   }
 `;
