@@ -6,14 +6,18 @@ import {
 import Node3D from "./Node3D";
 import useActiveItem from "../Hooks/useActiveItem";
 import ControlPanel from "./ControlPanel";
-import { GardenReducerAction } from "../Hooks/Reducers/gardenReducer";
+import {
+  Direction,
+  GardenReducerAction,
+} from "../Hooks/Reducers/gardenReducer";
+import { Vector3 } from "three";
 
 type FlowerProps = {
   root: DoublyCircularlyLinkedList;
   index: number;
   gardenDispatch: React.Dispatch<GardenReducerAction>;
-  positionOffsets: [number, number, number];
-  rotationOffsets: [number, number, number];
+  position: Vector3;
+  rotation: Vector3;
   selectPlant: () => void;
   deselectAllPlants: () => void;
   isActive: boolean;
@@ -22,8 +26,8 @@ type FlowerProps = {
 const Flower = (props: FlowerProps) => {
   const {
     root,
-    positionOffsets,
-    rotationOffsets,
+    position,
+    rotation,
     selectPlant,
     deselectAllPlants,
     isActive,
@@ -49,20 +53,18 @@ const Flower = (props: FlowerProps) => {
 
   const children: React.ReactNode[] = [];
 
+  console.log(`flower rotation: ${[rotation.x, rotation.y, rotation.z]}`);
+
   // central hub node of the flower
   children.push(
     <Node3D
       value={2}
       key={-1}
-      position={[
-        positionOffsets[0],
-        positionOffsets[1],
-        positionOffsets[2] + 0.3,
-      ]}
-      rotation={[1.5708, 0, 0]}
+      position={position.clone().add(new Vector3(0, 0, 0.3))}
+      rotation={rotation.clone().add(new Vector3(0, 1.5708, 0))}
       cylinderArgs={[1, 2, 0.5]}
       isSelected={false}
-      defaultColor={"yellow"}
+      defaultColor={"rgb(221, 255, 0)"}
       deselectAllPlants={deselectAllPlants}
       deselectAllNodes={() => {
         deselectAllItems();
@@ -80,21 +82,23 @@ const Flower = (props: FlowerProps) => {
       <Node3D
         value={nodeValue}
         key={index}
-        position={[
-          positionOffsets[0] +
-            (nodeValue * 2 - 1.5) *
-              Math.cos(((2 * Math.PI) / values.length) * index),
-          positionOffsets[1] +
-            (nodeValue * 2 - 1.5) *
-              Math.sin(((2 * Math.PI) / values.length) * index),
-          positionOffsets[2] + (index % 2 == 0 ? 0.05 : -0.05),
-        ]}
-        rotation={[1.5708, 0, 0]}
+        position={position
+          .clone()
+          .add(
+            new Vector3(
+              (nodeValue * 2 - 1.5) *
+                Math.cos(((2 * Math.PI) / values.length) * index),
+              (nodeValue * 2 - 1.5) *
+                Math.sin(((2 * Math.PI) / values.length) * index),
+              index % 2 === 0 ? 0.05 : -0.05
+            )
+          )}
+        rotation={rotation.clone().add(new Vector3(0, 1.5708, 0))}
         cylinderArgs={[nodeValue, nodeValue, 0.1]}
         isSelected={isActive && activeItem === index}
         deselectAllNodes={deselectAllItems}
         selectNode={() => selectItem(index)}
-        defaultColor="rgb(255,0,174)"
+        defaultColor="rgb(255, 92, 203)"
         deselectAllPlants={deselectAllPlants}
         selectPlant={selectPlant}
         materialOverride={null}
@@ -113,11 +117,12 @@ const Flower = (props: FlowerProps) => {
     setValues(newLinkedList.intoArray());
   };
 
-  const handleMove = () => {
+  const handleMove = (direction: Direction) => {
     const action: GardenReducerAction = {
-      type: "modifyPlant",
+      type: "movePlant",
       payload: {
         index,
+        direction,
       },
     };
     gardenDispatch(action);
@@ -138,9 +143,12 @@ const Flower = (props: FlowerProps) => {
     setValues(newLinkedList.intoArray());
   };
 
+  const moveOperations = {
+    move: (direction: Direction) => handleMove(direction),
+  };
+
   const plantOperations = {
     append: handleAppend,
-    move: handleMove,
   };
 
   const nodeOperations = {
@@ -155,6 +163,7 @@ const Flower = (props: FlowerProps) => {
         <ControlPanel
           data={root}
           activeNodeId={activeItem}
+          moveOperations={moveOperations}
           plantOperations={plantOperations}
           nodeOperations={nodeOperations}
         />

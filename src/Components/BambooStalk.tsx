@@ -3,21 +3,34 @@ import { LinkedList, LinkedListFromArray } from "../DataStructures/LinkedList";
 import Node3D from "./Node3D";
 import ControlPanel from "./ControlPanel";
 import useActiveItem from "../Hooks/useActiveItem";
-import { GardenReducerAction } from "../Hooks/Reducers/gardenReducer";
+import {
+  Direction,
+  GardenReducerAction,
+} from "../Hooks/Reducers/gardenReducer";
+import { Vector3 } from "three";
 
 type BambooStalkProps = {
   root: LinkedList;
   index: number;
+  position: Vector3;
+  rotation: Vector3;
   gardenDispatch: React.Dispatch<GardenReducerAction>;
-  positionOffsets: [number, number, number];
   selectPlant: () => void;
   deselectAllPlants: () => void;
   isActive: boolean;
 };
 
 const BambooStalk = (props: BambooStalkProps) => {
-  const { root, positionOffsets, selectPlant, deselectAllPlants, isActive } =
-    props;
+  const {
+    root,
+    position,
+    rotation,
+    selectPlant,
+    deselectAllPlants,
+    isActive,
+    gardenDispatch,
+    index,
+  } = props;
   const {
     activeItem: activeNode,
     selectItem: selectNode,
@@ -37,15 +50,11 @@ const BambooStalk = (props: BambooStalkProps) => {
     <Node3D
       value={2}
       key={-1}
-      position={[
-        positionOffsets[0],
-        positionOffsets[1],
-        positionOffsets[2] + 0.3,
-      ]}
-      rotation={[0, 0, 0]}
+      position={position.clone().add(new Vector3(0, 0, 0.3))}
+      rotation={rotation}
       cylinderArgs={[1, 2, 1]}
       isSelected={false}
-      defaultColor={"brown"}
+      defaultColor={"rgb(114, 100, 21)"}
       deselectAllPlants={deselectAllPlants}
       deselectAllNodes={() => {
         deselectAllNodes();
@@ -62,17 +71,15 @@ const BambooStalk = (props: BambooStalkProps) => {
       <Node3D
         value={nodeValue}
         key={index}
-        position={[
-          positionOffsets[0],
-          positionOffsets[1] + cumulativeHeight + 0.5 * nodeValue,
-          positionOffsets[2],
-        ]}
-        rotation={[0, 0, 0]}
+        position={position
+          .clone()
+          .add(new Vector3(0, cumulativeHeight + 0.5 * nodeValue, 0))}
+        rotation={rotation.clone().add(new Vector3(0, 0, 0))}
         cylinderArgs={[1, 1, nodeValue]}
         isSelected={isActive && activeNode === index}
         deselectAllPlants={deselectAllPlants}
         selectPlant={selectPlant}
-        defaultColor={"green"}
+        defaultColor={"rgb(26, 255, 0)"}
         deselectAllNodes={deselectAllNodes}
         selectNode={() => selectNode(index)}
         materialOverride={null}
@@ -80,6 +87,17 @@ const BambooStalk = (props: BambooStalkProps) => {
     );
     cumulativeHeight += nodeValue;
   });
+
+  const handleMove = (direction: Direction) => {
+    const action: GardenReducerAction = {
+      type: "movePlant",
+      payload: {
+        index,
+        direction,
+      },
+    };
+    gardenDispatch(action);
+  };
 
   const handleAppend = () => {
     let newLinkedList = LinkedListFromArray(values);
@@ -112,6 +130,10 @@ const BambooStalk = (props: BambooStalkProps) => {
     setValues(newLinkedList.intoArray());
   };
 
+  const moveOperations = {
+    move: (direction: Direction) => handleMove(direction),
+  };
+
   const plantOperations = {
     append: handleAppend,
     pop: handlePop,
@@ -131,6 +153,7 @@ const BambooStalk = (props: BambooStalkProps) => {
         <ControlPanel
           data={root}
           activeNodeId={activeNode}
+          moveOperations={moveOperations}
           plantOperations={plantOperations}
           nodeOperations={nodeOperations}
         />
