@@ -1,27 +1,22 @@
 ## 𝓈ℴ𝒻𝓉𝓌𝒶𝓇ℯ ℊ𝒶𝓇𝒹ℯ𝓃𝒾𝓃ℊ
-<i>Though data structures & algorithms are constrained by definition, can we consider them through our own lenses, and converge on the same equation / solution?</i>
 
 ### `Motivation`<br>
-Ben, Stella, and Zack met at the Recurse Center. Ben was a cool and generous algorithm sensei. Stella and Zack were largely project-based, with backgrounds in atmospheric dynamics/teaching and art/writing, respectively.<br><br>
+Ben, Stella, and Zack met at the Recurse Center. Ben was a data structures and algorithms expert. Stella and Zack were largely project-based, with backgrounds in atmospheric dynamics/teaching and art/writing, respectively.<br><br>
 
-After her first algorithm interview, Stella reflected on the experience, and was curious to ascertain a framework to acquire a deeper understanding of data structures and algorithms. She noticed the paper flowers she made behind her desk resembled doubly linked lists. Were the flower petals nodes of a circularly linked list?<br><br>
+Stella was curious to ascertain a framework to acquire a deeper understanding of data structures and algorithms. She noticed the paper flowers she made hanging behind her desk resembled linked lists. Were the flower petals nodes of a circularly linked list?<br><br>
 
-Ben, Stella, and Zack collaborated on a project: reimagining data structures through the natural world - a universal language - and exploring algorithms via storytelling. They became software gardeners in an effort to illuminate new perspectives.
+Ben, Stella, and Zack collaborated on a project: reimagining data structures and algorithms through the natural world - a universal language.
 
 ### `Technologies`<br>
 - TypeScript
-- React
+- React Three Fiber
 - Vite
 - Vercel
 
 ### `Functionalities`<br>
-- 
+- Users are invited to garden
+- CRUD data structures
 
 ### `Future Considerations`<br>
-- 
-
-### `Shout Outs`<br>
-- 
-
-
-https://www.figma.com/file/av4j9K1vweCU0Z2mJSTRH8/dream-team?type=design&node-id=0-1&t=VxoyRBmNhaa2i4hi-0
+- Backend
+- Database

@@ -142,7 +142,7 @@ const GlobalCanvas: React.FC = () => {
       <Canvas>
         <OrbitControls />
         <ambientLight intensity={1} />
-        <directionalLight intensity={1}></directionalLight>
+        <directionalLight intensity={1} />
         <camera position={[0, 5, -5]} />
         {/* World box for missed click events */}
         <Box
