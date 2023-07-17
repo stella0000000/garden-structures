@@ -10,7 +10,7 @@ const Button = styled.button`
   height: 45px;
   background: transparent;
   color: white;
-  border: 1px solid #ffc3db;
+  border: 1px solid #ff0088;
   border-radius: 100px;
   cursor: default;
 
@@ -27,9 +27,9 @@ const Button = styled.button`
 const PositionWrap = styled.div`
   display: flex;
   gap: 10px;
-  margin: -40px -10px;
+  margin: -50px -10px;
   width: 300px;
-  height: 150px;
+  height: 100px;
   justify-content: center;
   align-items: center;
   /* height: 300px; */
@@ -38,15 +38,15 @@ const PositionWrap = styled.div`
 `;
 
 const Arrow = styled.button`
-  border: 1px solid #ffc3db;
+  border: 1px solid #ff0088;
   border-radius: 100px;
   text-align: center;
-  font-size: 40px;
+  font-size: 30px;
   font-weight: 500px;
   margin: 0px;
   padding: 0px;
-  width: 65px;
-  height: 65px;
+  width: 60px;
+  height: 60px;
   background: transparent;
   color: white;
   cursor: default;
@@ -57,7 +57,7 @@ const Arrow = styled.button`
 `
 
 const ArrowWrap = styled.div`
-  margin: -30px 30px;
+  margin: -20px 25px;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -64,7 +64,7 @@ const Flower = (props: FlowerProps) => {
       rotation={rotation.clone().add(new Vector3(0, 1.5708, 0))}
       cylinderArgs={[1, 2, 0.5]}
       isSelected={false}
-      defaultColor={"yellow"}
+      defaultColor={"rgb(221, 255, 0)"}
       deselectAllPlants={deselectAllPlants}
       deselectAllNodes={() => {
         deselectAllItems();
@@ -98,7 +98,7 @@ const Flower = (props: FlowerProps) => {
         isSelected={isActive && activeItem === index}
         deselectAllNodes={deselectAllItems}
         selectNode={() => selectItem(index)}
-        defaultColor="rgb(255,0,174)"
+        defaultColor="rgb(255, 92, 203)"
         deselectAllPlants={deselectAllPlants}
         selectPlant={selectPlant}
         materialOverride={null}
