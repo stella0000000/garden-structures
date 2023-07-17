@@ -71,15 +71,15 @@ const initialTestingState: PlantCollection = [
   testingFlower1,
 ];
 
-const texture = new THREE.TextureLoader().load("dirt.jpeg");
-texture.wrapS = THREE.RepeatWrapping;
-texture.wrapT = THREE.RepeatWrapping;
-texture.repeat.set(4, 4);
+// const texture = new THREE.TextureLoader().load("dirt.jpeg");
+// texture.wrapS = THREE.RepeatWrapping;
+// texture.wrapT = THREE.RepeatWrapping;
+// texture.repeat.set(4, 4);
 
-const dirtMaterial = new THREE.MeshBasicMaterial({
-  map: texture,
-  color: "rgb(135, 111, 89)",
-});
+// const dirtMaterial = new THREE.MeshBasicMaterial({
+//   map: texture,
+//   color: "rgb(135, 111, 89)",
+// });
 
 const GlobalCanvas: React.FC = () => {
   const [plantData, dispatch] = useReducer(gardenReducer, initialTestingState);
@@ -162,11 +162,11 @@ const GlobalCanvas: React.FC = () => {
           }
         />
         {children()}
-        <Plane
+        {/* <Plane
           args={[20, 20]}
           rotation={[-1.57, 0, 0]}
           material={dirtMaterial}
-        ></Plane>
+        ></Plane> */}
       </Canvas>
     </>
   );

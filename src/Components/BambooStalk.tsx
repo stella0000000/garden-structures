@@ -54,7 +54,7 @@ const BambooStalk = (props: BambooStalkProps) => {
       rotation={rotation}
       cylinderArgs={[1, 2, 1]}
       isSelected={false}
-      defaultColor={"brown"}
+      defaultColor={"rgb(114, 100, 21)"}
       deselectAllPlants={deselectAllPlants}
       deselectAllNodes={() => {
         deselectAllNodes();
@@ -79,7 +79,7 @@ const BambooStalk = (props: BambooStalkProps) => {
         isSelected={isActive && activeNode === index}
         deselectAllPlants={deselectAllPlants}
         selectPlant={selectPlant}
-        defaultColor={"green"}
+        defaultColor={"rgb(26, 255, 0)"}
         deselectAllNodes={deselectAllNodes}
         selectNode={() => selectNode(index)}
         materialOverride={null}

@@ -35,9 +35,9 @@ export default function gardenReducer(
     let currentPosition = currentPlant.position
     const direction = action.payload.direction
     if (direction === Direction.UP) {
-      currentPosition.add(new Vector3(0, 0, 1))
+      currentPosition.add(new Vector3(0, 1, 0))
     } else if (direction === Direction.DOWN) {
-      currentPosition.add(new Vector3(0, 0, -1))
+      currentPosition.add(new Vector3(0, -1, 0))
     } else if (direction === Direction.LEFT) {
       currentPosition.add(new Vector3(-1, 0, 0))
     } else if (direction === Direction.RIGHT) {
