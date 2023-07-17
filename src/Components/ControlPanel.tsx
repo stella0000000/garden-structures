@@ -32,7 +32,7 @@ const Button = styled.button`
 const PositionWrap = styled.div`
   display: flex;
   gap: 10px;
-  margin: -50px -10px;
+  margin: -50px 10px;
   width: 300px;
   justify-content: center;
   align-items: center;
@@ -40,7 +40,7 @@ const PositionWrap = styled.div`
   /* border: 1px solid red; */
 
   @media only screen and (max-width: 700px) {
-    margin: -135px -125px;
+    margin: -30px 25px;
     width: 150px;
   }
 `;
