@@ -90,8 +90,8 @@ const GlobalCanvas: React.FC = () => {
   } = useActiveItem();
 
   useEffect(() => {
-    console.log(plantData[3]);
-  }, [plantData]);
+    console.log({ activePlant})
+  }, [activePlant])
 
   // renders the appropriate JSX for each plant in the PlantData based on type
   const children = () => {
@@ -139,11 +139,10 @@ const GlobalCanvas: React.FC = () => {
 
   return (
     <>
-      <Canvas>
-        <OrbitControls />
+      <Canvas camera={{ position: [0, 20, 50] }}>
+        <OrbitControls target={[0, 0, 0]} />
         <ambientLight intensity={1} />
         <directionalLight intensity={1} />
-        <camera position={[0, 5, -5]} />
         {/* World box for missed click events */}
         <Box
           args={[75, 75, 75]}

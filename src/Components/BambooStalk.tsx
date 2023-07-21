@@ -65,6 +65,7 @@ const BambooStalk = (props: BambooStalkProps) => {
       materialOverride={null}
     />
   );
+  // let values = root.intoArray()
   values.forEach((nodeValue, index) => {
     // plant nodes
     children.push(
@@ -102,7 +103,10 @@ const BambooStalk = (props: BambooStalkProps) => {
   const handleAppend = () => {
     let newLinkedList = LinkedListFromArray(values);
     newLinkedList.append(Math.random() * 10);
-    setValues(newLinkedList.intoArray());
+    // setValues(newLinkedList.intoArray());
+    // console.log({ values })
+    selectNode(values.length-1)
+    // console.log({ activeNode })
   };
 
   const handlePop = () => {
@@ -110,6 +114,8 @@ const BambooStalk = (props: BambooStalkProps) => {
     let newLinkedList = LinkedListFromArray(values);
     newLinkedList.delete(len - 1);
     setValues(newLinkedList.intoArray());
+    selectNode(values.length-1)
+    console.log({activeNode})
   };
 
   const handleInsert = (index: number) => {
@@ -122,6 +128,7 @@ const BambooStalk = (props: BambooStalkProps) => {
     let newLinkedList = LinkedListFromArray(values);
     newLinkedList.delete(index); // tumbly
     setValues(newLinkedList.intoArray());
+    // console.log(activePlant)
   };
 
   const handleDeleteAtIndex = (index: number) => {
