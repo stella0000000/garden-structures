@@ -6,13 +6,16 @@ import styled from "styled-components";
 import { Direction } from "../Hooks/Reducers/gardenReducer";
 
 const Button = styled.button`
-  width: auto;
+  /* width: auto; */
   height: 40px;
   background: transparent;
   color: white;
   border: 1px solid #ff0088;
   border-radius: 100px;
   cursor: default;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &:hover {
     border: 1px solid #ddff00;
