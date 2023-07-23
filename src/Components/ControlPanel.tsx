@@ -7,7 +7,7 @@ import { Direction } from "../Hooks/Reducers/gardenReducer";
 
 const Button = styled.button`
   width: auto;
-  height: 45px;
+  height: 40px;
   background: transparent;
   color: white;
   border: 1px solid #ff0088;
@@ -24,8 +24,9 @@ const Button = styled.button`
   }
 
   @media only screen and (max-width: 700px) {
-    height: 30px;
-    font-size: 12px;
+    display: none;
+    /* height: 30px;
+    font-size: 12px; */
   }
 `;
 
@@ -48,8 +49,9 @@ const PositionWrap = styled.div`
 const Arrow = styled.button`
   border: 1px solid #ff0088;
   border-radius: 100px;
-  text-align: center;
-  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  font-size: 40px;
   margin: 0px;
   padding: 0px;
   width: 60px;
@@ -63,22 +65,24 @@ const Arrow = styled.button`
   }
 
   @media only screen and (max-width: 700px) {
-    font-size: 20px;
+    /* font-size: 20px;
     width: 40px;
     height: 40px;
     width: 40px;
-    height: 40px;
+    height: 40px; */
+    display: none;
   }
 `
 
 const ArrowWrap = styled.div`
-  margin: -20px 25px;
+  margin: -5px 25px;
   display: flex;
   flex-direction: column;
   align-items: center;
   
   @media only screen and (max-width: 700px) {
-    margin: 60px 5px;
+    /* margin: 60px 5px; */
+    display: none;
   }
 `
 
