@@ -140,7 +140,7 @@ const GlobalCanvas: React.FC = () => {
   return (
     <>
       <Canvas camera={{ position: [0, 20, 50] }}>
-        <OrbitControls target={[0, 0, 0]} />
+        <OrbitControls target={[5, 5, 0]} />
         <ambientLight intensity={1} />
         <directionalLight intensity={1} />
         {/* World box for missed click events */}
