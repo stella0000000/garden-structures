@@ -75,7 +75,7 @@ export class DoublyCircularlyLinkedList {
     }
 
     if (!curr) return;
-    
+
     curr.value = newValue;
   }
 
@@ -137,6 +137,10 @@ export class DoublyCircularlyLinkedList {
       curr = curr.next;
     }
     return out;
+  }
+
+  clone(): DoublyCircularlyLinkedList {
+    return CircularlyLinkedListFromArray(this.intoArray());
   }
 }
 

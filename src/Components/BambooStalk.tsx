@@ -6,6 +6,8 @@ import useActiveItem from "../Hooks/useActiveItem";
 import {
   Direction,
   GardenReducerAction,
+  OpName,
+  PlantName,
 } from "../Hooks/Reducers/gardenReducer";
 import { Vector3 } from "three";
 
@@ -38,7 +40,6 @@ const BambooStalk = (props: BambooStalkProps) => {
   } = useActiveItem();
 
   let cumulativeHeight = 0;
-  const [values, setValues] = useState<number[]>(root.intoArray());
 
   useEffect(() => {
     console.log("activeNodeIndex" + activeNode);
@@ -65,8 +66,7 @@ const BambooStalk = (props: BambooStalkProps) => {
       materialOverride={null}
     />
   );
-  // let values = root.intoArray()
-  values.forEach((nodeValue, index) => {
+  root.intoArray().forEach((nodeValue, index) => {
     // plant nodes
     children.push(
       <Node3D
@@ -101,40 +101,43 @@ const BambooStalk = (props: BambooStalkProps) => {
   };
 
   const handleAppend = () => {
-    let newLinkedList = LinkedListFromArray(values);
-    newLinkedList.append(Math.random() * 10);
-    // setValues(newLinkedList.intoArray());
-    // console.log({ values })
-    selectNode(values.length-1)
-    // console.log({ activeNode })
+    const action: GardenReducerAction = {
+      type: "plantOperation",
+      payload: {
+        plantName: PlantName.BAMBOO,
+        opName: OpName.APPEND,
+        index,
+      },
+    };
+    gardenDispatch(action);
   };
 
   const handlePop = () => {
-    const len = values.length;
-    let newLinkedList = LinkedListFromArray(values);
-    newLinkedList.delete(len - 1);
-    setValues(newLinkedList.intoArray());
-    selectNode(values.length-1)
-    console.log({activeNode})
+    // const len = root.intoArray().length;
+    // let newLinkedList = LinkedListFromArray(values);
+    // newLinkedList.delete(len - 1);
+    // setValues(newLinkedList.intoArray());
+    // selectNode(values.length - 1);
+    // console.log({ activeNode });
   };
 
   const handleInsert = (index: number) => {
-    let newLinkedList = LinkedListFromArray(values);
-    newLinkedList.insertAtIndex(index, Math.random() * 10);
-    setValues(newLinkedList.intoArray());
+    // let newLinkedList = LinkedListFromArray(values);
+    // newLinkedList.insertAtIndex(index, Math.random() * 10);
+    // setValues(newLinkedList.intoArray());
   };
 
   const handleDelete = (index: number) => {
-    let newLinkedList = LinkedListFromArray(values);
-    newLinkedList.delete(index); // tumbly
-    setValues(newLinkedList.intoArray());
+    // let newLinkedList = LinkedListFromArray(values);
+    // newLinkedList.delete(index); // tumbly
+    // setValues(newLinkedList.intoArray());
     // console.log(activePlant)
   };
 
   const handleDeleteAtIndex = (index: number) => {
-    let newLinkedList = LinkedListFromArray(values);
-    newLinkedList.deleteAtIndex(index);
-    setValues(newLinkedList.intoArray());
+    // let newLinkedList = LinkedListFromArray(values);
+    // newLinkedList.deleteAtIndex(index);
+    // setValues(newLinkedList.intoArray());
   };
 
   const moveOperations = {
