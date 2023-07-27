@@ -12,6 +12,8 @@ import useActiveItem from "../Hooks/useActiveItem";
 import gardenReducer from "../Hooks/Reducers/gardenReducer";
 import * as THREE from "three";
 import { Vector3 } from "three";
+import { GraphNode } from "../DataStructures/Graph";
+import Constellation from "./Constellation";
 
 /* plant data is stored at the topmost level as a React antipattern,
  * until we figure out a better way to integrate ui controls inside the canvas
@@ -34,7 +36,18 @@ export type Flower = {
 };
 export type FlowerData = Flower & Transform3D;
 
-export type PlantCollection = (BambooStalkData | FlowerData)[];
+export type Constellation = {
+  kind: "ConstellationData";
+  data: GraphNode;
+};
+
+export type ConstellationData = Constellation & Transform3D;
+
+export type PlantCollection = (
+  | BambooStalkData
+  | FlowerData
+  | ConstellationData
+)[];
 
 // dummy values for use during local testing
 const testingBamboo: BambooStalkData = {
@@ -64,11 +77,28 @@ const testingFlower1: FlowerData = {
   rotation: new Vector3(1.5708, 0, 0),
 };
 
+const testingConstellationStar1: GraphNode = new GraphNode([10, 30], []);
+const testingConstellationStar2: GraphNode = new GraphNode([10, 5], []);
+const testingConstellationStar3: GraphNode = new GraphNode([5, 15], []);
+const testingConstellationStar4: GraphNode = new GraphNode([15, 15], []);
+testingConstellationStar1.connect(testingConstellationStar2);
+testingConstellationStar1.connect(testingConstellationStar3);
+testingConstellationStar4.connect(testingConstellationStar1);
+testingConstellationStar2.connect(testingConstellationStar3);
+
+const testingConstellation1: ConstellationData = {
+  kind: "ConstellationData",
+  data: testingConstellationStar1,
+  position: new Vector3(),
+  rotation: new Vector3(),
+};
+
 const initialTestingState: PlantCollection = [
   testingBamboo,
   testingBamboo2,
   testingBamboo3,
   testingFlower1,
+  testingConstellation1,
 ];
 
 // const texture = new THREE.TextureLoader().load("dirt.jpeg");
@@ -90,8 +120,8 @@ const GlobalCanvas: React.FC = () => {
   } = useActiveItem();
 
   useEffect(() => {
-    console.log({ activePlant})
-  }, [activePlant])
+    console.log({ activePlant });
+  }, [activePlant]);
 
   // renders the appropriate JSX for each plant in the PlantData based on type
   const children = () => {
@@ -117,6 +147,21 @@ const GlobalCanvas: React.FC = () => {
           // TODO: UNIMPLEMENTED: component for rendering flowers
           return (
             <Flower
+              key={index}
+              index={index}
+              gardenDispatch={dispatch}
+              root={plant.data}
+              position={plant.position}
+              rotation={plant.rotation}
+              selectPlant={() => selectPlant(index)}
+              deselectAllPlants={deselectAllPlants}
+              isActive={activePlant === index}
+            />
+          );
+        }
+        case "ConstellationData": {
+          return (
+            <Constellation
               key={index}
               index={index}
               gardenDispatch={dispatch}

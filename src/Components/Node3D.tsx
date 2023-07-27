@@ -43,7 +43,11 @@ const Node3D = (props: Node3DProps) => {
         materialOverride ||
         new THREE.MeshBasicMaterial({
           wireframe: true,
-          color: isSelected ? "white" : isHighlighted ? "rgb(99, 99, 99)" : defaultColor,
+          color: isSelected
+            ? "white"
+            : isHighlighted
+            ? "rgb(99, 99, 99)"
+            : defaultColor,
         })
       }
       onPointerEnter={(e: ThreeEvent<PointerEvent>) => {
