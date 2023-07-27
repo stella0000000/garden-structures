@@ -37,14 +37,12 @@ const Constellation = (props: ConstellationProps) => {
 
   useEffect(() => {
     console.log({ root });
-    console.log(root.dfs());
   }, [root]);
 
   const children: React.ReactNode[] = [];
 
-  // cursed: do not read
-  const uniqueEdgeHashes = new Set<string>();
-  const uniqueEdges: [GraphNode, GraphNode][] = [];
+  // uncursed:  read
+  const uniqueEdgeMap = new Map<string, [GraphNode, GraphNode]>();
   root.dfs().forEach((node) => {
     const nodeHash = `${node.val[0]},${node.val[1]}`;
     for (const neighbor of node.neighbors) {
@@ -53,13 +51,11 @@ const Constellation = (props: ConstellationProps) => {
         nodeHash < neighborHash
           ? nodeHash + neighborHash
           : neighborHash + nodeHash;
-      if (!uniqueEdgeHashes.has(fullHash)) {
-        uniqueEdges.push([node, neighbor]);
+      if (!uniqueEdgeMap.has(fullHash)) {
+        uniqueEdgeMap.set(fullHash, [node, neighbor]);
       }
-      uniqueEdgeHashes.add(fullHash);
     }
   });
-  console.log({ uniqueEdges });
 
   // root node
   root.dfs().forEach((graphNode, index) => {
@@ -84,7 +80,7 @@ const Constellation = (props: ConstellationProps) => {
     );
   });
 
-  uniqueEdges.forEach((nodes, index) => {
+  Array.from(uniqueEdgeMap.values()).forEach((nodes, index) => {
     const [node1, node2] = nodes;
     const p1 = position.clone().add(new Vector3(node1.val[0], node1.val[1], 0));
     const p2 = position.clone().add(new Vector3(node2.val[0], node2.val[1], 0));
