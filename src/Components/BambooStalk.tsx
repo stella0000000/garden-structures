@@ -155,10 +155,6 @@ const BambooStalk = (props: BambooStalkProps) => {
     deleteAtIndex: handleDeleteAtIndex,
   };
 
-  // const handleKeyDown = (e: any) => {
-  //   console.log( { e } )
-  // }
-
   return (
     <>
       {children}
@@ -170,7 +166,6 @@ const BambooStalk = (props: BambooStalkProps) => {
           moveOperations={moveOperations}
           plantOperations={plantOperations}
           nodeOperations={nodeOperations}
-          // handleKeyDown={(e: any) => handleKeyDown(e)}
         />
       )}
     </>

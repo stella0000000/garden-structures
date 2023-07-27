@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { Reducer, useEffect, useReducer } from "react";
 import { Canvas, ThreeEvent } from "@react-three/fiber";
 import { LinkedList, LinkedListFromArray } from "../DataStructures/LinkedList";
 import { Box, OrbitControls } from "@react-three/drei";
@@ -9,7 +9,9 @@ import {
 } from "../DataStructures/DoublyCircularlyLinkedList";
 import Flower from "./Flower";
 import useActiveItem from "../Hooks/useActiveItem";
-import gardenReducer from "../Hooks/Reducers/gardenReducer";
+import gardenReducer, {
+  GardenReducerAction,
+} from "../Hooks/Reducers/gardenReducer";
 import * as THREE from "three";
 import { Vector3 } from "three";
 
@@ -90,8 +92,8 @@ const GlobalCanvas: React.FC = () => {
   } = useActiveItem();
 
   useEffect(() => {
-    console.log({ activePlant})
-  }, [activePlant])
+    console.log({ activePlant });
+  }, [activePlant]);
 
   // renders the appropriate JSX for each plant in the PlantData based on type
   const children = () => {
