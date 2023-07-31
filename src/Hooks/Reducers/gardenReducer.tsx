@@ -20,12 +20,17 @@ export enum PlantName {
 
 export enum OpName {
   APPEND = "append",
+  DELETEATINDEX = "deleteAtIndex",
+  INSERT = "insert",
+  DELETE = "delete",
+  POP = "pop",
 }
 
 export type GardenReducerAction = {
   type: string;
   payload: {
     index?: number;
+    nodeIndex?: number;
     direction?: Direction;
     plantName?: PlantName;
     opName?: OpName;
@@ -38,17 +43,35 @@ export default function gardenReducer(
 ): PlantCollection {
   console.log(action);
 
+  const { index, nodeIndex, direction, plantName, opName } = action.payload
+
+  /* PLANT OPS */
   if (action.type === "plantOperation") {
-    if (action.payload.opName === OpName.APPEND) {
-      if (action.payload.plantName === PlantName.BAMBOO) {
+    if (opName === OpName.APPEND) {
+      if (plantName === PlantName.BAMBOO) {
         return appendBamboo(plantCollection, action);
+      } else if (action.payload.plantName === PlantName.FLOWER) {
+        return appendFlower(plantCollection, action);
       } else {
-        throw Error(`No append handler for plant: ${action.payload.plantName}`);
+        throw Error(`No append handler for ${plantName}`);
       }
     } else {
       throw Error(
         `No ${action.payload.opName} handler for plant: ${action.payload.plantName}`
       );
+    }
+  /* NODE OPS */
+  } else if (action.type === "nodeOperation") {
+    if (opName === OpName.DELETEATINDEX) {
+      if (plantName === PlantName.BAMBOO) {
+        // delete @ index bamboo
+        // return deleteAtIndexBamboo(plantCollection, action)
+        return plantCollection // filler, delete this
+      } else if (plantName === PlantName.FLOWER) {
+        return deleteAtIndexFlower(plantCollection, action)
+      } else {
+        throw Error(`No delete @ index handler for ${plantName}`);
+      }
     }
   } else if (action.type === "movePlant") {
     return movePlant(plantCollection, action);
@@ -111,7 +134,7 @@ const appendBamboo = (
 ): PlantCollection => {
   const { index } = action.payload;
   if (index === undefined)
-    throw Error("bamboo append operation requires plant index");
+    throw Error("Bamboo append operation requires plant index");
 
   const newLinkedList = plantCollection[index].data.clone();
   newLinkedList.append(Math.random() * 10);
@@ -125,6 +148,80 @@ const appendBamboo = (
   };
 
   console.log(Object.values(newState));
+
+  return Object.values(newState) as PlantCollection;
+};
+
+// const deleteAtIndexBamboo = (
+//   plantCollection: PlantCollection,
+//   action: GardenReducerAction
+// ): PlantCollection => {
+//   const { index, nodeIndex } = action.payload;
+//   if (index === undefined)
+//     throw Error("Bamboo delete @ index requires plant index");
+
+//     const newLinkedList = plantCollection[index].data.clone();
+//     newLinkedList.delete(nodeIndex!);
+  
+//     const newState: PlantCollection = {
+//       ...plantCollection,
+//       [`${index}`]: {
+//         ...plantCollection[index],
+//         data: newLinkedList,
+//       },
+//     };
+  
+//     console.log(Object.values(newState));
+  
+//     return Object.values(newState) as PlantCollection;
+//   return Object.values(newState) as PlantCollection;
+// };
+
+
+const appendFlower = (
+  plantCollection: PlantCollection,
+  action: GardenReducerAction
+): PlantCollection => {
+  const { index } = action.payload;
+  if (index === undefined)
+    throw Error("Flower append requires plant index");
+
+  const newDoublyCircularlyLinkedList = plantCollection[index].data.clone();
+  newDoublyCircularlyLinkedList.append(2);
+
+  const newState: PlantCollection = {
+    ...plantCollection,
+    [`${index}`]: {
+      ...plantCollection[index],
+      data: newDoublyCircularlyLinkedList,
+    },
+  };
+
+  console.log(Object.values({newState}));
+
+  return Object.values(newState) as PlantCollection;
+};
+
+const deleteAtIndexFlower = (
+  plantCollection: PlantCollection,
+  action: GardenReducerAction
+): PlantCollection => {
+  const { index, nodeIndex } = action.payload;
+  if (index === undefined)
+    throw Error("Flower delete @ index requires plant index");
+
+  const newDoublyCircularlyLinkedList = plantCollection[index].data.clone();
+  if (nodeIndex) newDoublyCircularlyLinkedList.delete(nodeIndex);
+
+  const newState: PlantCollection = {
+    ...plantCollection,
+    [`${index}`]: {
+      ...plantCollection[index],
+      data: newDoublyCircularlyLinkedList,
+    },
+  };
+
+  console.log(Object.values({newState}));
 
   return Object.values(newState) as PlantCollection;
 };

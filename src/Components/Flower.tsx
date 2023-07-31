@@ -9,6 +9,8 @@ import ControlPanel from "./ControlPanel";
 import {
   Direction,
   GardenReducerAction,
+  OpName,
+  PlantName,
 } from "../Hooks/Reducers/gardenReducer";
 import { Vector3 } from "three";
 
@@ -110,12 +112,12 @@ const Flower = (props: FlowerProps) => {
     );
   });
 
-  const handleAppend = () => {
-    let newLinkedList = CircularlyLinkedListFromArray(values);
-    newLinkedList.append(2);
-    console.log({ history });
-    setValues(newLinkedList.intoArray());
-  };
+  // const handleAppend = () => {
+  //   let newLinkedList = CircularlyLinkedListFromArray(values);
+  //   newLinkedList.append(2);
+  //   console.log({ history });
+  //   setValues(newLinkedList.intoArray());
+  // };
 
   const handleMove = (direction: Direction) => {
     const action: GardenReducerAction = {
@@ -123,6 +125,31 @@ const Flower = (props: FlowerProps) => {
       payload: {
         index,
         direction,
+      },
+    };
+    gardenDispatch(action);
+  };
+
+  const handleAppend = () => {
+    const action: GardenReducerAction = {
+      type: "plantOperation",
+      payload: {
+        plantName: PlantName.FLOWER,
+        opName: OpName.APPEND,
+        index,
+      },
+    };
+    gardenDispatch(action);
+  };
+
+  const handleDeleteAtIndex = (nodeIndex: number) => {
+    const action: GardenReducerAction = {
+      type: "nodeOperation",
+      payload: {
+        plantName: PlantName.FLOWER,
+        opName: OpName.DELETEATINDEX,
+        index,
+        nodeIndex
       },
     };
     gardenDispatch(action);
@@ -137,11 +164,11 @@ const Flower = (props: FlowerProps) => {
   // no tumbly delete for flowers
   // only plucking petal at index
   // they love me they love me not
-  const handleDeleteAtIndex = (index: number) => {
-    let newLinkedList = CircularlyLinkedListFromArray(values);
-    newLinkedList.setValue(index, 0);
-    setValues(newLinkedList.intoArray());
-  };
+  // const handleDeleteAtIndex = (index: number) => {
+  //   let newLinkedList = CircularlyLinkedListFromArray(values);
+  //   newLinkedList.setValue(index, 0);
+  //   setValues(newLinkedList.intoArray());
+  // };
 
   const moveOperations = {
     move: (direction: Direction) => handleMove(direction),

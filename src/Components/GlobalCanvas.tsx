@@ -1,4 +1,4 @@
-import { Reducer, useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import { Canvas, ThreeEvent } from "@react-three/fiber";
 import { LinkedList, LinkedListFromArray } from "../DataStructures/LinkedList";
 import { Box, OrbitControls } from "@react-three/drei";
@@ -9,9 +9,7 @@ import {
 } from "../DataStructures/DoublyCircularlyLinkedList";
 import Flower from "./Flower";
 import useActiveItem from "../Hooks/useActiveItem";
-import gardenReducer, {
-  GardenReducerAction,
-} from "../Hooks/Reducers/gardenReducer";
+import gardenReducer from "../Hooks/Reducers/gardenReducer";
 import * as THREE from "three";
 import { Vector3 } from "three";
 
@@ -34,6 +32,7 @@ export type Flower = {
   kind: "FlowerData";
   data: DoublyCircularlyLinkedList;
 };
+
 export type FlowerData = Flower & Transform3D;
 
 export type PlantCollection = (BambooStalkData | FlowerData)[];
