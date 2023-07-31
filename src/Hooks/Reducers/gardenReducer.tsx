@@ -69,7 +69,7 @@ export default function gardenReducer(
     }
   } else {
     throw Error(
-      `Invalid action type for gardenReducer: no action matches supplied name ${action.type}`
+      `Invalid action type for gardenReducer: ${action.type}`
     );
   }
 }

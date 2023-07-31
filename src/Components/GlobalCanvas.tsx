@@ -77,14 +77,68 @@ const testingFlower1: FlowerData = {
   rotation: new Vector3(1.5708, 0, 0),
 };
 
-const testingConstellationStar1: GraphNode = new GraphNode([10, 30], []);
-const testingConstellationStar2: GraphNode = new GraphNode([10, 5], []);
-const testingConstellationStar3: GraphNode = new GraphNode([5, 15], []);
-const testingConstellationStar4: GraphNode = new GraphNode([15, 15], []);
-testingConstellationStar1.connect(testingConstellationStar2);
-testingConstellationStar1.connect(testingConstellationStar3);
-testingConstellationStar4.connect(testingConstellationStar1);
-testingConstellationStar2.connect(testingConstellationStar3);
+
+const generateRandomNum = (numStars: number): number => {
+  // return Math.ceil(Math.random() * numStars) * Math.round(Math.random()) ? 10 : -10
+  return Math.ceil(Math.random() * numStars) * (Math.round(Math.random()) ? 1 : -1)
+}
+// edges: [a, b] => [[a1, b1], [a2, b2]] = [a2-a1, b2-b1]
+const populateCoords = (numStars: number): number[][][] => {
+  const coords = []
+
+  for (let i=0; i<numStars; i++) {
+    let x1 = generateRandomNum(numStars)
+    let y1 = generateRandomNum(numStars)
+
+    let x2 = generateRandomNum(numStars)
+    let y2 = generateRandomNum(numStars)
+    
+    coords.push([[x1, y1], [x2, y2]])
+    // toggle = !toggle
+  }
+
+  return coords
+}
+
+const populateStars = (): GraphNode => {
+  const edges = populateCoords(100)
+  // const graph: GraphNode[] = []
+  // vertex [x, y]: neighbors [a, b]
+  const stars: GraphNode = new GraphNode([0, 0], [])
+  // let count = 0
+  let nodeA, nodeB
+  for (let edge of edges) {
+    const [ [x1, y1], [x2, y2] ] = edge // a = [x1, y1], b = [x2, y2]
+    nodeA = new GraphNode([x1, y1], [])
+    nodeB = new GraphNode([x2, y2], [])
+    
+    // if (count === 0) stars.connect(nodeA)
+    // count++
+    stars.connect(nodeA)
+    nodeA.connect(nodeB)
+
+    // const posA = `${x1},${y1}`
+    // const posB = `${x2},${y2}`
+    // if (!(posA in graph)) graph[posA] = []
+    // if (!(posB in graph)) graph[posB] = []
+    // graph[posA].push(graph[posB])
+    // graph[posB].push(graph[posA])
+  }
+  
+  console.log({stars})
+  return stars
+}
+
+const testingConstellationStar1 = populateStars()
+
+// const testingConstellationStar1: GraphNode = new GraphNode([10, 30], []);
+// const testingConstellationStar2: GraphNode = new GraphNode([10, 5], []);
+// const testingConstellationStar3: GraphNode = new GraphNode([5, 15], []);
+// const testingConstellationStar4: GraphNode = new GraphNode([15, 15], []);
+// testingConstellationStar1.connect(testingConstellationStar2);
+// testingConstellationStar1.connect(testingConstellationStar3);
+// testingConstellationStar4.connect(testingConstellationStar1);
+// testingConstellationStar2.connect(testingConstellationStar3);
 
 const testingConstellation1: ConstellationData = {
   kind: "ConstellationData",

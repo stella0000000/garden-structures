@@ -63,12 +63,14 @@ const Constellation = (props: ConstellationProps) => {
     children.push(
       <Node3D
         value={2}
-        key={index}
+        // fix key
+        key={index * Math.random() + 1}
         position={position
           .clone()
           .add(new Vector3(graphNode.val[0], graphNode.val[1], 0))}
         rotation={rotation.clone().add(new Vector3(0, 0, 0))}
         cylinderArgs={[0.1, 0.2, 0.2]}
+        // cylinderArgs={[1, 2, 2]}
         isSelected={isActive && activeNode === index}
         deselectAllPlants={deselectAllPlants}
         selectPlant={selectPlant}
@@ -87,9 +89,10 @@ const Constellation = (props: ConstellationProps) => {
 
     children.push(
       <Line
-        key={node1.val[0] + index}
+        // fix key
+        key={node1.val[0] + index * Math.random()}
         points={[p1, p2]}
-        color="white"
+        color="rgb(255, 255, 255)"
         dashed={true}
         dashScale={4}
         lineWidth={2}

@@ -13,6 +13,18 @@ export class GraphNode {
     this.neighbors.push(otherNode);
   }
 
+  // const root = new GraphNode([0, 0], []);
+  // const node1 = new GraphNode([1, 1], []);
+  // const node2 = new GraphNode([2, 2], []);
+  // const node3 = new GraphNode([3, 3], []);
+
+  // root.connect(node1);
+  // node1.connect(node2);
+  // root.connect(node3);
+
+  // buildConstellation() {
+  // }
+
   dfs(): GraphNode[] {
     const seen = new Set<GraphNode>();
 
