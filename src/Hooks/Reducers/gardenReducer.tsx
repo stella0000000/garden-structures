@@ -55,6 +55,12 @@ export default function gardenReducer(
       } else {
         throw Error(`No append handler for ${plantName}`);
       }
+    } else if (opName === OpName.POP) {
+      if (plantName === PlantName.BAMBOO) {
+        // return popBamboo(plantCollection, action)
+      } else {
+        throw Error(`No pop handler for ${plantName}`);
+      }
     } else {
       throw Error(
         `No ${action.payload.opName} handler for plant: ${action.payload.plantName}`
@@ -71,6 +77,22 @@ export default function gardenReducer(
         return deleteAtIndexFlower(plantCollection, action)
       } else {
         throw Error(`No delete @ index handler for ${plantName}`);
+      }
+    } else if (opName === OpName.INSERT) {
+      if (plantName === PlantName.BAMBOO) {
+        // delete @ index bamboo
+        // return insertBamboo(plantCollection, action)
+        return plantCollection // filler, delete this
+      } else {
+        throw Error(`No insert @ index handler for ${plantName}`);
+      }
+    } else if (opName === OpName.DELETE) {
+      if (plantName === PlantName.BAMBOO) {
+        // delete @ index bamboo
+        // return deleteBamboo(plantCollection, action)
+        return plantCollection // filler, delete this
+      } else {
+        throw Error(`No insert @ index handler for ${plantName}`);
       }
     }
   } else if (action.type === "movePlant") {

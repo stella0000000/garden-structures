@@ -113,28 +113,61 @@ const BambooStalk = (props: BambooStalkProps) => {
   };
 
   const handlePop = () => {
-    // const len = root.intoArray().length;
-    // let newLinkedList = LinkedListFromArray(values);
-    // newLinkedList.delete(len - 1);
-    // setValues(newLinkedList.intoArray());
-    // selectNode(values.length - 1);
-    // console.log({ activeNode });
+    const action: GardenReducerAction = {
+      type: "plantOperation",
+      payload: {
+        plantName: PlantName.BAMBOO,
+        opName: OpName.POP,
+        index,
+      },
+    };
+    gardenDispatch(action);
   };
 
-  const handleInsert = (index: number) => {
+  const handleInsert = (nodeIndex: number) => {
+    const action: GardenReducerAction = {
+      type: "plantOperation",
+      payload: {
+        plantName: PlantName.BAMBOO,
+        opName: OpName.INSERT,
+        index,
+        nodeIndex
+      },
+    };
+    gardenDispatch(action);
     // let newLinkedList = LinkedListFromArray(values);
     // newLinkedList.insertAtIndex(index, Math.random() * 10);
     // setValues(newLinkedList.intoArray());
   };
 
-  const handleDelete = (index: number) => {
+  const handleDelete = (nodeIndex: number) => {
+    const action: GardenReducerAction = {
+      type: "plantOperation",
+      payload: {
+        plantName: PlantName.BAMBOO,
+        opName: OpName.DELETE,
+        index,
+        nodeIndex
+      },
+    };
+    gardenDispatch(action);
     // let newLinkedList = LinkedListFromArray(values);
     // newLinkedList.delete(index); // tumbly
     // setValues(newLinkedList.intoArray());
     // console.log(activePlant)
   };
 
-  const handleDeleteAtIndex = (index: number) => {
+  const handleDeleteAtIndex = (nodeIndex: number) => {
+    const action: GardenReducerAction = {
+      type: "plantOperation",
+      payload: {
+        plantName: PlantName.BAMBOO,
+        opName: OpName.DELETEATINDEX,
+        index,
+        nodeIndex
+      },
+    };
+    gardenDispatch(action);
     // let newLinkedList = LinkedListFromArray(values);
     // newLinkedList.deleteAtIndex(index);
     // setValues(newLinkedList.intoArray());
