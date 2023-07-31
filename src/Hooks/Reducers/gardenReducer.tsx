@@ -63,7 +63,7 @@ export default function gardenReducer(
       }
     } else {
       throw Error(
-        `No ${action.payload.opName} handler for plant: ${action.payload.plantName}`
+        `No ${opName} handler for plant: ${plantName}`
       );
     }
   /* NODE OPS */
@@ -80,7 +80,6 @@ export default function gardenReducer(
       }
     } else if (opName === OpName.INSERT) {
       if (plantName === PlantName.BAMBOO) {
-        // delete @ index bamboo
         // return insertBamboo(plantCollection, action)
         return plantCollection // filler, delete this
       } else {
@@ -88,12 +87,13 @@ export default function gardenReducer(
       }
     } else if (opName === OpName.DELETE) {
       if (plantName === PlantName.BAMBOO) {
-        // delete @ index bamboo
         // return deleteBamboo(plantCollection, action)
         return plantCollection // filler, delete this
       } else {
         throw Error(`No insert @ index handler for ${plantName}`);
       }
+    } else {
+      throw Error(`No ${opName} handler for plant: ${plantName}`);
     }
   } else if (action.type === "movePlant") {
     return movePlant(plantCollection, action);
