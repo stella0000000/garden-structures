@@ -45,7 +45,7 @@ const Flower = (props: FlowerProps) => {
   // delete @ idx 1
   // [1, _, 3, 4, 5, 6]
 
-  const [values, setValues] = useState(root.intoArray());
+  // const [values, setValues] = useState(root.intoArray());
   const { activeItem, selectItem, deselectAllItems } = useActiveItem();
 
   // useEffect(() => {
@@ -79,7 +79,7 @@ const Flower = (props: FlowerProps) => {
   );
 
   // petal nodes of the flower
-  values.forEach((nodeValue, index) => {
+  root.intoArray().forEach((nodeValue, index) => {
     children.push(
       <Node3D
         value={nodeValue}
@@ -89,9 +89,9 @@ const Flower = (props: FlowerProps) => {
           .add(
             new Vector3(
               (nodeValue * 2 - 1.5) *
-                Math.cos(((2 * Math.PI) / values.length) * index),
+                Math.cos(((2 * Math.PI) / root.length) * index),
               (nodeValue * 2 - 1.5) *
-                Math.sin(((2 * Math.PI) / values.length) * index),
+                Math.sin(((2 * Math.PI) / root.length) * index),
               index % 2 === 0 ? 0.05 : -0.05
             )
           )}

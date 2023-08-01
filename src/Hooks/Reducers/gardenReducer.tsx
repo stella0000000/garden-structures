@@ -4,6 +4,7 @@ import {
   FlowerData,
   PlantCollection,
 } from "../../Components/GlobalCanvas";
+import { produce } from "immer";
 
 export enum Direction {
   UP = "up",
@@ -50,7 +51,7 @@ export default function gardenReducer(
     if (opName === OpName.APPEND) {
       if (plantName === PlantName.BAMBOO) {
         return appendBamboo(plantCollection, action);
-      } else if (action.payload.plantName === PlantName.FLOWER) {
+      } else if (plantName === PlantName.FLOWER) {
         return appendFlower(plantCollection, action);
       } else {
         throw Error(`No append handler for ${plantName}`);
@@ -58,6 +59,7 @@ export default function gardenReducer(
     } else if (opName === OpName.POP) {
       if (plantName === PlantName.BAMBOO) {
         // return popBamboo(plantCollection, action)
+        throw Error(`to do`)
       } else {
         throw Error(`No pop handler for ${plantName}`);
       }
@@ -72,7 +74,7 @@ export default function gardenReducer(
       if (plantName === PlantName.BAMBOO) {
         // delete @ index bamboo
         // return deleteAtIndexBamboo(plantCollection, action)
-        return plantCollection // filler, delete this
+        throw Error(`to do`)
       } else if (plantName === PlantName.FLOWER) {
         return deleteAtIndexFlower(plantCollection, action)
       } else {
@@ -81,14 +83,14 @@ export default function gardenReducer(
     } else if (opName === OpName.INSERT) {
       if (plantName === PlantName.BAMBOO) {
         // return insertBamboo(plantCollection, action)
-        return plantCollection // filler, delete this
+        throw Error(`to do`)
       } else {
         throw Error(`No insert @ index handler for ${plantName}`);
       }
     } else if (opName === OpName.DELETE) {
       if (plantName === PlantName.BAMBOO) {
         // return deleteBamboo(plantCollection, action)
-        return plantCollection // filler, delete this
+        throw Error(`to do`)
       } else {
         throw Error(`No insert @ index handler for ${plantName}`);
       }
@@ -169,8 +171,6 @@ const appendBamboo = (
     },
   };
 
-  console.log(Object.values(newState));
-
   return Object.values(newState) as PlantCollection;
 };
 
@@ -219,8 +219,6 @@ const appendFlower = (
     },
   };
 
-  console.log(Object.values({newState}));
-
   return Object.values(newState) as PlantCollection;
 };
 
@@ -231,19 +229,32 @@ const deleteAtIndexFlower = (
   const { index, nodeIndex } = action.payload;
   if (index === undefined)
     throw Error("Flower delete @ index requires plant index");
+  if (nodeIndex === undefined)
+    throw Error("Flower node index required")
 
-  const newDoublyCircularlyLinkedList = plantCollection[index].data.clone();
-  if (nodeIndex) newDoublyCircularlyLinkedList.delete(nodeIndex);
+  // draft is a mutable copy of plantCollection
+  // avoid side effects and don't mutate plantCllxn
+  // modify draft instead
+  // completely replace plantCllxn with updated version of changes from draft
+  return produce(
+    plantCollection,
+    (draft) => {
+      draft[index].data.delete(nodeIndex)
+      draft[index].data = draft[index].data.clone()
+    })
 
-  const newState: PlantCollection = {
-    ...plantCollection,
-    [`${index}`]: {
-      ...plantCollection[index],
-      data: newDoublyCircularlyLinkedList,
-    },
-  };
+  // const newDoublyCircularlyLinkedList = plantCollection[index].data.clone();
+  // newDoublyCircularlyLinkedList.delete(nodeIndex);
 
-  console.log(Object.values({newState}));
+  // const newState: PlantCollection = {
+  //   ...plantCollection,
+  //   [`${index}`]: {
+  //     ...plantCollection[index],
+  //     data: newDoublyCircularlyLinkedList,
+  //   },
+  // };
 
-  return Object.values(newState) as PlantCollection;
+  // console.log(Object.values({newState}));
+
+  // return Object.values(newState) as PlantCollection;
 };
