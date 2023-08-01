@@ -57,6 +57,7 @@ const Constellation = (props: ConstellationProps) => {
     }
   });
 
+  console.log(root.flatten())
   // root node
   root.dfs().forEach((graphNode, index) => {
     // plant nodes

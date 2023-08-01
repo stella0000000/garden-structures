@@ -82,6 +82,7 @@ const generateRandomNum = (numStars: number): number => {
   // return Math.ceil(Math.random() * numStars) * Math.round(Math.random()) ? 10 : -10
   return Math.ceil(Math.random() * numStars) * (Math.round(Math.random()) ? 1 : -1)
 }
+
 // edges: [a, b] => [[a1, b1], [a2, b2]] = [a2-a1, b2-b1]
 const populateCoords = (numStars: number): number[][][] => {
   const coords = []
@@ -99,9 +100,23 @@ const populateCoords = (numStars: number): number[][][] => {
 
   return coords
 }
+/*
+[
+  values[], "the positions of the nodes @ index"
+  neighbors[], "the neighbors of that node @ index"
+
+  index-aligned
+
+  // literally an array of our nodes
+    GraphNode[] - where the indicies are nodeIdx
+  // array of neighbors, indicies align with nodeIdx
+    GraphNode[][]
+
+]
+*/
 
 const populateStars = (): GraphNode => {
-  const edges = populateCoords(100)
+  const edges = populateCoords(5)
   // const graph: GraphNode[] = []
   // vertex [x, y]: neighbors [a, b]
   const stars: GraphNode = new GraphNode([0, 0], [])
@@ -120,7 +135,7 @@ const populateStars = (): GraphNode => {
     // const posA = `${x1},${y1}`
     // const posB = `${x2},${y2}`
     // if (!(posA in graph)) graph[posA] = []
-    // if (!(posB in graph)) graph[posB] = []
+    // if (!(posB in graph)) graph[posB] = []u
     // graph[posA].push(graph[posB])
     // graph[posB].push(graph[posA])
   }

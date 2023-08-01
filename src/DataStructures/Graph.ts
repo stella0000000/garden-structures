@@ -1,9 +1,21 @@
+import { v4 as uuidv4 } from 'uuid';
+
+type FlattenedGraph = {
+  nodes: {
+    value: [number, number],
+    uuid: string
+  }[],
+  adjacencyMatrix: boolean[][] // for adjacency matrix
+}
+
 export class GraphNode {
   // val represents an x and y coordinate in space
+  uuid: string;
   val: [number, number];
   neighbors: GraphNode[];
 
-  constructor(val: [number, number], neighbors: GraphNode[]) {
+  constructor(val: [number, number], neighbors: GraphNode[], uuid?: string) {
+    this.uuid = uuid || uuidv4();
     this.val = val;
     this.neighbors = neighbors;
   }
@@ -54,6 +66,39 @@ export class GraphNode {
       }
     }
     return Array.from(visited);
+  }
+
+  flatten(): FlattenedGraph {
+    // discrete list, no cycles
+    const nodes = this.dfs() // array
+    nodes.sort((a, b) => a.uuid < b.uuid ? -1 : 1)
+
+    const values = nodes.map(node => ({ value: node.val, uuid: node.uuid}))
+    const length = values.length
+    const adjacencyMatrix = Array.from(Array(length), () => Array(length).fill(false));
+    // const adjacencyMatrix = new Array(values.length).fill(new Array(values.length).fill(false))
+    
+    for (let i=0; i<values.length; i++) {
+      for (let neighbor of nodes[i].neighbors) {
+        const neighborId = neighbor.uuid
+        const neighborIdx = nodes.findIndex(node => { return node.uuid === neighborId })
+
+        adjacencyMatrix[i][neighborIdx] = true
+        //where neighborId = nodesId
+      }
+    }
+
+    return { nodes: values, adjacencyMatrix }
+  }
+
+  unflatten({ nodes, adjacencyMatrix }: FlattenedGraph): GraphNode {
+    const nodez = nodes.map(node => new GraphNode(node.value, [], node.uuid))
+
+    for (let i=0; i<nodez.length; i++) {
+      let nodeVal = values[i]
+      let nodeAdjacencies = adjacencyMatrix[i]
+
+    }
   }
 
   // levelTraverse(): GraphNode[] {
@@ -112,14 +157,16 @@ export class GraphNode {
   // CRUD
 }
 
-const root = new GraphNode([0, 0], []);
-const node1 = new GraphNode([1, 1], []);
-const node2 = new GraphNode([2, 2], []);
-const node3 = new GraphNode([3, 3], []);
+// const root = new GraphNode([0, 0], []);
+// const node1 = new GraphNode([1, 1], []);
+// const node2 = new GraphNode([2, 2], []);
+// const node3 = new GraphNode([3, 3], []);
 
-root.connect(node1);
-node1.connect(node2);
-root.connect(node3);
+// root.connect(node1);
+// node1.connect(node2);
+// root.connect(node3);
 
-console.log(root.dfs());
-console.log(root.bfs());
+// console.log(root.dfs());
+// console.log(root.bfs());
+
+// console.log(root.flatten())
