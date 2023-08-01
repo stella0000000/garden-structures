@@ -1,4 +1,4 @@
-import { GraphNode } from "../DataStructures/Graph";
+import { FlattenedGraph, GraphNode } from "../DataStructures/Graph";
 import { GardenReducerAction } from "../Hooks/Reducers/gardenReducer";
 import { Vector3 } from "three";
 import Node3D from "./Node3D";
@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { Line, ScreenSpace } from "@react-three/drei";
 
 type ConstellationProps = {
-  root: GraphNode;
+  data: FlattenedGraph;
   index: number;
   gardenDispatch: React.Dispatch<GardenReducerAction>;
   position: Vector3;
@@ -19,25 +19,23 @@ type ConstellationProps = {
 
 const Constellation = (props: ConstellationProps) => {
   const {
-    root,
+    data,
     position,
     rotation,
     selectPlant,
     deselectAllPlants,
     isActive,
-    // gardenDispatch,
-    // index,
+    gardenDispatch,
+    index,
   } = props;
+
+  const root = GraphNode.unflatten(data);
 
   const {
     activeItem: activeNode,
     selectItem: selectNode,
     deselectAllItems: deselectAllNodes,
   } = useActiveItem();
-
-  useEffect(() => {
-    console.log({ root });
-  }, [root]);
 
   const children: React.ReactNode[] = [];
 
@@ -57,7 +55,6 @@ const Constellation = (props: ConstellationProps) => {
     }
   });
 
-  console.log(root.flatten())
   // root node
   root.dfs().forEach((graphNode, index) => {
     // plant nodes
@@ -101,11 +98,7 @@ const Constellation = (props: ConstellationProps) => {
     );
   });
 
-  return (
-    <ScreenSpace depth={75}>
-      {children}
-    </ScreenSpace>
-  );
+  return <ScreenSpace depth={75}>{children}</ScreenSpace>;
 };
 
 export default Constellation;

@@ -1,12 +1,12 @@
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
-type FlattenedGraph = {
+export type FlattenedGraph = {
   nodes: {
-    value: [number, number],
-    uuid: string
-  }[],
-  adjacencyMatrix: boolean[][] // for adjacency matrix
-}
+    value: [number, number];
+    uuid: string;
+  }[];
+  adjacencyMatrix: boolean[][]; // for adjacency matrix
+};
 
 export class GraphNode {
   // val represents an x and y coordinate in space
@@ -70,35 +70,49 @@ export class GraphNode {
 
   flatten(): FlattenedGraph {
     // discrete list, no cycles
-    const nodes = this.dfs() // array
-    nodes.sort((a, b) => a.uuid < b.uuid ? -1 : 1)
+    const nodes = this.dfs(); // array
+    nodes.sort((a, b) => (a.uuid < b.uuid ? -1 : 1));
 
-    const values = nodes.map(node => ({ value: node.val, uuid: node.uuid}))
-    const length = values.length
-    const adjacencyMatrix = Array.from(Array(length), () => Array(length).fill(false));
+    const values = nodes.map((node) => ({ value: node.val, uuid: node.uuid }));
+    const length = values.length;
+    const adjacencyMatrix = Array.from(Array(length), () =>
+      Array(length).fill(false)
+    );
     // const adjacencyMatrix = new Array(values.length).fill(new Array(values.length).fill(false))
-    
-    for (let i=0; i<values.length; i++) {
-      for (let neighbor of nodes[i].neighbors) {
-        const neighborId = neighbor.uuid
-        const neighborIdx = nodes.findIndex(node => { return node.uuid === neighborId })
 
-        adjacencyMatrix[i][neighborIdx] = true
+    for (let i = 0; i < values.length; i++) {
+      for (let neighbor of nodes[i].neighbors) {
+        const neighborId = neighbor.uuid;
+        const neighborIdx = nodes.findIndex((node) => {
+          return node.uuid === neighborId;
+        });
+
+        adjacencyMatrix[i][neighborIdx] = true;
+        adjacencyMatrix[neighborIdx][i] = true;
         //where neighborId = nodesId
       }
     }
 
-    return { nodes: values, adjacencyMatrix }
+    return { nodes: values, adjacencyMatrix };
   }
 
-  unflatten({ nodes, adjacencyMatrix }: FlattenedGraph): GraphNode {
-    const nodez = nodes.map(node => new GraphNode(node.value, [], node.uuid))
+  static unflatten({ nodes, adjacencyMatrix }: FlattenedGraph): GraphNode {
+    // unlinked flat list of nodes, to be connected
+    const nodez = nodes.map((node) => new GraphNode(node.value, [], node.uuid));
+    const newAdjMatrix = JSON.parse(JSON.stringify(adjacencyMatrix));
 
-    for (let i=0; i<nodez.length; i++) {
-      let nodeVal = values[i]
-      let nodeAdjacencies = adjacencyMatrix[i]
+    nodez.sort((a, b) => (a.uuid < b.uuid ? -1 : 1));
 
+    for (let i = 0; i < newAdjMatrix.length; i++) {
+      for (let j = 0; j < newAdjMatrix[i].length; j++) {
+        if (newAdjMatrix[i][j]) {
+          // one-way, directed connection
+          nodez[i].connect(nodez[j]);
+        }
+      }
     }
+
+    return nodez[0];
   }
 
   // levelTraverse(): GraphNode[] {

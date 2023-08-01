@@ -4,19 +4,22 @@ import {
   FlowerData,
   PlantCollection,
 } from "../../Components/GlobalCanvas";
+import { FlattenedGraph, GraphNode } from "../../DataStructures/Graph";
+import { produce } from "immer";
+import { v4 as uuidv4 } from "uuid";
 
 export enum Direction {
   UP,
   DOWN,
   LEFT,
-  RIGHT
+  RIGHT,
 }
 
 export type GardenReducerAction = {
   type: string;
   payload: {
     index?: number;
-    direction?: Direction
+    direction?: Direction;
   };
 };
 
@@ -32,16 +35,16 @@ export default function gardenReducer(
       );
     }
     const currentPlant = plantCollection[action.payload.index];
-    let currentPosition = currentPlant.position
-    const direction = action.payload.direction
+    let currentPosition = currentPlant.position;
+    const direction = action.payload.direction;
     if (direction === Direction.UP) {
-      currentPosition.add(new Vector3(0, 1, 0))
+      currentPosition.add(new Vector3(0, 1, 0));
     } else if (direction === Direction.DOWN) {
-      currentPosition.add(new Vector3(0, -1, 0))
+      currentPosition.add(new Vector3(0, -1, 0));
     } else if (direction === Direction.LEFT) {
-      currentPosition.add(new Vector3(-1, 0, 0))
+      currentPosition.add(new Vector3(-1, 0, 0));
     } else if (direction === Direction.RIGHT) {
-      currentPosition.add(new Vector3(1, 0, 0))
+      currentPosition.add(new Vector3(1, 0, 0));
     }
 
     if (currentPlant.kind === "BambooStalkData") {
@@ -67,9 +70,30 @@ export default function gardenReducer(
         "Invalid action for gardenReducer: plant accessed by index is wrong type"
       );
     }
+  }
+  if (action.type === "append") {
+    return produce(plantCollection, (draft) => {
+      if (action.payload.index == undefined) {
+        throw Error("no matching plant index");
+      }
+
+      draft[action.payload.index].data;
+
+      console.log(draft[action.payload.index]);
+
+      const flat = draft[action.payload.index].data as FlattenedGraph;
+
+      console.log({ flat });
+
+      const unflat = GraphNode.unflatten(flat);
+
+      unflat.connect(
+        new GraphNode([Math.random() * 50, Math.random() * 50], [])
+      );
+
+      draft[action.payload.index].data = unflat.flatten();
+    });
   } else {
-    throw Error(
-      `Invalid action type for gardenReducer: ${action.type}`
-    );
+    throw Error(`Invalid action type for gardenReducer: ${action.type}`);
   }
 }

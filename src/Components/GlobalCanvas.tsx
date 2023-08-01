@@ -12,7 +12,7 @@ import useActiveItem from "../Hooks/useActiveItem";
 import gardenReducer from "../Hooks/Reducers/gardenReducer";
 import * as THREE from "three";
 import { Vector3 } from "three";
-import { GraphNode } from "../DataStructures/Graph";
+import { GraphNode, FlattenedGraph } from "../DataStructures/Graph";
 import Constellation from "./Constellation";
 
 /* plant data is stored at the topmost level as a React antipattern,
@@ -38,7 +38,7 @@ export type FlowerData = Flower & Transform3D;
 
 export type Constellation = {
   kind: "ConstellationData";
-  data: GraphNode;
+  data: FlattenedGraph;
 };
 
 export type ConstellationData = Constellation & Transform3D;
@@ -77,29 +77,33 @@ const testingFlower1: FlowerData = {
   rotation: new Vector3(1.5708, 0, 0),
 };
 
-
 const generateRandomNum = (numStars: number): number => {
   // return Math.ceil(Math.random() * numStars) * Math.round(Math.random()) ? 10 : -10
-  return Math.ceil(Math.random() * numStars) * (Math.round(Math.random()) ? 1 : -1)
-}
+  return (
+    Math.ceil(Math.random() * numStars) * (Math.round(Math.random()) ? 1 : -1)
+  );
+};
 
 // edges: [a, b] => [[a1, b1], [a2, b2]] = [a2-a1, b2-b1]
 const populateCoords = (numStars: number): number[][][] => {
-  const coords = []
+  const coords = [];
 
-  for (let i=0; i<numStars; i++) {
-    let x1 = generateRandomNum(numStars)
-    let y1 = generateRandomNum(numStars)
+  for (let i = 0; i < numStars; i++) {
+    let x1 = generateRandomNum(numStars);
+    let y1 = generateRandomNum(numStars);
 
-    let x2 = generateRandomNum(numStars)
-    let y2 = generateRandomNum(numStars)
-    
-    coords.push([[x1, y1], [x2, y2]])
+    let x2 = generateRandomNum(numStars);
+    let y2 = generateRandomNum(numStars);
+
+    coords.push([
+      [x1, y1],
+      [x2, y2],
+    ]);
     // toggle = !toggle
   }
 
-  return coords
-}
+  return coords;
+};
 /*
 [
   values[], "the positions of the nodes @ index"
@@ -115,22 +119,22 @@ const populateCoords = (numStars: number): number[][][] => {
 ]
 */
 
-const populateStars = (): GraphNode => {
-  const edges = populateCoords(5)
+const populateStars = (): FlattenedGraph => {
+  const edges = populateCoords(3);
   // const graph: GraphNode[] = []
   // vertex [x, y]: neighbors [a, b]
-  const stars: GraphNode = new GraphNode([0, 0], [])
+  const stars: GraphNode = new GraphNode([0, 0], []);
   // let count = 0
-  let nodeA, nodeB
+  let nodeA, nodeB;
   for (let edge of edges) {
-    const [ [x1, y1], [x2, y2] ] = edge // a = [x1, y1], b = [x2, y2]
-    nodeA = new GraphNode([x1, y1], [])
-    nodeB = new GraphNode([x2, y2], [])
-    
+    const [[x1, y1], [x2, y2]] = edge; // a = [x1, y1], b = [x2, y2]
+    nodeA = new GraphNode([x1, y1], []);
+    nodeB = new GraphNode([x2, y2], []);
+
     // if (count === 0) stars.connect(nodeA)
     // count++
-    stars.connect(nodeA)
-    nodeA.connect(nodeB)
+    stars.connect(nodeA);
+    nodeA.connect(nodeB);
 
     // const posA = `${x1},${y1}`
     // const posB = `${x2},${y2}`
@@ -139,12 +143,12 @@ const populateStars = (): GraphNode => {
     // graph[posA].push(graph[posB])
     // graph[posB].push(graph[posA])
   }
-  
-  console.log({stars})
-  return stars
-}
 
-const testingConstellationStar1 = populateStars()
+  console.log({ stars });
+  return stars.flatten();
+};
+
+const testingConstellationStar1 = populateStars();
 
 // const testingConstellationStar1: GraphNode = new GraphNode([10, 30], []);
 // const testingConstellationStar2: GraphNode = new GraphNode([10, 5], []);
@@ -192,6 +196,12 @@ const GlobalCanvas: React.FC = () => {
     console.log({ activePlant });
   }, [activePlant]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      dispatch({ type: "append", payload: { index: 4 } });
+    }, 1000);
+  }, []);
+
   // renders the appropriate JSX for each plant in the PlantData based on type
   const children = () => {
     return plantData?.map((plant, index) => {
@@ -234,7 +244,7 @@ const GlobalCanvas: React.FC = () => {
               key={index}
               index={index}
               gardenDispatch={dispatch}
-              root={plant.data}
+              data={plant.data}
               position={plant.position}
               rotation={plant.rotation}
               selectPlant={() => selectPlant(index)}
