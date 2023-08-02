@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useReducer } from "react";
 import { Canvas, ThreeEvent } from "@react-three/fiber";
 import { LinkedList, LinkedListFromArray } from "../DataStructures/LinkedList";
 import { Box, OrbitControls } from "@react-three/drei";
@@ -77,8 +77,20 @@ const testingFlower1: FlowerData = {
   rotation: new Vector3(1.5708, 0, 0),
 };
 
+
+// Fix generating constellation graph
+// for visual purposes (dfs, bfs)
+// start @ [0, 0] root node
+// root.connect(nodeA)
+// nodeA.connect(nodeB)
+// BUT NOW for clear DFS viz, generate A, B nodes within quadrants + specify layers
+  // B will ALWAYS have to have higher Math.abs(x, y) than A, and not switching quadrants = or keep X, while Y can flip
+  // i.e. B is in outer ring of A
+
+
 const generateRandomNum = (numStars: number): number => {
   return (
+    // random num from [-numStars to +numStars]
     Math.ceil(Math.random() * numStars) * (Math.round(Math.random()) ? 1 : -1)
   );
 };
@@ -88,11 +100,11 @@ const populateCoords = (numStars: number): number[][][] => {
   const coords = [];
 
   for (let i = 0; i < numStars; i++) {
-    let x1 = generateRandomNum(numStars);
-    let y1 = generateRandomNum(numStars);
+    let x1 = generateRandomNum(i + 1);
+    let y1 = generateRandomNum(i + 1);
 
-    let x2 = generateRandomNum(numStars);
-    let y2 = generateRandomNum(numStars);
+    let x2 = generateRandomNum(2 * (i+1));
+    let y2 = generateRandomNum(2 * (i+1));
 
     coords.push([
       [x1, y1],
@@ -118,29 +130,37 @@ const populateCoords = (numStars: number): number[][][] => {
 */
 
 const populateStars = (): FlattenedGraph => {
-  const edges = populateCoords(3);
+  const edges = populateCoords(50);
+  // const edges = [[[13,-4],[-6,-5]],[[-25,-9],[-2,11]],[[12,24],[7,-21]],[[-20,14],[20,13]],[[22,-8],[-13,-9]],[[12,-17],[-25,1]],[[-14,6],[18,8]],[[-8,-17],[6,2]],[[-24,17],[-11,16]],[[-4,1],[-5,6]],[[17,7],[-17,4]],[[20,13],[-18,20]],[[17,5],[-24,15]]]
+
   // const graph: GraphNode[] = []
   // vertex [x, y]: neighbors [a, b]
   const stars: GraphNode = new GraphNode([0, 0], []);
+  // const allNodes = []
   // let count = 0
+
   let nodeA, nodeB;
+
   for (let edge of edges) {
     const [[x1, y1], [x2, y2]] = edge; // a = [x1, y1], b = [x2, y2]
     nodeA = new GraphNode([x1, y1], []);
     nodeB = new GraphNode([x2, y2], []);
 
-    // if (count === 0) stars.connect(nodeA)
-    // count++
-    stars.connect(nodeA);
-    nodeA.connect(nodeB);
+    // if (count === 0) {
+    //   stars.connect(nodeA)
+    //   count++
+    // }
 
-    // const posA = `${x1},${y1}`
-    // const posB = `${x2},${y2}`
-    // if (!(posA in graph)) graph[posA] = []
-    // if (!(posB in graph)) graph[posB] = []u
-    // graph[posA].push(graph[posB])
-    // graph[posB].push(graph[posA])
+    // allNodes.push(nodeA)
+    // console.log(allNodes[Math.floor(Math.random() * allNodes.length)])
+    // nodeB.connect(allNodes[Math.floor(Math.random() * allNodes.length)])
+
+    // allNodes.push(nodeB)
+    stars.connect(nodeA)
+    nodeA.connect(nodeB)
   }
+
+  // console.log(allNodes.map(node => node.val))
 
   return stars.flatten();
 };
@@ -180,9 +200,9 @@ const GlobalCanvas: React.FC = () => {
     deselectAllItems: deselectAllPlants,
   } = useActiveItem();
 
-  useEffect(() => {
-    console.log({ activePlant });
-  }, [activePlant]);
+  // useEffect(() => {
+  //   console.log({ activePlant });
+  // }, [activePlant]);
 
   // useEffect(() => {
   //   setTimeout(() => {

@@ -46,7 +46,7 @@ export default function gardenReducer(
   plantCollection: PlantCollection,
   action: GardenReducerAction
 ) {
-  const { index, nodeIndex, direction, plantName, opName } = action.payload
+  const { plantName, opName } = action.payload
 
   /* PLANT OPS */
   if (action.type === "plantOperation") {
@@ -320,62 +320,7 @@ const deleteAtIndexFlower = (
 };
 
 
-
-
-
-
-
-
-
-/////////////
-
-  // OLD STUFF
-
-  // if (action.type === "movePlant") {
-  //   // if we are modifying a plant, the new plant should exist in the payload
-  //   if (index === undefined) {
-  //     throw Error(
-  //       "Invalid action for gardenPlant Reducer: no index in payload"
-  //     );
-  //   }
-  //   const currentPlant = plantCollection[index];
-  //   let currentPosition = currentPlant.position;
-  //   if (direction === Direction.UP) {
-  //     currentPosition.add(new Vector3(0, 1, 0));
-  //   } else if (direction === Direction.DOWN) {
-  //     currentPosition.add(new Vector3(0, -1, 0));
-  //   } else if (direction === Direction.LEFT) {
-  //     currentPosition.add(new Vector3(-1, 0, 0));
-  //   } else if (direction === Direction.RIGHT) {
-  //     currentPosition.add(new Vector3(1, 0, 0));
-  //   }
-
-  //   if (currentPlant.kind === "BambooStalkData") {
-  //     const newPlant: BambooStalkData = {
-  //       kind: currentPlant.kind,
-  //       data: currentPlant.data,
-  //       position: currentPosition,
-  //       rotation: currentPlant.rotation,
-  //     };
-  //     plantCollection[index] = newPlant;
-  //     return [...plantCollection];
-  //   } else if (currentPlant.kind === "FlowerData") {
-  //     const newPlant: FlowerData = {
-  //       kind: currentPlant.kind,
-  //       data: currentPlant.data,
-  //       position: currentPosition,
-  //       rotation: currentPlant.rotation,
-  //     };
-  //     plantCollection[index] = newPlant;
-  //     return [...plantCollection];
-  //   } else {
-  //     throw Error(
-  //       "Invalid action for gardenReducer: plant accessed by index is wrong type"
-  //     );
-  //   }
-  // }
-
-  /** IMMER STUFF */
+  /** IMMER */
   // if (action.type === "append") {
   //   return produce(plantCollection, (draft) => {
   //     if (index == undefined) {

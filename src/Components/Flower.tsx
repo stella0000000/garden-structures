@@ -42,11 +42,7 @@ const Flower = (props: FlowerProps) => {
   // [1, _, 3, 4, 5, 6]
 
   const { activeItem, selectItem, deselectAllItems } = useActiveItem();
-
-
   const children: React.ReactNode[] = [];
-
-  console.log(`flower rotation: ${[rotation.x, rotation.y, rotation.z]}`);
 
   // central hub node of the flower
   children.push(

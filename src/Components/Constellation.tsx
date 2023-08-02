@@ -3,8 +3,8 @@ import { GardenReducerAction } from "../Hooks/Reducers/gardenReducer";
 import { Vector3 } from "three";
 import Node3D from "./Node3D";
 import useActiveItem from "../Hooks/useActiveItem";
-// import { useEffect } from "react";
 import { Line, ScreenSpace } from "@react-three/drei";
+import { useEffect, useState } from "react";
 
 type ConstellationProps = {
   data: FlattenedGraph;
@@ -30,6 +30,16 @@ const Constellation = (props: ConstellationProps) => {
   } = props;
 
   const root = GraphNode.unflatten(data);
+  const allStars = root.dfs()
+  const [currStarIdx, setCurrStarIdx] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log(currStarIdx)
+      setCurrStarIdx((currStarIdx + 1) % allStars.length)
+    }, 750);
+    return () => clearInterval(interval);
+  }, [currStarIdx, allStars.length]);
 
   const {
     activeItem: activeNode,
@@ -37,11 +47,12 @@ const Constellation = (props: ConstellationProps) => {
     deselectAllItems: deselectAllNodes,
   } = useActiveItem();
 
-  const children: React.ReactNode[] = [];
+  const starChildren: React.ReactNode[] = [];
+  const edgeChildren: React.ReactNode[] = [];
 
   // uncursed:  read
   const uniqueEdgeMap = new Map<string, [GraphNode, GraphNode]>();
-  root.dfs().forEach((node) => {
+  allStars.forEach((node) => {
     const nodeHash = `${node.val[0]},${node.val[1]}`;
     for (const neighbor of node.neighbors) {
       const neighborHash = `${neighbor.val[0]},${neighbor.val[1]}`;
@@ -56,23 +67,26 @@ const Constellation = (props: ConstellationProps) => {
   });
 
   // root node
-  root.dfs().forEach((graphNode, index) => {
+  // .dfs() => returns the full array
+
+  // console.log('dfs: '+ root.dfs().map(node => node.uuid.slice(10)))
+  // console.log('bfs: ' + root.bfs().map(node => node.uuid.slice(10)))
+  allStars.forEach((graphNode, index) => {
     // plant nodes
-    children.push(
+    starChildren.push(
       <Node3D
         value={2}
-        // fix key
-        key={index * Math.random() + 1}
+        key={index}
         position={position
           .clone()
           .add(new Vector3(graphNode.val[0], graphNode.val[1], 0))}
         rotation={rotation.clone().add(new Vector3(0, 0, 0))}
-        cylinderArgs={[0.1, 0.2, 0.2]}
-        // cylinderArgs={[1, 2, 2]}
+        // cylinderArgs={[0.1, 0.2, 0.2]}
+        cylinderArgs={[0.75, 0.75, 0.75]}
         isSelected={isActive && activeNode === index}
         deselectAllPlants={deselectAllPlants}
         selectPlant={selectPlant}
-        defaultColor={"rgb(255,230,230)"}
+        defaultColor={currStarIdx === index ? "red" : "rgb(255,230,230)"}
         deselectAllNodes={deselectAllNodes}
         selectNode={() => selectNode(index)}
         materialOverride={null}
@@ -85,7 +99,7 @@ const Constellation = (props: ConstellationProps) => {
     const p1 = position.clone().add(new Vector3(node1.val[0], node1.val[1], 0));
     const p2 = position.clone().add(new Vector3(node2.val[0], node2.val[1], 0));
 
-    children.push(
+    edgeChildren.push(
       <Line
         // fix key
         key={node1.val[0] + index * Math.random()}
@@ -98,7 +112,7 @@ const Constellation = (props: ConstellationProps) => {
     );
   });
 
-  return <ScreenSpace depth={75}>{children}</ScreenSpace>;
+  return <ScreenSpace depth={75}>{starChildren}{edgeChildren}</ScreenSpace>;
 };
 
 export default Constellation;
