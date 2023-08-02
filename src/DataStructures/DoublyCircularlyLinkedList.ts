@@ -1,9 +1,9 @@
 export class DoublyCircularlyLinkedList {
-  dummyHead: LinkedListNode;
+  dummyHead: DoublyCircularlyLinkedListNode;
   length: number;
 
   constructor() {
-    this.dummyHead = new LinkedListNode(-1);
+    this.dummyHead = new DoublyCircularlyLinkedListNode(-1);
     this.length = 0;
   }
 
@@ -28,7 +28,7 @@ export class DoublyCircularlyLinkedList {
   }
 
   append(value: number) {
-    const newNode = new LinkedListNode(value);
+    const newNode = new DoublyCircularlyLinkedListNode(value);
     let current = this.dummyHead.next;
 
     if (!current) {
@@ -36,7 +36,7 @@ export class DoublyCircularlyLinkedList {
       newNode.prev = newNode;
       newNode.next = newNode;
     } else {
-      let prev = current.prev as LinkedListNode;
+      let prev = current.prev as DoublyCircularlyLinkedListNode;
       prev.next = newNode;
       newNode.prev = prev;
       current.prev = newNode;
@@ -75,7 +75,7 @@ export class DoublyCircularlyLinkedList {
     }
 
     if (!curr) return;
-    
+
     curr.value = newValue;
   }
 
@@ -109,9 +109,9 @@ export class DoublyCircularlyLinkedList {
     } else {
       // nodeToDelete.prev's next = nodeToDelete.next
       // nodeToDelete.next's prev = nodeToDelete.prev
-      let prev = nodeToDelete.prev as LinkedListNode;
+      let prev = nodeToDelete.prev as DoublyCircularlyLinkedListNode;
       prev.next = nodeToDelete.next;
-      let next = nodeToDelete.next as LinkedListNode;
+      let next = nodeToDelete.next as DoublyCircularlyLinkedListNode;
       next.prev = prev;
     }
 
@@ -138,6 +138,10 @@ export class DoublyCircularlyLinkedList {
     }
     return out;
   }
+
+  clone(): DoublyCircularlyLinkedList {
+    return CircularlyLinkedListFromArray(this.intoArray());
+  }
 }
 
 export const CircularlyLinkedListFromArray = (
@@ -158,10 +162,10 @@ export const CircularlyLinkedListFromArray = (
   return list;
 };
 
-class LinkedListNode {
+class DoublyCircularlyLinkedListNode {
   value: number;
-  prev: LinkedListNode | null;
-  next: LinkedListNode | null;
+  prev: DoublyCircularlyLinkedListNode | null;
+  next: DoublyCircularlyLinkedListNode | null;
 
   constructor(value: number) {
     this.value = value;

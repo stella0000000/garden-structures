@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
-import { LinkedList, LinkedListFromArray } from "../DataStructures/LinkedList";
+// import { useEffect, useState } from "react";
+import { LinkedList } from "../DataStructures/LinkedList";
 import Node3D from "./Node3D";
 import ControlPanel from "./ControlPanel";
 import useActiveItem from "../Hooks/useActiveItem";
 import {
   Direction,
   GardenReducerAction,
+  OpName,
+  PlantName,
 } from "../Hooks/Reducers/gardenReducer";
 import { Vector3 } from "three";
 
@@ -38,11 +40,6 @@ const BambooStalk = (props: BambooStalkProps) => {
   } = useActiveItem();
 
   let cumulativeHeight = 0;
-  const [values, setValues] = useState<number[]>(root.intoArray());
-
-  useEffect(() => {
-    console.log("activeNodeIndex" + activeNode);
-  }, [activeNode]);
 
   const children: React.ReactNode[] = [];
   // root node
@@ -65,8 +62,7 @@ const BambooStalk = (props: BambooStalkProps) => {
       materialOverride={null}
     />
   );
-  // let values = root.intoArray()
-  values.forEach((nodeValue, index) => {
+  root.intoArray().forEach((nodeValue, index) => {
     // plant nodes
     children.push(
       <Node3D
@@ -101,40 +97,66 @@ const BambooStalk = (props: BambooStalkProps) => {
   };
 
   const handleAppend = () => {
-    let newLinkedList = LinkedListFromArray(values);
-    newLinkedList.append(Math.random() * 10);
-    // setValues(newLinkedList.intoArray());
-    // console.log({ values })
-    selectNode(values.length-1)
-    // console.log({ activeNode })
+    const action: GardenReducerAction = {
+      type: "plantOperation",
+      payload: {
+        plantName: PlantName.BAMBOO,
+        opName: OpName.APPEND,
+        index,
+      },
+    };
+    gardenDispatch(action);
   };
 
   const handlePop = () => {
-    const len = values.length;
-    let newLinkedList = LinkedListFromArray(values);
-    newLinkedList.delete(len - 1);
-    setValues(newLinkedList.intoArray());
-    selectNode(values.length-1)
-    console.log({activeNode})
+    const action: GardenReducerAction = {
+      type: "plantOperation",
+      payload: {
+        plantName: PlantName.BAMBOO,
+        opName: OpName.POP,
+        index,
+      },
+    };
+    gardenDispatch(action);
   };
 
-  const handleInsert = (index: number) => {
-    let newLinkedList = LinkedListFromArray(values);
-    newLinkedList.insertAtIndex(index, Math.random() * 10);
-    setValues(newLinkedList.intoArray());
+  const handleInsert = (nodeIndex: number) => {
+    const action: GardenReducerAction = {
+      type: "nodeOperation",
+      payload: {
+        plantName: PlantName.BAMBOO,
+        opName: OpName.INSERT,
+        index,
+        nodeIndex
+      },
+    };
+    gardenDispatch(action);
   };
 
-  const handleDelete = (index: number) => {
-    let newLinkedList = LinkedListFromArray(values);
-    newLinkedList.delete(index); // tumbly
-    setValues(newLinkedList.intoArray());
-    // console.log(activePlant)
+  const handleDelete = (nodeIndex: number) => {
+    const action: GardenReducerAction = {
+      type: "nodeOperation",
+      payload: {
+        plantName: PlantName.BAMBOO,
+        opName: OpName.DELETE,
+        index,
+        nodeIndex
+      },
+    };
+    gardenDispatch(action);
   };
 
-  const handleDeleteAtIndex = (index: number) => {
-    let newLinkedList = LinkedListFromArray(values);
-    newLinkedList.deleteAtIndex(index);
-    setValues(newLinkedList.intoArray());
+  const handleDeleteAtIndex = (nodeIndex: number) => {
+    const action: GardenReducerAction = {
+      type: "nodeOperation",
+      payload: {
+        plantName: PlantName.BAMBOO,
+        opName: OpName.DELETEATINDEX,
+        index,
+        nodeIndex
+      },
+    };
+    gardenDispatch(action);
   };
 
   const moveOperations = {
@@ -148,13 +170,9 @@ const BambooStalk = (props: BambooStalkProps) => {
 
   const nodeOperations = {
     insert: handleInsert,
-    delete: handleDelete,
+    deleteAfter: handleDelete,
     deleteAtIndex: handleDeleteAtIndex,
   };
-
-  // const handleKeyDown = (e: any) => {
-  //   console.log( { e } )
-  // }
 
   return (
     <>
@@ -167,7 +185,6 @@ const BambooStalk = (props: BambooStalkProps) => {
           moveOperations={moveOperations}
           plantOperations={plantOperations}
           nodeOperations={nodeOperations}
-          // handleKeyDown={(e: any) => handleKeyDown(e)}
         />
       )}
     </>

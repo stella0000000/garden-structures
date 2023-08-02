@@ -37,7 +37,7 @@ const PositionWrap = styled.div`
   display: flex;
   gap: 10px;
   margin: -50px 10px;
-  width: 300px;
+  width: 350px;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;

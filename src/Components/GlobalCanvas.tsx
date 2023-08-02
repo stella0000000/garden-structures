@@ -78,7 +78,6 @@ const testingFlower1: FlowerData = {
 };
 
 const generateRandomNum = (numStars: number): number => {
-  // return Math.ceil(Math.random() * numStars) * Math.round(Math.random()) ? 10 : -10
   return (
     Math.ceil(Math.random() * numStars) * (Math.round(Math.random()) ? 1 : -1)
   );
@@ -99,7 +98,6 @@ const populateCoords = (numStars: number): number[][][] => {
       [x1, y1],
       [x2, y2],
     ]);
-    // toggle = !toggle
   }
 
   return coords;
@@ -144,20 +142,10 @@ const populateStars = (): FlattenedGraph => {
     // graph[posB].push(graph[posA])
   }
 
-  console.log({ stars });
   return stars.flatten();
 };
 
 const testingConstellationStar1 = populateStars();
-
-// const testingConstellationStar1: GraphNode = new GraphNode([10, 30], []);
-// const testingConstellationStar2: GraphNode = new GraphNode([10, 5], []);
-// const testingConstellationStar3: GraphNode = new GraphNode([5, 15], []);
-// const testingConstellationStar4: GraphNode = new GraphNode([15, 15], []);
-// testingConstellationStar1.connect(testingConstellationStar2);
-// testingConstellationStar1.connect(testingConstellationStar3);
-// testingConstellationStar4.connect(testingConstellationStar1);
-// testingConstellationStar2.connect(testingConstellationStar3);
 
 const testingConstellation1: ConstellationData = {
   kind: "ConstellationData",
@@ -196,11 +184,11 @@ const GlobalCanvas: React.FC = () => {
     console.log({ activePlant });
   }, [activePlant]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      dispatch({ type: "append", payload: { index: 4 } });
-    }, 1000);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     dispatch({ type: "append", payload: { index: 4 } });
+  //   }, 1000);
+  // }, []);
 
   // renders the appropriate JSX for each plant in the PlantData based on type
   const children = () => {

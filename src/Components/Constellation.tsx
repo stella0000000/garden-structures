@@ -3,7 +3,7 @@ import { GardenReducerAction } from "../Hooks/Reducers/gardenReducer";
 import { Vector3 } from "three";
 import Node3D from "./Node3D";
 import useActiveItem from "../Hooks/useActiveItem";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import { Line, ScreenSpace } from "@react-three/drei";
 
 type ConstellationProps = {
@@ -25,8 +25,8 @@ const Constellation = (props: ConstellationProps) => {
     selectPlant,
     deselectAllPlants,
     isActive,
-    gardenDispatch,
-    index,
+    // gardenDispatch,
+    // index,
   } = props;
 
   const root = GraphNode.unflatten(data);
