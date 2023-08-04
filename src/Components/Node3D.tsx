@@ -15,6 +15,8 @@ type Node3DProps = {
   deselectAllPlants: () => void;
   selectPlant: () => void;
   materialOverride: THREE.Material | null;
+  opacity?: number;
+  transparent?: boolean;
 };
 
 const Node3D = (props: Node3DProps) => {
@@ -29,6 +31,8 @@ const Node3D = (props: Node3DProps) => {
     cylinderArgs,
     defaultColor,
     materialOverride,
+    opacity,
+    transparent
   } = props;
   const meshRef = useRef<THREE.Mesh>(null!);
   const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
@@ -78,6 +82,8 @@ const Node3D = (props: Node3DProps) => {
           <meshStandardMaterial
             wireframe={true}
             color={isSelected ? "white" : isHighlighted ? "grey" : defaultColor}
+            opacity={opacity}
+            transparent={transparent}
           />
         </>
       )}

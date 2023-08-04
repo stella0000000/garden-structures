@@ -90,6 +90,8 @@ const Constellation = (props: ConstellationProps) => {
         deselectAllNodes={deselectAllNodes}
         selectNode={() => selectNode(index)}
         materialOverride={null}
+        // opacity={0.1}
+        // transparent
       />
     );
   });
@@ -108,6 +110,8 @@ const Constellation = (props: ConstellationProps) => {
         dashed={true}
         dashScale={4}
         lineWidth={2}
+        // opacity={0.5}
+        // transparent
       />
     );
   });
