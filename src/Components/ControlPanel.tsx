@@ -33,10 +33,23 @@ const Button = styled.button`
   }
 `;
 
+const AddRemovePlant = styled.button`
+  text-transform: uppercase;
+  background: transparent;
+  color: #ffffff;
+  font-size: 14px;
+  cursor: default;
+  border: 1px solid transparent;
+
+  &:hover {
+    border: 1px solid transparent;
+  }
+`
+
 const PositionWrap = styled.div`
   display: flex;
   gap: 10px;
-  margin: -50px 10px;
+  margin: -25px 10px;
   width: 350px;
   justify-content: center;
   align-items: center;
@@ -116,11 +129,13 @@ const ControlPanel = (props: ControlPanelProps) => {
     moveOperations,
     plantOperations,
     nodeOperations,
+    data,
     // handleKeyDown
   } = props;
   const [controlsHeight, setControlsHeight] = useState(0);
   const [controlsWidth, setControlsWidth] = useState(0);
   const positionRef = useRef<HTMLDivElement>(null);
+  const plant = data.constructor.name === 'LinkedList' ? '🎋' : '🌸'
 
   useEffect(() => {
     setTimeout(() => {
@@ -207,6 +222,8 @@ const ControlPanel = (props: ControlPanelProps) => {
               </Button>
             );
           })}
+          <AddRemovePlant>plant {`${plant}`}</AddRemovePlant>
+          <AddRemovePlant>remove {`${plant}`}</AddRemovePlant>
         </PositionWrap>
       </Html>
     </>

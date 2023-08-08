@@ -81,8 +81,8 @@ const Constellation = (props: ConstellationProps) => {
           .clone()
           .add(new Vector3(graphNode.val[0], graphNode.val[1], 0))}
         rotation={rotation.clone().add(new Vector3(0, 0, 0))}
-        // cylinderArgs={[0.1, 0.2, 0.2]}
-        cylinderArgs={[0.75, 0.75, 0.75]}
+        cylinderArgs={[0.3, 0.3, 0.3]}
+        // cylinderArgs={[0.75, 0.75, 0.75]}
         isSelected={isActive && activeNode === index}
         deselectAllPlants={deselectAllPlants}
         selectPlant={selectPlant}
@@ -107,9 +107,9 @@ const Constellation = (props: ConstellationProps) => {
         key={node1.val[0] + index * Math.random()}
         points={[p1, p2]}
         color="rgb(255, 255, 255)"
-        dashed={true}
+        // dashed={true}
         dashScale={4}
-        lineWidth={2}
+        lineWidth={0.5}
         // opacity={0.5}
         // transparent
       />
