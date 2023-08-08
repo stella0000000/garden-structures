@@ -135,7 +135,12 @@ const ControlPanel = (props: ControlPanelProps) => {
   const [controlsHeight, setControlsHeight] = useState(0);
   const [controlsWidth, setControlsWidth] = useState(0);
   const positionRef = useRef<HTMLDivElement>(null);
-  const plant = data.constructor.name === 'LinkedList' ? '🎋' : '🌸'
+
+  const plantType =()=> {
+    const dataStructure = data.constructor.name
+    if (dataStructure === 'LinkedList') return '🎋'
+    else if (dataStructure === 'DoublyCircularlyLinkedList') return '🌸'
+  } 
 
   useEffect(() => {
     setTimeout(() => {
@@ -222,8 +227,8 @@ const ControlPanel = (props: ControlPanelProps) => {
               </Button>
             );
           })}
-          <AddRemovePlant>plant {`${plant}`}</AddRemovePlant>
-          <AddRemovePlant>remove {`${plant}`}</AddRemovePlant>
+          <AddRemovePlant>plant {plantType()}</AddRemovePlant>
+          <AddRemovePlant>remove {plantType()}</AddRemovePlant>
         </PositionWrap>
       </Html>
     </>
