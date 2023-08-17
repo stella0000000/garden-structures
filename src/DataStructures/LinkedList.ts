@@ -1,6 +1,16 @@
 export class LinkedList {
   dummyHead: LinkedListNode;
 
+  static fromArray = (inputArray: number[]): LinkedList => {
+    const list = new LinkedList();
+
+    for (let value of inputArray) {
+      list.append(value);
+    }
+
+    return list;
+  };
+
   constructor() {
     this.dummyHead = new LinkedListNode(-1);
   }
@@ -18,11 +28,11 @@ export class LinkedList {
   pop() {
     let current = this.dummyHead;
 
-    while(current.next?.next) {
-      current = current.next
+    while (current.next?.next) {
+      current = current.next;
     }
 
-    current.next = null
+    current.next = null;
   }
 
   // get the node at index
@@ -94,19 +104,9 @@ export class LinkedList {
   }
 
   clone(): LinkedList {
-    return LinkedListFromArray(this.intoArray());
+    return LinkedList.fromArray(this.intoArray());
   }
 }
-
-export const LinkedListFromArray = (inputArray: number[]): LinkedList => {
-  const list = new LinkedList();
-
-  for (let value of inputArray) {
-    list.append(value);
-  }
-
-  return list;
-};
 
 class LinkedListNode {
   value: number;

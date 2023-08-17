@@ -30,14 +30,14 @@ const Constellation = (props: ConstellationProps) => {
   } = props;
 
   const root = GraphNode.unflatten(data);
-  const allStars = root.bfs()
-  const [currStarIdx, setCurrStarIdx] = useState(0)
+  const allStars = root.bfs();
+  const [currStarIdx, setCurrStarIdx] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log(currStarIdx)
-      setCurrStarIdx((currStarIdx + 1) % allStars.length)
-    }, 750);
+      console.log(currStarIdx);
+      setCurrStarIdx((currStarIdx + 1) % allStars.length);
+    }, 50);
     return () => clearInterval(interval);
   }, [currStarIdx, allStars.length]);
 
@@ -81,7 +81,7 @@ const Constellation = (props: ConstellationProps) => {
           .clone()
           .add(new Vector3(graphNode.val[0], graphNode.val[1], 0))}
         rotation={rotation.clone().add(new Vector3(0, 0, 0))}
-        cylinderArgs={[0.3, 0.3, 0.3]}
+        cylinderArgs={[1, 1, 1]}
         // cylinderArgs={[0.75, 0.75, 0.75]}
         isSelected={isActive && activeNode === index}
         deselectAllPlants={deselectAllPlants}
@@ -116,7 +116,12 @@ const Constellation = (props: ConstellationProps) => {
     );
   });
 
-  return <ScreenSpace depth={75}>{starChildren}{edgeChildren}</ScreenSpace>;
+  return (
+    <ScreenSpace depth={75}>
+      {starChildren}
+      {edgeChildren}
+    </ScreenSpace>
+  );
 };
 
 export default Constellation;

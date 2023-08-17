@@ -1,6 +1,6 @@
 import { useReducer } from "react";
 import { Canvas, ThreeEvent } from "@react-three/fiber";
-import { LinkedList, LinkedListFromArray } from "../DataStructures/LinkedList";
+import { LinkedList } from "../DataStructures/LinkedList";
 import { Box, OrbitControls } from "@react-three/drei";
 import BambooStalk from "./BambooStalk";
 import {
@@ -52,20 +52,20 @@ export type PlantCollection = (
 // dummy values for use during local testing
 const testingBamboo: BambooStalkData = {
   kind: "BambooStalkData",
-  data: LinkedListFromArray([2, 8, 12, 2]),
+  data: LinkedList.fromArray([2, 8, 12, 2]),
   position: new Vector3(0, 0, 0),
   rotation: new Vector3(0, 0, 0),
 };
 
 const testingBamboo2: BambooStalkData = {
   kind: "BambooStalkData",
-  data: LinkedListFromArray([4, 6, 8, 2]),
+  data: LinkedList.fromArray([4, 6, 8, 2]),
   position: new Vector3(4, 0, 1),
   rotation: new Vector3(0, 0, 0),
 };
 const testingBamboo3: BambooStalkData = {
   kind: "BambooStalkData",
-  data: LinkedListFromArray([2, 6, 4, 2]),
+  data: LinkedList.fromArray([2, 6, 4, 2]),
   position: new Vector3(2, 0, 2),
   rotation: new Vector3(0, 0, 0),
 };
@@ -77,16 +77,14 @@ const testingFlower1: FlowerData = {
   rotation: new Vector3(1.5708, 0, 0),
 };
 
-
 // Fix generating constellation graph
 // for visual purposes (dfs, bfs)
 // start @ [0, 0] root node
 // root.connect(nodeA)
 // nodeA.connect(nodeB)
 // BUT NOW for clear DFS viz, generate A, B nodes within quadrants + specify layers
-  // B will ALWAYS have to have higher Math.abs(x, y) than A, and not switching quadrants = or keep X, while Y can flip
-  // i.e. B is in outer ring of A
-
+// B will ALWAYS have to have higher Math.abs(x, y) than A, and not switching quadrants = or keep X, while Y can flip
+// i.e. B is in outer ring of A
 
 // const generateRandomNum = (numStars: number): number => {
 //   return (
@@ -103,23 +101,21 @@ const testingFlower1: FlowerData = {
     5. math to plot that coord on arc (?)
 */
 
-
-
 // edges: [a, b] => [[a1, b1], [a2, b2]] = [a2-a1, b2-b1]
 const populateStars = (): GraphNode => {
-  const root = new GraphNode([0, 0], [])
+  const root = new GraphNode([0, 0], []);
 
-  const r = 10
-  const arr = []
-  let sum = 0
-  const numNodesLayer1 = 10
-  const numLayers = 3
-  for (let i=0; i<numLayers; i++) sum += Math.pow(2, i) * numNodesLayer1
-  for (let i=0; i<sum; i++) arr.push(Math.random() * 2 * Math.PI)
-  arr.sort()
-  const offset = Math.pow(2, numLayers) - 1
+  const r = 10;
+  const arr = [];
+  let sum = 0;
+  const numNodesLayer1 = 10;
+  const numLayers = 3;
+  for (let i = 0; i < numLayers; i++) sum += Math.pow(2, i) * numNodesLayer1;
+  for (let i = 0; i < sum; i++) arr.push(Math.random() * 2 * Math.PI);
+  arr.sort();
+  const offset = Math.pow(2, numLayers) - 1;
 
-  for (let i=numNodesLayer1; i<sum; i+=offset) {
+  for (let i = numNodesLayer1; i < sum; i += offset) {
     // layer1
     // let angle = arr[i]
     // let x = r1 * Math.cos(angle)
@@ -127,36 +123,54 @@ const populateStars = (): GraphNode => {
     // let node = new GraphNode([x, y], [])
     // node.connect(root)
 
-    // 3 layers, 
-    const node = traverse(numLayers, 1, i, arr, r)
-    if (node) root.connect(node)
+    // 3 layers,
+    const node = traverse(numLayers, 1, i, arr, r);
+    if (node) root.connect(node);
   }
 
-  return root
+  return root;
 };
 
-const traverse = (numLayers: number, currLayer: number, index: number, arr: number[], r: number)=> {
-  if (currLayer > numLayers) return
+const traverse = (
+  numLayers: number,
+  currLayer: number,
+  index: number,
+  arr: number[],
+  r: number
+) => {
+  if (currLayer > numLayers) return;
 
-  const angle = arr[index]
-  const x = Math.cos(angle) * currLayer * r
-  const y = Math.sin(angle) * currLayer * r
-  const node = new GraphNode([x, y], [])
+  const angle = arr[index];
+  const x = Math.cos(angle) * currLayer * r;
+  const y = Math.sin(angle) * currLayer * r;
+  const node = new GraphNode([x, y], []);
 
-  const left = traverse(numLayers, currLayer+1, index - (numLayers - currLayer), arr, r)
-  const right = traverse(numLayers, currLayer+1, index + (numLayers - currLayer), arr, r)
+  const left = traverse(
+    numLayers,
+    currLayer + 1,
+    index - (numLayers - currLayer),
+    arr,
+    r
+  );
+  const right = traverse(
+    numLayers,
+    currLayer + 1,
+    index + (numLayers - currLayer),
+    arr,
+    r
+  );
 
-  if (left) node.connect(left)
-  if (right) node.connect(right)
+  if (left) node.connect(left);
+  if (right) node.connect(right);
 
-  return node
-}
+  return node;
+};
 
-//  1   *   1   *    *     1   *    *    1 
-  // [ 5, 50, 90, 120, 200, 340, 345, 347, 350 ]
+//  1   *   1   *    *     1   *    *    1
+// [ 5, 50, 90, 120, 200, 340, 345, 347, 350 ]
 
-  // if (index % 3 === 1) l1
-  // else l2
+// if (index % 3 === 1) l1
+// else l2
 
 // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 ]
 
@@ -172,9 +186,8 @@ const traverse = (numLayers: number, currLayer: number, index: number, arr: numb
 //     sum += Math.pow(2, i) * branches
 // }
 
-
 // 2^power of num layers   - 1
-// 
+//
 /*
 
       3         10          17
@@ -184,7 +197,6 @@ const traverse = (numLayers: number, currLayer: number, index: number, arr: numb
 0 2   4 6  7
 
 */
-
 
 const testingConstellationStar1 = populateStars().flatten();
 
@@ -326,19 +338,14 @@ const GlobalCanvas: React.FC = () => {
 
 export default GlobalCanvas;
 
+//  1   *   1   *    *     1   *    *    1
+// [ 5, 50, 90, 120, 200, 340, 345, 347, 350 ]
+// [ 5, 50, 90, 120, 200, 340, 345, 347, 350 ]
 
-//  1   *   1   *    *     1   *    *    1 
-  // [ 5, 50, 90, 120, 200, 340, 345, 347, 350 ]
-  // [ 5, 50, 90, 120, 200, 340, 345, 347, 350 ]
-
-
-
-  // if (index % 3 === 1) l1
-  // else l2
-
+// if (index % 3 === 1) l1
+// else l2
 
 // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 ]
-
 
 /*
 

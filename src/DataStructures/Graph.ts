@@ -1,21 +1,24 @@
-import { v4 as uuidv4 } from "uuid";
-
 export type FlattenedGraph = {
   nodes: {
     value: [number, number];
-    uuid: string;
+    uuid: number;
   }[];
   adjacencyMatrix: boolean[][]; // for adjacency matrix
 };
 
 export class GraphNode {
   // val represents an x and y coordinate in space
-  uuid: string;
+  uuid: number;
   val: [number, number];
   neighbors: GraphNode[];
 
-  constructor(val: [number, number], neighbors: GraphNode[], uuid?: string) {
-    this.uuid = uuid || uuidv4();
+  // global to GraphNode class.
+  // Every member of this class needs access to this var.
+  // otherwise each new GraphNode would have uuid = 1
+  static idIter = 0;
+
+  constructor(val: [number, number], neighbors: GraphNode[]) {
+    this.uuid = GraphNode.idIter++;
     this.val = val;
     this.neighbors = neighbors;
   }
@@ -98,7 +101,7 @@ export class GraphNode {
 
   static unflatten({ nodes, adjacencyMatrix }: FlattenedGraph): GraphNode {
     // unlinked flat list of nodes, to be connected
-    const nodez = nodes.map((node) => new GraphNode(node.value, [], node.uuid));
+    const nodez = nodes.map((node) => new GraphNode(node.value, []));
     const newAdjMatrix = JSON.parse(JSON.stringify(adjacencyMatrix));
 
     nodez.sort((a, b) => (a.uuid < b.uuid ? -1 : 1));
