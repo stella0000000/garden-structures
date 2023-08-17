@@ -88,84 +88,105 @@ const testingFlower1: FlowerData = {
   // i.e. B is in outer ring of A
 
 
-const generateRandomNum = (numStars: number): number => {
-  return (
-    // random num from [-numStars to +numStars]
-    Math.ceil(Math.random() * numStars) * (Math.round(Math.random()) ? 1 : -1)
-  );
-};
+// const generateRandomNum = (numStars: number): number => {
+//   return (
+//     // random num from [-numStars to +numStars]
+//     Math.ceil(Math.random() * numStars) * (Math.round(Math.random()) ? 1 : -1)
+//   );
+// };
 
-// edges: [a, b] => [[a1, b1], [a2, b2]] = [a2-a1, b2-b1]
-const populateCoords = (numStars: number): number[][][] => {
-  const coords = [];
-
-  for (let i = 0; i < numStars; i++) {
-    let x1 = generateRandomNum(i + 1);
-    let y1 = generateRandomNum(i + 1);
-
-    let x2 = generateRandomNum(2 * (i+1));
-    let y2 = generateRandomNum(2 * (i+1));
-
-    coords.push([
-      [x1, y1],
-      [x2, y2],
-    ]);
-  }
-
-  return coords;
-};
 /*
-[
-  values[], "the positions of the nodes @ index"
-  neighbors[], "the neighbors of that node @ index"
-
-  index-aligned
-
-  // literally an array of our nodes
-    GraphNode[] - where the indicies are nodeIdx
-  // array of neighbors, indicies align with nodeIdx
-    GraphNode[][]
-
-]
+    1. where is the root node and/or parent node is
+    2. calculate arc range param (cone variance)
+    3. calc vector from center of arc range to center of graph
+    4. pick random num from 0 to arc range
+    5. math to plot that coord on arc (?)
 */
 
-const populateStars = (): FlattenedGraph => {
-  const edges = populateCoords(50);
-  // const edges = [[[13,-4],[-6,-5]],[[-25,-9],[-2,11]],[[12,24],[7,-21]],[[-20,14],[20,13]],[[22,-8],[-13,-9]],[[12,-17],[-25,1]],[[-14,6],[18,8]],[[-8,-17],[6,2]],[[-24,17],[-11,16]],[[-4,1],[-5,6]],[[17,7],[-17,4]],[[20,13],[-18,20]],[[17,5],[-24,15]]]
 
-  // const graph: GraphNode[] = []
-  // vertex [x, y]: neighbors [a, b]
-  const stars: GraphNode = new GraphNode([0, 0], []);
-  // const allNodes = []
-  // let count = 0
 
-  let nodeA, nodeB;
+// edges: [a, b] => [[a1, b1], [a2, b2]] = [a2-a1, b2-b1]
+const populateStars = (): GraphNode => {
+  const root = new GraphNode([0, 0], [])
 
-  for (let edge of edges) {
-    const [[x1, y1], [x2, y2]] = edge; // a = [x1, y1], b = [x2, y2]
-    nodeA = new GraphNode([x1, y1], []);
-    nodeB = new GraphNode([x2, y2], []);
+  const r = 10
+  const arr = []
+  let sum = 0
+  const numNodesLayer1 = 10
+  const numLayers = 3
+  for (let i=0; i<numLayers; i++) sum += Math.pow(2, i) * numNodesLayer1
+  for (let i=0; i<sum; i++) arr.push(Math.random() * 2 * Math.PI)
+  arr.sort()
+  const offset = Math.pow(2, numLayers) - 1
 
-    // if (count === 0) {
-    //   stars.connect(nodeA)
-    //   count++
-    // }
+  for (let i=numNodesLayer1; i<sum; i+=offset) {
+    // layer1
+    // let angle = arr[i]
+    // let x = r1 * Math.cos(angle)
+    // let y = r1 * Math.sin(angle)
+    // let node = new GraphNode([x, y], [])
+    // node.connect(root)
 
-    // allNodes.push(nodeA)
-    // console.log(allNodes[Math.floor(Math.random() * allNodes.length)])
-    // nodeB.connect(allNodes[Math.floor(Math.random() * allNodes.length)])
-
-    // allNodes.push(nodeB)
-    stars.connect(nodeA)
-    nodeA.connect(nodeB)
+    // 3 layers, 
+    const node = traverse(numLayers, 1, i, arr, r)
+    if (node) root.connect(node)
   }
 
-  // console.log(allNodes.map(node => node.val))
-
-  return stars.flatten();
+  return root
 };
 
-const testingConstellationStar1 = populateStars();
+const traverse = (numLayers: number, currLayer: number, index: number, arr: number[], r: number)=> {
+  if (currLayer > numLayers) return
+
+  const angle = arr[index]
+  const x = Math.cos(angle) * currLayer * r
+  const y = Math.sin(angle) * currLayer * r
+  const node = new GraphNode([x, y], [])
+
+  const left = traverse(numLayers, currLayer+1, index - (numLayers - currLayer), arr, r)
+  const right = traverse(numLayers, currLayer+1, index + (numLayers - currLayer), arr, r)
+
+  if (left) node.connect(left)
+  if (right) node.connect(right)
+
+  return node
+}
+
+//  1   *   1   *    *     1   *    *    1 
+  // [ 5, 50, 90, 120, 200, 340, 345, 347, 350 ]
+
+  // if (index % 3 === 1) l1
+  // else l2
+
+// [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 ]
+
+// 4 + 2*4 + 4*4 + 8*4
+// 4 + (2*1)*4 + (2*2)*4 + (2*2*2)*4
+
+// 3 + 6 + 12 + 24 = 45
+// 4 8 16 = 28
+
+// let sum = 0
+// var branches = 4
+// for (let i=0; i<3; i++) {
+//     sum += Math.pow(2, i) * branches
+// }
+
+
+// 2^power of num layers   - 1
+// 
+/*
+
+      3         10          17
+    /  \      /   \       /    \
+   1   5    8      12    15     19
+ /\    /\   /\     /\    /\     /\
+0 2   4 6  7
+
+*/
+
+
+const testingConstellationStar1 = populateStars().flatten();
 
 const testingConstellation1: ConstellationData = {
   kind: "ConstellationData",
@@ -304,3 +325,27 @@ const GlobalCanvas: React.FC = () => {
 };
 
 export default GlobalCanvas;
+
+
+//  1   *   1   *    *     1   *    *    1 
+  // [ 5, 50, 90, 120, 200, 340, 345, 347, 350 ]
+  // [ 5, 50, 90, 120, 200, 340, 345, 347, 350 ]
+
+
+
+  // if (index % 3 === 1) l1
+  // else l2
+
+
+// [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 ]
+
+
+/*
+
+      3         10          17
+    /  \      /   \       /    \
+   1   5    8      12    15     19
+ /\    /\   /\     /\    /\     /\
+0 2   4 6  7
+
+*/

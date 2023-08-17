@@ -30,7 +30,7 @@ const Constellation = (props: ConstellationProps) => {
   } = props;
 
   const root = GraphNode.unflatten(data);
-  const allStars = root.dfs()
+  const allStars = root.bfs()
   const [currStarIdx, setCurrStarIdx] = useState(0)
 
   useEffect(() => {
