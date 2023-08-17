@@ -109,13 +109,13 @@ const populateStars = (): GraphNode => {
   const arr = [];
   let sum = 0;
   const numNodesLayer1 = 10;
-  const numLayers = 3;
+  const numLayers = 5;
   for (let i = 0; i < numLayers; i++) sum += Math.pow(2, i) * numNodesLayer1;
   for (let i = 0; i < sum; i++) arr.push(Math.random() * 2 * Math.PI);
   arr.sort();
   const offset = Math.pow(2, numLayers) - 1;
 
-  for (let i = numNodesLayer1; i < sum; i += offset) {
+  for (let i = Math.floor(offset / 2); i < sum; i += offset) {
     // layer1
     // let angle = arr[i]
     // let x = r1 * Math.cos(angle)
@@ -141,6 +141,7 @@ const traverse = (
   if (currLayer > numLayers) return;
 
   const angle = arr[index];
+
   const x = Math.cos(angle) * currLayer * r;
   const y = Math.sin(angle) * currLayer * r;
   const node = new GraphNode([x, y], []);
@@ -197,6 +198,8 @@ const traverse = (
 0 2   4 6  7
 
 */
+
+// initial number is Math.floor(offset/2)
 
 const testingConstellationStar1 = populateStars().flatten();
 

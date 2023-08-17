@@ -35,7 +35,6 @@ const Constellation = (props: ConstellationProps) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log(currStarIdx);
       setCurrStarIdx((currStarIdx + 1) % allStars.length);
     }, 50);
     return () => clearInterval(interval);
@@ -52,6 +51,7 @@ const Constellation = (props: ConstellationProps) => {
 
   // uncursed:  read
   const uniqueEdgeMap = new Map<string, [GraphNode, GraphNode]>();
+
   allStars.forEach((node) => {
     const nodeHash = `${node.val[0]},${node.val[1]}`;
     for (const neighbor of node.neighbors) {
