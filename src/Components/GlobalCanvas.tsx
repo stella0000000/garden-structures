@@ -108,7 +108,7 @@ const populateStars = (): GraphNode => {
   const r = 10;
   const arr = [];
   let sum = 0;
-  const numNodesLayer1 = 10;
+  const numNodesLayer1 = 5;
   const numLayers = 5;
   for (let i = 0; i < numLayers; i++) sum += Math.pow(2, i) * numNodesLayer1;
   for (let i = 0; i < sum; i++) arr.push(Math.random() * 2 * Math.PI);
@@ -139,6 +139,7 @@ const traverse = (
   r: number
 ) => {
   if (currLayer > numLayers) return;
+  console.log({ index });
 
   const angle = arr[index];
 
@@ -149,14 +150,15 @@ const traverse = (
   const left = traverse(
     numLayers,
     currLayer + 1,
-    index - (numLayers - currLayer),
+    index - (numLayers - (currLayer - 1)),
     arr,
     r
   );
+
   const right = traverse(
     numLayers,
     currLayer + 1,
-    index + (numLayers - currLayer),
+    index + (numLayers - (currLayer - 1)),
     arr,
     r
   );
