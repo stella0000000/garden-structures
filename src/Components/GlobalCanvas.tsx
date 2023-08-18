@@ -14,7 +14,6 @@ import * as THREE from "three";
 import { Vector3 } from "three";
 import { GraphNode, FlattenedGraph } from "../DataStructures/Graph";
 import Constellation from "./Constellation";
-import { toTrianglesDrawMode } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
 /* plant data is stored at the topmost level as a React antipattern,
  * until we figure out a better way to integrate ui controls inside the canvas
@@ -109,13 +108,10 @@ const populateStars = (): GraphNode => {
   arr.sort();
   const offset = Math.pow(2, numLayers) - 1;
 
-  const indexHits: number[] = [];
   for (let i = Math.floor(offset / 2) + 1; i < sum; i += offset) {
     const node = traverse(numLayers, 1, i, arr, r);
-    indexHits.sort();
     if (node) root.connect(node);
   }
-  indexHits.sort((a, b) => a - b);
 
   return root;
 };
