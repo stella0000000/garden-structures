@@ -14,6 +14,7 @@ import * as THREE from "three";
 import { Vector3 } from "three";
 import { GraphNode, FlattenedGraph } from "../DataStructures/Graph";
 import Constellation from "./Constellation";
+import { toTrianglesDrawMode } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
 /* plant data is stored at the topmost level as a React antipattern,
  * until we figure out a better way to integrate ui controls inside the canvas
@@ -86,13 +87,6 @@ const testingFlower1: FlowerData = {
 // B will ALWAYS have to have higher Math.abs(x, y) than A, and not switching quadrants = or keep X, while Y can flip
 // i.e. B is in outer ring of A
 
-// const generateRandomNum = (numStars: number): number => {
-//   return (
-//     // random num from [-numStars to +numStars]
-//     Math.ceil(Math.random() * numStars) * (Math.round(Math.random()) ? 1 : -1)
-//   );
-// };
-
 /*
     1. where is the root node and/or parent node is
     2. calculate arc range param (cone variance)
@@ -105,28 +99,23 @@ const testingFlower1: FlowerData = {
 const populateStars = (): GraphNode => {
   const root = new GraphNode([0, 0], []);
 
-  const r = 10;
+  const r = 4;
   const arr = [];
   let sum = 0;
   const numNodesLayer1 = 5;
-  const numLayers = 5;
+  const numLayers = 6;
   for (let i = 0; i < numLayers; i++) sum += Math.pow(2, i) * numNodesLayer1;
   for (let i = 0; i < sum; i++) arr.push(Math.random() * 2 * Math.PI);
   arr.sort();
   const offset = Math.pow(2, numLayers) - 1;
 
-  for (let i = Math.floor(offset / 2); i < sum; i += offset) {
-    // layer1
-    // let angle = arr[i]
-    // let x = r1 * Math.cos(angle)
-    // let y = r1 * Math.sin(angle)
-    // let node = new GraphNode([x, y], [])
-    // node.connect(root)
-
-    // 3 layers,
+  const indexHits: number[] = [];
+  for (let i = Math.floor(offset / 2) + 1; i < sum; i += offset) {
     const node = traverse(numLayers, 1, i, arr, r);
+    indexHits.sort();
     if (node) root.connect(node);
   }
+  indexHits.sort((a, b) => a - b);
 
   return root;
 };
@@ -139,7 +128,6 @@ const traverse = (
   r: number
 ) => {
   if (currLayer > numLayers) return;
-  console.log({ index });
 
   const angle = arr[index];
 
@@ -147,21 +135,12 @@ const traverse = (
   const y = Math.sin(angle) * currLayer * r;
   const node = new GraphNode([x, y], []);
 
-  const left = traverse(
-    numLayers,
-    currLayer + 1,
-    index - (numLayers - (currLayer - 1)),
-    arr,
-    r
-  );
+  // jump is halved on each level
+  const remainingLayers = numLayers - currLayer;
+  const jump = Math.pow(2, remainingLayers - 1);
 
-  const right = traverse(
-    numLayers,
-    currLayer + 1,
-    index + (numLayers - (currLayer - 1)),
-    arr,
-    r
-  );
+  const left = traverse(numLayers, currLayer + 1, index - jump, arr, r);
+  const right = traverse(numLayers, currLayer + 1, index + jump, arr, r);
 
   if (left) node.connect(left);
   if (right) node.connect(right);
@@ -198,6 +177,20 @@ const traverse = (
    1   5    8      12    15     19
  /\    /\   /\     /\    /\     /\
 0 2   4 6  7
+
+
+0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16
+
+          9
+         / \
+            3
+            / \
+           5   8  
+          /\   /\
+         4  6 7  9
+
+
+
 
 */
 
