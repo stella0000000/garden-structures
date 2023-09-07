@@ -1,10 +1,15 @@
 import { FlattenedGraph, GraphNode } from "../DataStructures/Graph";
-import { GardenReducerAction } from "../Hooks/Reducers/gardenReducer";
+import {
+  GardenReducerAction,
+  PlantName,
+} from "../Hooks/Reducers/gardenReducer";
 import { Vector3 } from "three";
+import * as THREE from "three";
 import Node3D from "./Node3D";
 import useActiveItem from "../Hooks/useActiveItem";
 import { Line, ScreenSpace } from "@react-three/drei";
 import { useEffect, useState } from "react";
+import { defaultStarMaterial, starBlinkMaterial } from "../materials";
 
 type ConstellationProps = {
   data: FlattenedGraph;
@@ -36,7 +41,7 @@ const Constellation = (props: ConstellationProps) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrStarIdx((currStarIdx + 1) % allStars.length);
-    }, 500);
+    }, 50);
     return () => clearInterval(interval);
   }, [currStarIdx, allStars.length]);
 
@@ -85,16 +90,17 @@ const Constellation = (props: ConstellationProps) => {
         position={position
           .clone()
           .add(new Vector3(graphNode.val[0], graphNode.val[1], 0))}
-        rotation={rotation.clone().add(new Vector3(0, 0, 0))}
+        rotation={rotation.clone()}
         // cylinderArgs={[1, 1, 1]}
         cylinderArgs={[0.5, 0.5, 0.5]}
         isSelected={isActive && activeNode === index}
         deselectAllPlants={deselectAllPlants}
         selectPlant={selectPlant}
-        defaultColor={currStarIdx === index ? "rgb(255, 0, 136)" : "rgb(194, 194, 194)"}
+        defaultMaterial={
+          currStarIdx === index ? starBlinkMaterial : defaultStarMaterial
+        }
         deselectAllNodes={deselectAllNodes}
         selectNode={() => selectNode(index)}
-        materialOverride={null}
         // opacity={0.1}
         // transparent
       />
@@ -113,7 +119,7 @@ const Constellation = (props: ConstellationProps) => {
     edgeChildren.push(
       <Line
         // fix key
-        key={node1.val[0] + index * Math.random()}
+        key={node1.val[0] + index}
         points={[p1, p2]}
         color="rgb(255, 255, 255)"
         // dashed={true}

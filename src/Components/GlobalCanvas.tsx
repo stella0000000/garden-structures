@@ -299,7 +299,7 @@ const GlobalCanvas: React.FC = () => {
 
   return (
     <>
-      <Canvas camera={{ position: [0, 20, 50] }}>
+      <Canvas camera={{ position: [0, 20, 50] }} frameloop="demand">
         <OrbitControls target={[5, 5, 0]} />
         <ambientLight intensity={1} />
         <directionalLight intensity={1} />

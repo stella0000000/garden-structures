@@ -24,6 +24,7 @@ export enum PlantName {
   BAMBOO = "bamboo",
   FLOWER = "flower",
   TREE = "tree",
+  STAR = "star",
 }
 
 export enum OpName {

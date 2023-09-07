@@ -9,6 +9,10 @@ import {
   PlantName,
 } from "../Hooks/Reducers/gardenReducer";
 import { Vector3 } from "three";
+import {
+  defaultFlowerHubMaterial,
+  defaultFlowerPetalMaterial,
+} from "../materials";
 
 type FlowerProps = {
   root: DoublyCircularlyLinkedList;
@@ -53,7 +57,7 @@ const Flower = (props: FlowerProps) => {
       rotation={rotation.clone().add(new Vector3(0, 1.5708, 0))}
       cylinderArgs={[1, 2, 0.5]}
       isSelected={false}
-      defaultColor={"rgb(221, 255, 0)"}
+      defaultMaterial={defaultFlowerHubMaterial}
       deselectAllPlants={deselectAllPlants}
       deselectAllNodes={() => {
         deselectAllItems();
@@ -61,7 +65,6 @@ const Flower = (props: FlowerProps) => {
       }}
       selectPlant={selectPlant}
       selectNode={deselectAllItems}
-      materialOverride={null}
     />
   );
 
@@ -87,14 +90,12 @@ const Flower = (props: FlowerProps) => {
         isSelected={isActive && activeItem === index}
         deselectAllNodes={deselectAllItems}
         selectNode={() => selectItem(index)}
-        defaultColor="rgb(255, 92, 203)"
+        defaultMaterial={defaultFlowerPetalMaterial}
         deselectAllPlants={deselectAllPlants}
         selectPlant={selectPlant}
-        materialOverride={null}
       />
     );
   });
-
 
   const handleMove = (direction: Direction) => {
     const action: GardenReducerAction = {
@@ -126,7 +127,7 @@ const Flower = (props: FlowerProps) => {
         plantName: PlantName.FLOWER,
         opName: OpName.DELETEATINDEX,
         index,
-        nodeIndex
+        nodeIndex,
       },
     };
     gardenDispatch(action);

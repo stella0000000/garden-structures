@@ -1,20 +1,20 @@
 import { ThreeEvent } from "@react-three/fiber";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import * as THREE from "three";
 import { Euler, Vector3 } from "three";
+import { selectedMaterial, hoveredMaterial } from "../materials";
 
-type Node3DProps = {
+export type Node3DProps = {
   value: number;
   position: Vector3;
   rotation: Vector3;
   cylinderArgs: [number, number, number];
   isSelected: boolean;
-  defaultColor: string;
+  defaultMaterial: THREE.Material;
   deselectAllNodes: () => void;
   selectNode: () => void;
   deselectAllPlants: () => void;
   selectPlant: () => void;
-  materialOverride: THREE.Material | null;
   opacity?: number;
   transparent?: boolean;
 };
@@ -29,17 +29,12 @@ const Node3D = (props: Node3DProps) => {
     selectPlant,
     isSelected,
     cylinderArgs,
-    defaultColor,
-    materialOverride,
     opacity,
-    transparent
+    transparent,
+    defaultMaterial,
   } = props;
   const meshRef = useRef<THREE.Mesh>(null!);
   const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
-
-  // useEffect(() => {
-  //   console.log('node 3d')
-  // }, [defaultColor])
 
   return (
     <mesh
@@ -48,16 +43,13 @@ const Node3D = (props: Node3DProps) => {
       position={position}
       rotation={new Euler(rotation.x, rotation.y, rotation.z)}
       material={
-        materialOverride ||
-        new THREE.MeshBasicMaterial({
-          wireframe: true,
-          color: isSelected
-            ? "white"
-            : isHighlighted
-            ? "rgb(99, 99, 99)"
-            : defaultColor,
-        })
+        isSelected
+          ? selectedMaterial
+          : isHighlighted
+          ? hoveredMaterial
+          : defaultMaterial
       }
+      geometry={new THREE.CylinderGeometry(...cylinderArgs)}
       onPointerEnter={(e: ThreeEvent<PointerEvent>) => {
         e.stopPropagation();
         setIsHighlighted(true);
@@ -76,22 +68,7 @@ const Node3D = (props: Node3DProps) => {
         selectPlant();
         selectNode();
       }}
-    >
-      {/* args are radiusTop, radiusBottom, height */}
-      {materialOverride ? (
-        <cylinderGeometry args={cylinderArgs} />
-      ) : (
-        <>
-          <cylinderGeometry args={cylinderArgs} />
-          <meshStandardMaterial
-            wireframe={true}
-            color={isSelected ? "white" : isHighlighted ? "grey" : defaultColor}
-            opacity={opacity}
-            transparent={transparent}
-          />
-        </>
-      )}
-    </mesh>
+    ></mesh>
   );
 };
 

@@ -10,6 +10,7 @@ import {
   PlantName,
 } from "../Hooks/Reducers/gardenReducer";
 import { Vector3 } from "three";
+import { defaultBambooMaterial, defaultBambooRootMaterial } from "../materials";
 
 type BambooStalkProps = {
   root: LinkedList;
@@ -51,7 +52,7 @@ const BambooStalk = (props: BambooStalkProps) => {
       rotation={rotation}
       cylinderArgs={[1, 2, 1]}
       isSelected={false}
-      defaultColor={"rgb(114, 100, 21)"}
+      defaultMaterial={defaultBambooRootMaterial}
       deselectAllPlants={deselectAllPlants}
       deselectAllNodes={() => {
         deselectAllNodes();
@@ -59,7 +60,6 @@ const BambooStalk = (props: BambooStalkProps) => {
       }}
       selectPlant={selectPlant}
       selectNode={deselectAllNodes}
-      materialOverride={null}
     />
   );
   root.intoArray().forEach((nodeValue, index) => {
@@ -76,10 +76,9 @@ const BambooStalk = (props: BambooStalkProps) => {
         isSelected={isActive && activeNode === index}
         deselectAllPlants={deselectAllPlants}
         selectPlant={selectPlant}
-        defaultColor={"rgb(26, 255, 0)"}
+        defaultMaterial={defaultBambooMaterial}
         deselectAllNodes={deselectAllNodes}
         selectNode={() => selectNode(index)}
-        materialOverride={null}
       />
     );
     cumulativeHeight += nodeValue;
@@ -127,7 +126,7 @@ const BambooStalk = (props: BambooStalkProps) => {
         plantName: PlantName.BAMBOO,
         opName: OpName.INSERT,
         index,
-        nodeIndex
+        nodeIndex,
       },
     };
     gardenDispatch(action);
@@ -140,7 +139,7 @@ const BambooStalk = (props: BambooStalkProps) => {
         plantName: PlantName.BAMBOO,
         opName: OpName.DELETE,
         index,
-        nodeIndex
+        nodeIndex,
       },
     };
     gardenDispatch(action);
@@ -153,7 +152,7 @@ const BambooStalk = (props: BambooStalkProps) => {
         plantName: PlantName.BAMBOO,
         opName: OpName.DELETEATINDEX,
         index,
-        nodeIndex
+        nodeIndex,
       },
     };
     gardenDispatch(action);
