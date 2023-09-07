@@ -36,9 +36,13 @@ const Constellation = (props: ConstellationProps) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrStarIdx((currStarIdx + 1) % allStars.length);
-    }, 5);
+    }, 500);
     return () => clearInterval(interval);
   }, [currStarIdx, allStars.length]);
+
+  // useEffect(() => {
+  //   console.log('constellation')
+  // }, [])
 
   const {
     activeItem: activeNode,
@@ -65,6 +69,7 @@ const Constellation = (props: ConstellationProps) => {
       }
     }
   });
+  // console.log({ allStars })
 
   // root node
   // .dfs() => returns the full array
@@ -81,12 +86,12 @@ const Constellation = (props: ConstellationProps) => {
           .clone()
           .add(new Vector3(graphNode.val[0], graphNode.val[1], 0))}
         rotation={rotation.clone().add(new Vector3(0, 0, 0))}
-        cylinderArgs={[1, 1, 1]}
-        // cylinderArgs={[0.75, 0.75, 0.75]}
+        // cylinderArgs={[1, 1, 1]}
+        cylinderArgs={[0.5, 0.5, 0.5]}
         isSelected={isActive && activeNode === index}
         deselectAllPlants={deselectAllPlants}
         selectPlant={selectPlant}
-        defaultColor={currStarIdx === index ? "red" : "rgb(255,230,230)"}
+        defaultColor={currStarIdx === index ? "rgb(255, 0, 136)" : "rgb(194, 194, 194)"}
         deselectAllNodes={deselectAllNodes}
         selectNode={() => selectNode(index)}
         materialOverride={null}
@@ -94,6 +99,10 @@ const Constellation = (props: ConstellationProps) => {
         // transparent
       />
     );
+    // console.log(graphNode.val[0], graphNode.val[1])
+    // console.log(position
+    //   .clone()
+    //   .add(new Vector3(graphNode.val[0], graphNode.val[1], 0)))
   });
 
   Array.from(uniqueEdgeMap.values()).forEach((nodes, index) => {

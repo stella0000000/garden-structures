@@ -1,5 +1,5 @@
 import { ThreeEvent } from "@react-three/fiber";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { Euler, Vector3 } from "three";
 
@@ -36,6 +36,10 @@ const Node3D = (props: Node3DProps) => {
   } = props;
   const meshRef = useRef<THREE.Mesh>(null!);
   const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
+
+  // useEffect(() => {
+  //   console.log('node 3d')
+  // }, [defaultColor])
 
   return (
     <mesh

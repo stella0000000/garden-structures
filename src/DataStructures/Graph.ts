@@ -68,6 +68,7 @@ export class GraphNode {
         }
       }
     }
+
     return Array.from(visited);
   }
 

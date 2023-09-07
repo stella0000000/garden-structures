@@ -124,6 +124,7 @@ const traverse = (
   r: number
 ) => {
   if (currLayer > numLayers) return;
+  if (index >= arr.length) return;
 
   const angle = arr[index];
 
