@@ -1,10 +1,10 @@
 import { FlattenedGraph, GraphNode } from "../DataStructures/Graph";
 import {
   GardenReducerAction,
-  PlantName,
+  // PlantName,
 } from "../Hooks/Reducers/gardenReducer";
 import { Vector3 } from "three";
-import * as THREE from "three";
+// import * as THREE from "three";
 import Node3D from "./Node3D";
 import useActiveItem from "../Hooks/useActiveItem";
 import { Line, ScreenSpace } from "@react-three/drei";

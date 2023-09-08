@@ -29,8 +29,8 @@ const Node3D = (props: Node3DProps) => {
     selectPlant,
     isSelected,
     cylinderArgs,
-    opacity,
-    transparent,
+    // opacity,
+    // transparent,
     defaultMaterial,
   } = props;
   const meshRef = useRef<THREE.Mesh>(null!);

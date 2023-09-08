@@ -33,18 +33,18 @@ const Button = styled.button`
   }
 `;
 
-const AddRemovePlant = styled.button`
-  text-transform: uppercase;
-  background: transparent;
-  color: #ffffff;
-  font-size: 14px;
-  cursor: default;
-  border: 1px solid transparent;
+// const AddRemovePlant = styled.button`
+//   text-transform: uppercase;
+//   background: transparent;
+//   color: #ffffff;
+//   font-size: 14px;
+//   cursor: default;
+//   border: 1px solid transparent;
 
-  &:hover {
-    border: 1px solid transparent;
-  }
-`
+//   &:hover {
+//     border: 1px solid transparent;
+//   }
+// `
 
 const PositionWrap = styled.div`
   display: flex;
@@ -227,8 +227,8 @@ const ControlPanel = (props: ControlPanelProps) => {
               </Button>
             );
           })}
-          <AddRemovePlant>plant {plantType()}</AddRemovePlant>
-          <AddRemovePlant>remove {plantType()}</AddRemovePlant>
+          {/* <AddRemovePlant>plant {plantType()}</AddRemovePlant>
+          <AddRemovePlant>remove {plantType()}</AddRemovePlant> */}
         </PositionWrap>
       </Html>
     </>
