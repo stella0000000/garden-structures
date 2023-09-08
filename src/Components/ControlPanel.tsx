@@ -129,18 +129,18 @@ const ControlPanel = (props: ControlPanelProps) => {
     moveOperations,
     plantOperations,
     nodeOperations,
-    data,
+    // data,
     // handleKeyDown
   } = props;
   const [controlsHeight, setControlsHeight] = useState(0);
   const [controlsWidth, setControlsWidth] = useState(0);
   const positionRef = useRef<HTMLDivElement>(null);
 
-  const plantType =()=> {
-    const dataStructure = data.constructor.name
-    if (dataStructure === 'LinkedList') return '🎋'
-    else if (dataStructure === 'DoublyCircularlyLinkedList') return '🌸'
-  } 
+  // const plantType =()=> {
+  //   const dataStructure = data.constructor.name
+  //   if (dataStructure === 'LinkedList') return '🎋'
+  //   else if (dataStructure === 'DoublyCircularlyLinkedList') return '🌸'
+  // } 
 
   useEffect(() => {
     setTimeout(() => {
