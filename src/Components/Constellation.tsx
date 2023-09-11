@@ -41,7 +41,7 @@ const Constellation = (props: ConstellationProps) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrStarIdx((currStarIdx + 1) % allStars.length);
-    }, 50);
+    }, 500);
     return () => clearInterval(interval);
   }, [currStarIdx, allStars.length]);
 
