@@ -7,7 +7,8 @@ import { Vector3 } from "three";
 // import * as THREE from "three";
 import Node3D from "./Node3D";
 import useActiveItem from "../Hooks/useActiveItem";
-import { Line, ScreenSpace } from "@react-three/drei";
+// import { Line, ScreenSpace } from "@react-three/drei";
+import { ScreenSpace } from '@react-three/drei'
 import { useEffect, useState } from "react";
 import { defaultStarMaterial, starBlinkMaterial } from "../materials";
 
@@ -41,7 +42,7 @@ const Constellation = (props: ConstellationProps) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrStarIdx((currStarIdx + 1) % allStars.length);
-    }, 500);
+    }, 250);
     return () => clearInterval(interval);
   }, [currStarIdx, allStars.length]);
 
@@ -92,7 +93,7 @@ const Constellation = (props: ConstellationProps) => {
           .add(new Vector3(graphNode.val[0], graphNode.val[1], 0))}
         rotation={rotation.clone()}
         // cylinderArgs={[1, 1, 1]}
-        cylinderArgs={[0.5, 0.5, 0.5]}
+        cylinderArgs={[0.125, 0.125, 0.125]}
         isSelected={isActive && activeNode === index}
         deselectAllPlants={deselectAllPlants}
         selectPlant={selectPlant}
@@ -111,28 +112,28 @@ const Constellation = (props: ConstellationProps) => {
     //   .add(new Vector3(graphNode.val[0], graphNode.val[1], 0)))
   });
 
-  Array.from(uniqueEdgeMap.values()).forEach((nodes, index) => {
-    const [node1, node2] = nodes;
-    const p1 = position.clone().add(new Vector3(node1.val[0], node1.val[1], 0));
-    const p2 = position.clone().add(new Vector3(node2.val[0], node2.val[1], 0));
+  // Array.from(uniqueEdgeMap.values()).forEach((nodes, index) => {
+  //   const [node1, node2] = nodes;
+  //   const p1 = position.clone().add(new Vector3(node1.val[0], node1.val[1], 0));
+  //   const p2 = position.clone().add(new Vector3(node2.val[0], node2.val[1], 0));
 
-    edgeChildren.push(
-      <Line
-        // fix key
-        key={node1.val[0] + index}
-        points={[p1, p2]}
-        color="rgb(255, 255, 255)"
-        // dashed={true}
-        dashScale={4}
-        lineWidth={0.5}
-        // opacity={0.5}
-        // transparent
-      />
-    );
-  });
+  //   edgeChildren.push(
+  //     <Line
+  //       // fix key
+  //       key={node1.val[0] + index}
+  //       points={[p1, p2]}
+  //       color="rgb(255, 255, 255)"
+  //       // dashed={true}
+  //       // dashScale={0}
+  //       lineWidth={0.4}
+  //       // opacity={0.5}
+  //       // transparent
+  //     />
+  //   );
+  // });
 
   return (
-    <ScreenSpace depth={75}>
+    <ScreenSpace depth={30}>
       {starChildren}
       {edgeChildren}
     </ScreenSpace>

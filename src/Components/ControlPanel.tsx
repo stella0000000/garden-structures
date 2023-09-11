@@ -7,15 +7,17 @@ import { Direction } from "../Hooks/Reducers/gardenReducer";
 
 const Button = styled.button`
   /* width: auto; */
-  height: 40px;
+  /* height: 40px; */
   background: transparent;
   color: white;
-  border: 1px solid #ff0088;
+  border: 1px solid #717171;
   border-radius: 100px;
   cursor: default;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 14px;
+  color: #e4e4e4;
 
   &:hover {
     border: 1px solid #ddff00;
@@ -49,7 +51,7 @@ const Button = styled.button`
 const PositionWrap = styled.div`
   display: flex;
   gap: 10px;
-  margin: -25px 10px;
+  margin: -25px 40px;
   width: 350px;
   justify-content: center;
   align-items: center;
@@ -63,17 +65,17 @@ const PositionWrap = styled.div`
 `;
 
 const Arrow = styled.button`
-  border: 1px solid #ff0088;
+  border: 1px solid #717171;
   border-radius: 100px;
   display: flex;
   justify-content: center;
-  font-size: 40px;
+  font-size: 35px;
   margin: 0px;
   padding: 0px;
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   background: transparent;
-  color: white;
+  color: #e4e4e4;
   cursor: default;
 
   &:hover {
@@ -91,7 +93,7 @@ const Arrow = styled.button`
 `
 
 const ArrowWrap = styled.div`
-  margin: -5px 25px;
+  margin: 30px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -106,7 +108,7 @@ const LeftRightWrap = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 190px;
+  width: 170px;
 
   @media only screen and (max-width: 700px) {
     width: 125px;

@@ -101,8 +101,8 @@ const populateStars = (): GraphNode => {
   const r = 4;
   const arr = [];
   let sum = 0;
-  const numNodesLayer1 = 5;
-  const numLayers = 6;
+  const numNodesLayer1 = 3;
+  const numLayers = 5;
   for (let i = 0; i < numLayers; i++) sum += Math.pow(2, i) * numNodesLayer1;
   for (let i = 0; i < sum; i++) arr.push(Math.random() * 2 * Math.PI);
   arr.sort();
@@ -299,7 +299,7 @@ const GlobalCanvas: React.FC = () => {
 
   return (
     <>
-      <Canvas camera={{ position: [0, 20, 50] }} frameloop="demand">
+      <Canvas camera={{ position: [0, 10, 40] }} frameloop="demand">
         <OrbitControls target={[5, 5, 0]} />
         <ambientLight intensity={1} />
         <directionalLight intensity={1} />
