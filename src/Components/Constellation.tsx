@@ -23,6 +23,11 @@ type ConstellationProps = {
   isActive: boolean;
 };
 
+enum Search {
+  BFS,
+  DFS
+}
+
 const Constellation = (props: ConstellationProps) => {
   const {
     data,
@@ -36,7 +41,10 @@ const Constellation = (props: ConstellationProps) => {
   } = props;
 
   const root = GraphNode.unflatten(data);
-  const allStars = root.bfs();
+  // const allStars = root.bfs();
+  const [search, setSearch] = useState(Search.BFS)
+  const [allStars, setAllStars] = useState(root.bfs())
+  // let allStars = search === Search.BFS ? root.bfs() : root.dfs()
   const [currStarIdx, setCurrStarIdx] = useState(0);
 
   useEffect(() => {
@@ -46,9 +54,11 @@ const Constellation = (props: ConstellationProps) => {
     return () => clearInterval(interval);
   }, [currStarIdx, allStars.length]);
 
-  // useEffect(() => {
-  //   console.log('constellation')
-  // }, [])
+  useEffect(() => {
+    currStarIdx === 0 ? (search === Search.BFS ? setSearch(Search.DFS) : setSearch(Search.BFS)) : null
+    search === Search.BFS ? setAllStars(root.dfs()) : setAllStars(root.bfs())
+    console.log(search)
+  }, [search])
 
   const {
     activeItem: activeNode,
