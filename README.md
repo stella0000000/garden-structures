@@ -4,7 +4,7 @@
 Ben, Stella, and Zack met at the Recurse Center. They were curious to ascertain a framework to acquire a deeper understanding of data structures and algorithms. Stella noticed the paper flowers hanging behind her desk resembled linked lists. Were the flower petals nodes of a circularly linked list?<br><br>
 
 The trio decided to collaborate on a project: reimagining data structures and algorithms through the natural world - a universal language.<br><br>
-<img width="700" alt="garden" src="https://github.com/stella0000000/garden-structures/assets/112890821/8d5c29b6-2b9d-422c-a751-9cbf80359813">
+<img width="700" alt="garden" src="https://github.com/stella0000000/garden-structures/assets/112890821/baeb1773-d058-41c9-b5e4-d3fca986c5b6">
 
 ### `Technologies`<br>
 - TypeScript
