@@ -108,7 +108,7 @@ const LeftRightWrap = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 170px;
+  width: 160px;
 
   @media only screen and (max-width: 700px) {
     width: 125px;
