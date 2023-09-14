@@ -11,7 +11,7 @@ import Flower from "./Flower";
 import useActiveItem from "../Hooks/useActiveItem";
 import gardenReducer from "../Hooks/Reducers/gardenReducer";
 import * as THREE from "three";
-import { Vector3 } from "three";
+import { Vector3, Euler } from "three";
 import { GraphNode, FlattenedGraph } from "../DataStructures/Graph";
 import Constellation from "./Constellation";
 
@@ -101,7 +101,7 @@ const populateStars = (): GraphNode => {
   const r = 4;
   const arr = [];
   let sum = 0;
-  const numNodesLayer1 = 3;
+  const numNodesLayer1 = 4;
   const numLayers = 5;
   for (let i = 0; i < numLayers; i++) sum += Math.pow(2, i) * numNodesLayer1;
   for (let i = 0; i < sum; i++) arr.push(Math.random() * 2 * Math.PI);
@@ -199,7 +199,8 @@ const testingConstellation1: ConstellationData = {
   kind: "ConstellationData",
   data: testingConstellationStar1,
   position: new Vector3(),
-  rotation: new Vector3(),
+  rotation: new Vector3(0, 1.5, 0),
+  // rotation: new Euler(0, 90, 0)
 };
 
 const initialTestingState: PlantCollection = [
@@ -290,7 +291,7 @@ const GlobalCanvas: React.FC = () => {
           );
         }
         default: {
-          // !UNREACHABLE
+          // UNREACHABLE!
           return <></>;
         }
       }

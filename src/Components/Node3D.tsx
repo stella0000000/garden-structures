@@ -8,6 +8,7 @@ export type Node3DProps = {
   value: number;
   position: Vector3;
   rotation: Vector3;
+  geometry: THREE.CylinderGeometry;
   cylinderArgs: [number, number, number];
   isSelected: boolean;
   defaultMaterial: THREE.Material;
@@ -28,9 +29,8 @@ const Node3D = (props: Node3DProps) => {
     deselectAllPlants,
     selectPlant,
     isSelected,
+    geometry,
     cylinderArgs,
-    // opacity,
-    // transparent,
     defaultMaterial,
   } = props;
   const meshRef = useRef<THREE.Mesh>(null!);
@@ -39,7 +39,7 @@ const Node3D = (props: Node3DProps) => {
   return (
     <mesh
       ref={meshRef}
-      scale={1}
+      scale={[cylinderArgs[0], cylinderArgs[2], cylinderArgs[0]]}
       position={position}
       rotation={new Euler(rotation.x, rotation.y, rotation.z)}
       material={
@@ -49,7 +49,7 @@ const Node3D = (props: Node3DProps) => {
           ? hoveredMaterial
           : defaultMaterial
       }
-      geometry={new THREE.CylinderGeometry(...cylinderArgs)}
+      geometry={geometry}
       onPointerEnter={(e: ThreeEvent<PointerEvent>) => {
         e.stopPropagation();
         setIsHighlighted(true);

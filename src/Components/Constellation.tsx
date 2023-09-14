@@ -3,14 +3,16 @@ import {
   GardenReducerAction,
   // PlantName,
 } from "../Hooks/Reducers/gardenReducer";
-import { Vector3 } from "three";
+import { Euler, Vector3 } from "three";
 // import * as THREE from "three";
 import Node3D from "./Node3D";
 import useActiveItem from "../Hooks/useActiveItem";
 // import { Line, ScreenSpace } from "@react-three/drei";
-import { ScreenSpace } from '@react-three/drei'
+// import { ScreenSpace } from '@react-three/drei'
 import { useEffect, useState } from "react";
 import { defaultStarMaterial, starBlinkMaterial } from "../materials";
+import { cylinder } from "../geometries";
+import { Line } from "@react-three/drei";
 
 type ConstellationProps = {
   data: FlattenedGraph;
@@ -41,10 +43,8 @@ const Constellation = (props: ConstellationProps) => {
   } = props;
 
   const root = GraphNode.unflatten(data);
-  // const allStars = root.bfs();
   const [search, setSearch] = useState(Search.BFS)
   const [allStars, setAllStars] = useState(root.bfs())
-  // let allStars = search === Search.BFS ? root.bfs() : root.dfs()
   const [currStarIdx, setCurrStarIdx] = useState(0);
 
   useEffect(() => {
@@ -55,10 +55,16 @@ const Constellation = (props: ConstellationProps) => {
   }, [currStarIdx, allStars.length]);
 
   useEffect(() => {
-    currStarIdx === 0 ? (search === Search.BFS ? setSearch(Search.DFS) : setSearch(Search.BFS)) : null
-    search === Search.BFS ? setAllStars(root.dfs()) : setAllStars(root.bfs())
-    console.log(search)
-  }, [search])
+    if (currStarIdx === 0) {
+      search === Search.BFS ? setSearch(Search.DFS) : setSearch(Search.BFS)
+
+      if (search === Search.BFS) {
+        setAllStars(root.bfs())
+      } else {
+        setAllStars(root.dfs())
+      }
+    }
+  }, [currStarIdx])
 
   const {
     activeItem: activeNode,
@@ -103,6 +109,7 @@ const Constellation = (props: ConstellationProps) => {
           .add(new Vector3(graphNode.val[0], graphNode.val[1], 0))}
         rotation={rotation.clone()}
         // cylinderArgs={[1, 1, 1]}
+        geometry={cylinder}
         cylinderArgs={[0.125, 0.125, 0.125]}
         isSelected={isActive && activeNode === index}
         deselectAllPlants={deselectAllPlants}
@@ -122,31 +129,33 @@ const Constellation = (props: ConstellationProps) => {
     //   .add(new Vector3(graphNode.val[0], graphNode.val[1], 0)))
   });
 
-  // Array.from(uniqueEdgeMap.values()).forEach((nodes, index) => {
-  //   const [node1, node2] = nodes;
-  //   const p1 = position.clone().add(new Vector3(node1.val[0], node1.val[1], 0));
-  //   const p2 = position.clone().add(new Vector3(node2.val[0], node2.val[1], 0));
+  Array.from(uniqueEdgeMap.values()).forEach((nodes, index) => {
+    const [node1, node2] = nodes;
+    const p1 = position.clone().add(new Vector3(node1.val[0], node1.val[1], 0));
+    const p2 = position.clone().add(new Vector3(node2.val[0], node2.val[1], 0));
 
-  //   edgeChildren.push(
-  //     <Line
-  //       // fix key
-  //       key={node1.val[0] + index}
-  //       points={[p1, p2]}
-  //       color="rgb(255, 255, 255)"
-  //       // dashed={true}
-  //       // dashScale={0}
-  //       lineWidth={0.4}
-  //       // opacity={0.5}
-  //       // transparent
-  //     />
-  //   );
-  // });
+    edgeChildren.push(
+      <Line
+        // fix key
+        key={node1.val[0] + index}
+        points={[p1, p2]}
+        color="rgb(255, 255, 255)"
+        // dashed={true}
+        // dashScale={0}
+        lineWidth={0.4}
+        // opacity={0.5}
+        // transparent
+      />
+    );
+  });
 
   return (
-    <ScreenSpace depth={30}>
+    <group rotation={new Euler(Math.PI / 2,0,0)} position={[1, 100, 0]} scale={10}>
+    {/* <ScreenSpace depth={30}> */}
       {starChildren}
       {edgeChildren}
-    </ScreenSpace>
+    {/* </ScreenSpace> */}
+    </group>
   );
 };
 

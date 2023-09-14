@@ -11,6 +11,7 @@ import {
 } from "../Hooks/Reducers/gardenReducer";
 import { Vector3 } from "three";
 import { defaultBambooMaterial, defaultBambooRootMaterial } from "../materials";
+import { cone, cylinder } from "../geometries";
 
 type BambooStalkProps = {
   root: LinkedList;
@@ -50,6 +51,7 @@ const BambooStalk = (props: BambooStalkProps) => {
       key={-1}
       position={position.clone().add(new Vector3(0, 0, 0.3))}
       rotation={rotation}
+      geometry={cone}
       cylinderArgs={[1, 2, 1]}
       isSelected={false}
       defaultMaterial={defaultBambooRootMaterial}
@@ -72,6 +74,7 @@ const BambooStalk = (props: BambooStalkProps) => {
           .clone()
           .add(new Vector3(0, cumulativeHeight + 0.5 * nodeValue, 0))}
         rotation={rotation.clone().add(new Vector3(0, 0, 0))}
+        geometry={cylinder}
         cylinderArgs={[1, 1, nodeValue]}
         isSelected={isActive && activeNode === index}
         deselectAllPlants={deselectAllPlants}

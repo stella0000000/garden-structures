@@ -13,6 +13,7 @@ import {
   defaultFlowerHubMaterial,
   defaultFlowerPetalMaterial,
 } from "../materials";
+import { cone, cylinder } from "../geometries";
 
 type FlowerProps = {
   root: DoublyCircularlyLinkedList;
@@ -55,6 +56,7 @@ const Flower = (props: FlowerProps) => {
       key={-1}
       position={position.clone().add(new Vector3(0, 0, 0.3))}
       rotation={rotation.clone().add(new Vector3(0, 1.5708, 0))}
+      geometry={cone}
       cylinderArgs={[1, 2, 0.5]}
       isSelected={false}
       defaultMaterial={defaultFlowerHubMaterial}
@@ -86,6 +88,7 @@ const Flower = (props: FlowerProps) => {
             )
           )}
         rotation={rotation.clone().add(new Vector3(0, 1.5708, 0))}
+        geometry={cylinder}
         cylinderArgs={[nodeValue, nodeValue, 0.1]}
         isSelected={isActive && activeItem === index}
         deselectAllNodes={deselectAllItems}
