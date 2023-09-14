@@ -45,3 +45,13 @@ export const hoveredMaterial = new THREE.MeshBasicMaterial({
   wireframe: true,
   color: "rgb(255,255,0)",
 });
+
+const texture = new THREE.TextureLoader().load("dirt.jpeg");
+texture.wrapS = THREE.RepeatWrapping;
+texture.wrapT = THREE.RepeatWrapping;
+texture.repeat.set(64, 64);
+
+export const dirtMaterial = new THREE.MeshBasicMaterial({
+  map: texture,
+  color: "rgb(135, 111, 89)",
+});

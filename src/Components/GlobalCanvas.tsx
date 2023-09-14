@@ -1,7 +1,7 @@
-import { useReducer } from "react";
+import { useReducer, useRef } from "react";
 import { Canvas, ThreeEvent } from "@react-three/fiber";
 import { LinkedList } from "../DataStructures/LinkedList";
-import { Box, OrbitControls } from "@react-three/drei";
+import { Box, Plane } from "@react-three/drei";
 import BambooStalk from "./BambooStalk";
 import {
   CircularlyLinkedListFromArray,
@@ -14,6 +14,10 @@ import * as THREE from "three";
 import { Vector3, Euler } from "three";
 import { GraphNode, FlattenedGraph } from "../DataStructures/Graph";
 import Constellation from "./Constellation";
+import { dirtMaterial } from "../materials";
+import FirstPersonCameraControls from "./FirstPersonCameraControls";
+
+const camera = new THREE.PerspectiveCamera();
 
 /* plant data is stored at the topmost level as a React antipattern,
  * until we figure out a better way to integrate ui controls inside the canvas
@@ -211,16 +215,6 @@ const initialTestingState: PlantCollection = [
   testingConstellation1,
 ];
 
-// const texture = new THREE.TextureLoader().load("dirt.jpeg");
-// texture.wrapS = THREE.RepeatWrapping;
-// texture.wrapT = THREE.RepeatWrapping;
-// texture.repeat.set(4, 4);
-
-// const dirtMaterial = new THREE.MeshBasicMaterial({
-//   map: texture,
-//   color: "rgb(135, 111, 89)",
-// });
-
 const GlobalCanvas: React.FC = () => {
   const [plantData, dispatch] = useReducer(gardenReducer, initialTestingState);
   const {
@@ -228,6 +222,8 @@ const GlobalCanvas: React.FC = () => {
     selectItem: selectPlant,
     deselectAllItems: deselectAllPlants,
   } = useActiveItem();
+
+  const cameraRef = useRef(camera);
 
   // useEffect(() => {
   //   console.log({ activePlant });
@@ -300,8 +296,9 @@ const GlobalCanvas: React.FC = () => {
 
   return (
     <>
-      <Canvas camera={{ position: [0, 10, 40] }} frameloop="demand">
-        <OrbitControls target={[5, 5, 0]} />
+      <Canvas camera={cameraRef.current}>
+        {/* <OrbitControls target={[5, 5, 0]} /> */}
+        <FirstPersonCameraControls cameraRef={cameraRef} />
         <ambientLight intensity={1} />
         <directionalLight intensity={1} />
         {/* World box for missed click events */}
@@ -320,6 +317,11 @@ const GlobalCanvas: React.FC = () => {
               side: THREE.BackSide,
             })
           }
+        />
+        <Plane
+          args={[1000, 1000]}
+          rotation={new Euler(-Math.PI / 2, 0, 0)}
+          material={dirtMaterial}
         />
         {children()}
         {/* <Plane
