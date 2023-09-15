@@ -1,7 +1,7 @@
 import { useReducer, useRef } from "react";
 import { Canvas, ThreeEvent } from "@react-three/fiber";
 import { LinkedList } from "../DataStructures/LinkedList";
-import { Box, Plane } from "@react-three/drei";
+import { Box, Plane, PointerLockControls } from "@react-three/drei";
 import BambooStalk from "./BambooStalk";
 import {
   CircularlyLinkedListFromArray,
@@ -17,7 +17,7 @@ import Constellation from "./Constellation";
 import { dirtMaterial } from "../materials";
 import FirstPersonCameraControls from "./FirstPersonCameraControls";
 
-const camera = new THREE.PerspectiveCamera();
+const camera = new THREE.PerspectiveCamera(45, 2, 1, 1000);
 
 /* plant data is stored at the topmost level as a React antipattern,
  * until we figure out a better way to integrate ui controls inside the canvas
@@ -298,7 +298,8 @@ const GlobalCanvas: React.FC = () => {
     <>
       <Canvas camera={cameraRef.current}>
         {/* <OrbitControls target={[5, 5, 0]} /> */}
-        <FirstPersonCameraControls cameraRef={cameraRef} />
+        <FirstPersonCameraControls cameraRef={cameraRef} planting={activePlant !== -1} />
+        {/* <PointerLockControls /> */}
         <ambientLight intensity={1} />
         <directionalLight intensity={1} />
         {/* World box for missed click events */}

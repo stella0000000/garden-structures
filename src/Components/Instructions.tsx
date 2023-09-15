@@ -22,7 +22,7 @@ const Box = styled.div`
   color: white;
   /* width: 50%; */
   padding: 100px;
-  font-size: 25px;
+  font-size: 17px;
 `
 
 const Instructions = () => {
@@ -30,7 +30,7 @@ const Instructions = () => {
     <Screen>
       <Wrapper>
         <Box>
-          To move the garden, hold CMD + drag the screen.
+          Use your mouse for direction, and WASD keys for movement.
         </Box>
       </Wrapper>
     </Screen>
