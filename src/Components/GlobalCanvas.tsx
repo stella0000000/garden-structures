@@ -1,7 +1,7 @@
 import { useReducer, useRef } from "react";
 import { Canvas, ThreeEvent } from "@react-three/fiber";
 import { LinkedList } from "../DataStructures/LinkedList";
-import { Box, Plane, PointerLockControls } from "@react-three/drei";
+import { Box, Plane } from "@react-three/drei";
 import BambooStalk from "./BambooStalk";
 import {
   CircularlyLinkedListFromArray,
