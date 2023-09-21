@@ -21,55 +21,59 @@ const useFirstPersonControls = () => {
   // }, [keyStates])
   
   const handleKeyDown = (e: KeyboardEvent) => {
-    switch (e.key){
-      case 'w':
-        return setKeyStates(produce(keyStates, draft => {
-          draft.forward = true
-        }))
-      case 'a':
-        // sans immer
-        return setKeyStates((prevState) => {
-          const clone = { ...prevState }
-          clone.left = true
-          return clone
-        })
-      case 's':
-        return setKeyStates(produce(keyStates, draft => {
-          draft.back = true
-        }))
-      case 'd':
-        return setKeyStates(produce(keyStates, draft => {
-          draft.right = true
-        }))
-      default:
-        return
+    let key = e.key
+    if (key === 'w') {
+      setKeyStates(produce(keyStates, draft => {
+        draft.forward = true
+      }))
+    }
+    if (key === 'a') {
+      // sans immer
+      setKeyStates((prevState) => {
+        const clone = { ...prevState }
+        clone.left = true
+        return clone
+      })
+    }
+    if (key === 's') {
+      setKeyStates(produce(keyStates, draft => {
+        draft.back = true
+      }))
+    }
+
+    if (key === 'd') {
+      setKeyStates(produce(keyStates, draft => {
+        draft.right = true
+      }))
     }
   }
   
   const handleKeyUp = (e: KeyboardEvent) => {
     // console.log({ keyStates })
-    switch (e.key){
-      case 'w':
-        return setKeyStates(produce(keyStates, draft => {
-          draft.forward = false
-        }))
-      case 'a':
-        // sans immer
-        return setKeyStates((prevState) => {
-          const clone = { ...prevState }
-          clone.left = false
-          return clone
-        })
-      case 's':
-        return setKeyStates(produce(keyStates, draft => {
-          draft.back = false
-        }))
-      case 'd':
-        return setKeyStates(produce(keyStates, draft => {
-          draft.right = false
-        }))
-      default:
-        return
+    let key = e.key
+    if (key === 'w') {
+      setKeyStates(produce(keyStates, draft => {
+        draft.forward = false
+      }))
+    }
+    if (key === 'a') {
+      // sans immer
+      setKeyStates((prevState) => {
+        const clone = { ...prevState }
+        clone.left = false
+        return clone
+      })
+    }
+    if (key === 's') {
+      setKeyStates(produce(keyStates, draft => {
+        draft.back = false
+      }))
+    }
+
+    if (key === 'd') {
+      setKeyStates(produce(keyStates, draft => {
+        draft.right = false
+      }))
     }
   }
   
