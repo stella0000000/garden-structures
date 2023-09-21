@@ -1,92 +1,65 @@
-import { produce } from 'immer'
-import { useEffect, useState } from 'react'
+import { produce } from "immer";
+import { useCallback, useEffect, useState } from "react";
 
 type KeyStates = {
-  forward: boolean,
-  left: boolean,
-  back: boolean,
-  right: boolean,
-}
+  forward: boolean;
+  left: boolean;
+  back: boolean;
+  right: boolean;
+};
 
 const useFirstPersonControls = () => {
   const [keyStates, setKeyStates] = useState<KeyStates>({
     forward: false,
     left: false,
     back: false,
-    right: false
-  })
-  
+    right: false,
+  });
+
   // useEffect(() => {
   //   console.log({ keyStates })
   // }, [keyStates])
-  
-  const handleKeyDown = (e: KeyboardEvent) => {
-    let key = e.key
-    if (key === 'w') {
-      setKeyStates(produce(keyStates, draft => {
-        draft.forward = true
-      }))
-    }
-    if (key === 'a') {
-      // sans immer
-      setKeyStates((prevState) => {
-        const clone = { ...prevState }
-        clone.left = true
-        return clone
-      })
-    }
-    if (key === 's') {
-      setKeyStates(produce(keyStates, draft => {
-        draft.back = true
-      }))
-    }
 
-    if (key === 'd') {
-      setKeyStates(produce(keyStates, draft => {
-        draft.right = true
-      }))
-    }
-  }
-  
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      let key = e.key;
+      setKeyStates(
+        produce((draft) => {
+          if (key === "w") draft.forward = true;
+          if (key === "s") draft.back = true;
+          if (key === "a") {
+            console.log(draft.forward);
+            draft.left = true;
+          }
+          if (key === "d") draft.right = true;
+        })
+      );
+    },
+    [keyStates]
+  );
+
   const handleKeyUp = (e: KeyboardEvent) => {
-    // console.log({ keyStates })
-    let key = e.key
-    if (key === 'w') {
-      setKeyStates(produce(keyStates, draft => {
-        draft.forward = false
-      }))
-    }
-    if (key === 'a') {
-      // sans immer
-      setKeyStates((prevState) => {
-        const clone = { ...prevState }
-        clone.left = false
-        return clone
+    let key = e.key;
+    setKeyStates(
+      produce((draft) => {
+        if (key === "w") draft.forward = false;
+        if (key === "s") draft.back = false;
+        if (key === "a") draft.left = false;
+        if (key === "d") draft.right = false;
       })
-    }
-    if (key === 's') {
-      setKeyStates(produce(keyStates, draft => {
-        draft.back = false
-      }))
-    }
+    );
+  };
 
-    if (key === 'd') {
-      setKeyStates(produce(keyStates, draft => {
-        draft.right = false
-      }))
-    }
-  }
-  
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown)
-    document.addEventListener('keyup', handleKeyUp)
+    document.addEventListener("keypress", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-      document.removeEventListener('keyup', handleKeyUp)
-    }
-  }, [])
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyUp);
+    };
+  }, []);
 
-  return keyStates
-}
+  return keyStates;
+};
 
-export default useFirstPersonControls
+export default useFirstPersonControls;

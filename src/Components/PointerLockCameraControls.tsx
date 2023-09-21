@@ -13,41 +13,35 @@ type PointerLockCameraControlsProps = {
 };
 
 const PointerLockCameraControls = (props: PointerLockCameraControlsProps) => {
-  const {
-    cameraRef,
-    planting,
-    deselectAllPlants
-   } = props;
-  const pointerLockRef = useRef<any>(null)
-  const keyStates = useFirstPersonControls()
+  const { cameraRef, planting, deselectAllPlants } = props;
+  const pointerLockRef = useRef<any>(null);
+  const keyStates = useFirstPersonControls();
 
   useEffect(() => {
-    if (planting) pointerLockRef.current.unlock()
-  }, [planting])
+    if (planting) pointerLockRef.current.unlock();
+  }, [planting]);
 
-  useEffect(()=> {
+  useEffect(() => {
     cameraRef.current.position.setComponent(2, 50);
-  }, [])
+  }, []);
 
   useFrame(() => {
-    let x = 0
-    let z = 0
-    if (keyStates.forward) z += 1
-    if (keyStates.back) z -= 1
-    if (keyStates.right) x += 1
-    if (keyStates.left) x -= 1
+    let x = 0;
+    let z = 0;
+    if (keyStates.forward) z += 1;
+    if (keyStates.back) z -= 1;
+    if (keyStates.right) x += 1;
+    if (keyStates.left) x -= 1;
 
     // every frame sets height of camera to 15
     // "eye-level"
+    const cameraQuat = cameraRef.current.quaternion;
+    const playerMovement = new THREE.Vector3(x, 0, -z);
+    playerMovement.applyQuaternion(cameraQuat);
+
+    cameraRef.current.position.add(playerMovement);
     cameraRef.current.position.setComponent(1, 15);
-    const quaternion = cameraRef.current.quaternion
-    const { x: xRotation, y: yRotation, z: zRotation } = new THREE.Euler().setFromQuaternion(quaternion) // plane locked to left / right
-    console.log({ xRotation, yRotation, zRotation })
-    // const player2dRotation = new THREE.Euler(yRotation, 0, 0)
-    const playerMovement = new THREE.Vector3(x, 0, -z)
-    playerMovement.applyAxisAngle(new THREE.Vector3(0, 1, 0), yRotation)
-    cameraRef.current.position.add(playerMovement)
-  })
+  });
 
   return (
     <PointerLockControls
@@ -55,7 +49,6 @@ const PointerLockCameraControls = (props: PointerLockCameraControlsProps) => {
       ref={pointerLockRef}
       onLock={() => deselectAllPlants()}
     />
-
   );
 };
 
