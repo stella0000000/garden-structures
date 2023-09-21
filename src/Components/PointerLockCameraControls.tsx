@@ -39,12 +39,13 @@ const PointerLockCameraControls = (props: PointerLockCameraControlsProps) => {
 
     // every frame sets height of camera to 15
     // "eye-level"
-    cameraRef.current.position.setComponent(1, 15);
+    // cameraRef.current.position.setComponent(1, 15);
     const quaternion = cameraRef.current.quaternion
-    const { y: yRotation, z: zRotation } = new THREE.Euler().setFromQuaternion(quaternion) // plane locked to left / right
-    const player2dRotation = new THREE.Euler(yRotation, 0, zRotation)
+    const { x: xRotation, y: yRotation, z: zRotation } = new THREE.Euler().setFromQuaternion(quaternion) // plane locked to left / right
+    console.log({ xRotation, yRotation, zRotation })
+    // const player2dRotation = new THREE.Euler(yRotation, 0, 0)
     const playerMovement = new THREE.Vector3(x, 0, -z)
-    playerMovement.applyEuler(player2dRotation)
+    playerMovement.applyAxisAngle(new THREE.Vector3(0, 1, 0), yRotation)
     cameraRef.current.position.add(playerMovement)
   })
 
