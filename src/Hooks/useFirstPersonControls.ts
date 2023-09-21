@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 type KeyStates = {
   forward: boolean,
   left: boolean,
-  down: boolean,
+  back: boolean,
   right: boolean,
 }
 
@@ -12,7 +12,7 @@ const useFirstPersonControls = () => {
   const [keyStates, setKeyStates] = useState<KeyStates>({
     forward: false,
     left: false,
-    down: false,
+    back: false,
     right: false
   })
   
@@ -35,7 +35,7 @@ const useFirstPersonControls = () => {
         })
       case 's':
         return setKeyStates(produce(keyStates, draft => {
-          draft.left = true
+          draft.back = true
         }))
       case 'd':
         return setKeyStates(produce(keyStates, draft => {
@@ -62,7 +62,7 @@ const useFirstPersonControls = () => {
         })
       case 's':
         return setKeyStates(produce(keyStates, draft => {
-          draft.left = false
+          draft.back = false
         }))
       case 'd':
         return setKeyStates(produce(keyStates, draft => {

@@ -33,7 +33,7 @@ const PointerLockCameraControls = (props: PointerLockCameraControlsProps) => {
     let x = 0
     let z = 0
     if (keyStates.forward) z += 1
-    if (keyStates.down) z -= 1
+    if (keyStates.back) z -= 1
     if (keyStates.right) x += 1
     if (keyStates.left) x -= 1
 
@@ -42,8 +42,8 @@ const PointerLockCameraControls = (props: PointerLockCameraControlsProps) => {
     cameraRef.current.position.setComponent(1, 15);
     const quaternion = cameraRef.current.quaternion
     const { y: yRotation, z: zRotation } = new THREE.Euler().setFromQuaternion(quaternion) // plane locked to left / right
-    const player2dRotation = new THREE.Euler(yRotation, zRotation)  // 1 of the 3 will be set to 0, ben doesn't know which one
-    const playerMovement = new THREE.Vector3(x, z) // one should also be zero, ben doesn't know which one
+    const player2dRotation = new THREE.Euler(yRotation, 0, zRotation)
+    const playerMovement = new THREE.Vector3(x, 0, -z)
     playerMovement.applyEuler(player2dRotation)
     cameraRef.current.position.add(playerMovement)
   })
