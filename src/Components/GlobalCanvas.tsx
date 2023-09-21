@@ -15,7 +15,7 @@ import { Vector3, Euler } from "three";
 import { GraphNode, FlattenedGraph } from "../DataStructures/Graph";
 import Constellation from "./Constellation";
 import { dirtMaterial } from "../materials";
-import FirstPersonCameraControls from "./FirstPersonCameraControls";
+import PointerLockCameraControls from "./PointerLockCameraControls";
 
 const camera = new THREE.PerspectiveCamera(45, 2, 1, 1000);
 
@@ -189,10 +189,6 @@ const traverse = (
            5   8  
           /\   /\
          4  6 7  9
-
-
-
-
 */
 
 // initial number is Math.floor(offset/2)
@@ -215,7 +211,13 @@ const initialTestingState: PlantCollection = [
   testingConstellation1,
 ];
 
-const GlobalCanvas: React.FC = () => {
+type GlobalCanvasProps = {
+  isPointerLock: boolean;
+  setIsPointerLock: () => void;
+}
+
+const GlobalCanvas = (props: GlobalCanvasProps) => {
+  const { isPointerLock, setIsPointerLock } = props
   const [plantData, dispatch] = useReducer(gardenReducer, initialTestingState);
   const {
     activeItem: activePlant,
@@ -228,12 +230,6 @@ const GlobalCanvas: React.FC = () => {
   // useEffect(() => {
   //   console.log({ activePlant });
   // }, [activePlant]);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     dispatch({ type: "append", payload: { index: 4 } });
-  //   }, 1000);
-  // }, []);
 
   // renders the appropriate JSX for each plant in the PlantData based on type
   const children = () => {
@@ -295,11 +291,14 @@ const GlobalCanvas: React.FC = () => {
   };
 
   return (
-    <>
       <Canvas camera={cameraRef.current}>
-        {/* <OrbitControls target={[5, 5, 0]} /> */}
-        <FirstPersonCameraControls cameraRef={cameraRef} planting={activePlant !== -1} />
-        {/* <PointerLockControls /> */}
+        <PointerLockCameraControls
+          cameraRef={cameraRef}
+          planting={activePlant !== -1}
+          isPointerLock={isPointerLock}
+          setIsPointerLock={setIsPointerLock}
+          deselectAllPlants={deselectAllPlants}
+        />
         <ambientLight intensity={1} />
         <directionalLight intensity={1} />
         {/* World box for missed click events */}
@@ -331,7 +330,7 @@ const GlobalCanvas: React.FC = () => {
           material={dirtMaterial}
         ></Plane> */}
       </Canvas>
-    </>
+    // </KeyboardControls>
   );
 };
 

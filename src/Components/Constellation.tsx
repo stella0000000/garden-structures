@@ -140,8 +140,8 @@ const Constellation = (props: ConstellationProps) => {
         key={node1.val[0] + index}
         points={[p1, p2]}
         color="rgb(255, 255, 255)"
-        // dashed={true}
-        // dashScale={0}
+        dashed={true}
+        dashScale={7}
         lineWidth={0.4}
         // opacity={0.5}
         // transparent
