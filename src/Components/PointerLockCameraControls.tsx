@@ -22,7 +22,7 @@ const PointerLockCameraControls = (props: PointerLockCameraControlsProps) => {
   }, [planting]);
 
   useEffect(() => {
-    cameraRef.current.position.setComponent(2, 50);
+    cameraRef.current.position.setComponent(2, 150);
   }, []);
 
   useFrame(() => {

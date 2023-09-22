@@ -27,7 +27,7 @@ export const defaultBambooRootMaterial = new THREE.MeshBasicMaterial({
 
 export const defaultFlowerHubMaterial = new THREE.MeshBasicMaterial({
   wireframe: true,
-  color: "rgb(255,0,0)",
+  color: "rgb(255, 177, 225)",
 });
 
 export const defaultFlowerPetalMaterial = new THREE.MeshBasicMaterial({

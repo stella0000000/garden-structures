@@ -214,10 +214,10 @@ const initialTestingState: PlantCollection = [
 type GlobalCanvasProps = {
   isPointerLock: boolean;
   setIsPointerLock: () => void;
-}
+};
 
 const GlobalCanvas = (props: GlobalCanvasProps) => {
-  const { isPointerLock, setIsPointerLock } = props
+  const { isPointerLock, setIsPointerLock } = props;
   const [plantData, dispatch] = useReducer(gardenReducer, initialTestingState);
   const {
     activeItem: activePlant,
@@ -283,7 +283,7 @@ const GlobalCanvas = (props: GlobalCanvasProps) => {
           );
         }
         default: {
-          // UNREACHABLE!
+          // unreachable
           return <></>;
         }
       }
@@ -291,45 +291,45 @@ const GlobalCanvas = (props: GlobalCanvasProps) => {
   };
 
   return (
-      <Canvas camera={cameraRef.current}>
-        <PointerLockCameraControls
-          cameraRef={cameraRef}
-          planting={activePlant !== -1}
-          isPointerLock={isPointerLock}
-          setIsPointerLock={setIsPointerLock}
-          deselectAllPlants={deselectAllPlants}
-        />
-        <ambientLight intensity={1} />
-        <directionalLight intensity={1} />
-        {/* World box for missed click events */}
-        <Box
-          args={[75, 75, 75]}
-          visible={true}
-          onPointerDown={(e: ThreeEvent<PointerEvent>) => {
-            e.stopPropagation();
-            deselectAllPlants();
-          }}
-          material={
-            new THREE.MeshLambertMaterial({
-              color: 0xffffff,
-              transparent: true,
-              opacity: 0,
-              side: THREE.BackSide,
-            })
-          }
-        />
-        <Plane
-          args={[1000, 1000]}
-          rotation={new Euler(-Math.PI / 2, 0, 0)}
-          material={dirtMaterial}
-        />
-        {children()}
-        {/* <Plane
+    <Canvas camera={cameraRef.current}>
+      <PointerLockCameraControls
+        cameraRef={cameraRef}
+        planting={activePlant !== -1}
+        isPointerLock={isPointerLock}
+        setIsPointerLock={setIsPointerLock}
+        deselectAllPlants={deselectAllPlants}
+      />
+      <ambientLight intensity={1} />
+      <directionalLight intensity={1} />
+      {/* World box for missed click events */}
+      <Box
+        args={[75, 75, 75]}
+        visible={true}
+        onPointerDown={(e: ThreeEvent<PointerEvent>) => {
+          e.stopPropagation();
+          deselectAllPlants();
+        }}
+        material={
+          new THREE.MeshLambertMaterial({
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0,
+            side: THREE.BackSide,
+          })
+        }
+      />
+      <Plane
+        args={[1000, 1000]}
+        rotation={new Euler(-Math.PI / 2, 0, 0)}
+        material={dirtMaterial}
+      />
+      {children()}
+      {/* <Plane
           args={[20, 20]}
           rotation={[-1.57, 0, 0]}
           material={dirtMaterial}
         ></Plane> */}
-      </Canvas>
+    </Canvas>
     // </KeyboardControls>
   );
 };

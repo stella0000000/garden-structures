@@ -27,7 +27,7 @@ type ConstellationProps = {
 
 enum Search {
   BFS,
-  DFS
+  DFS,
 }
 
 const Constellation = (props: ConstellationProps) => {
@@ -43,8 +43,8 @@ const Constellation = (props: ConstellationProps) => {
   } = props;
 
   const root = GraphNode.unflatten(data);
-  const [search, setSearch] = useState(Search.BFS)
-  const [allStars, setAllStars] = useState(root.bfs())
+  const [search, setSearch] = useState(Search.BFS);
+  const [allStars, setAllStars] = useState(root.bfs());
   const [currStarIdx, setCurrStarIdx] = useState(0);
 
   useEffect(() => {
@@ -56,15 +56,15 @@ const Constellation = (props: ConstellationProps) => {
 
   useEffect(() => {
     if (currStarIdx === 0) {
-      search === Search.BFS ? setSearch(Search.DFS) : setSearch(Search.BFS)
+      search === Search.BFS ? setSearch(Search.DFS) : setSearch(Search.BFS);
 
       if (search === Search.BFS) {
-        setAllStars(root.bfs())
+        setAllStars(root.bfs());
       } else {
-        setAllStars(root.dfs())
+        setAllStars(root.dfs());
       }
     }
-  }, [currStarIdx])
+  }, [currStarIdx]);
 
   const {
     activeItem: activeNode,
@@ -108,7 +108,6 @@ const Constellation = (props: ConstellationProps) => {
           .clone()
           .add(new Vector3(graphNode.val[0], graphNode.val[1], 0))}
         rotation={rotation.clone()}
-        // cylinderArgs={[1, 1, 1]}
         geometry={cylinder}
         cylinderArgs={[0.125, 0.125, 0.125]}
         isSelected={isActive && activeNode === index}
@@ -119,14 +118,8 @@ const Constellation = (props: ConstellationProps) => {
         }
         deselectAllNodes={deselectAllNodes}
         selectNode={() => selectNode(index)}
-        // opacity={0.1}
-        // transparent
       />
     );
-    // console.log(graphNode.val[0], graphNode.val[1])
-    // console.log(position
-    //   .clone()
-    //   .add(new Vector3(graphNode.val[0], graphNode.val[1], 0)))
   });
 
   Array.from(uniqueEdgeMap.values()).forEach((nodes, index) => {
@@ -139,22 +132,24 @@ const Constellation = (props: ConstellationProps) => {
         // fix key
         key={node1.val[0] + index}
         points={[p1, p2]}
-        color="rgb(255, 255, 255)"
+        color="white"
         dashed={true}
-        dashScale={7}
-        lineWidth={0.4}
-        // opacity={0.5}
-        // transparent
+        dashScale={6}
+        lineWidth={0.5}
       />
     );
   });
 
   return (
-    <group rotation={new Euler(Math.PI / 2,0,0)} position={[1, 100, 0]} scale={10}>
-    {/* <ScreenSpace depth={30}> */}
+    <group
+      rotation={new Euler(Math.PI / 2, 0, 0)}
+      position={[1, 100, 0]}
+      scale={5}
+    >
+      {/* <ScreenSpace depth={30}> */}
       {starChildren}
       {edgeChildren}
-    {/* </ScreenSpace> */}
+      {/* </ScreenSpace> */}
     </group>
   );
 };

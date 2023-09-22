@@ -90,19 +90,19 @@ const Arrow = styled.button`
     height: 40px; */
     display: none;
   }
-`
+`;
 
 const ArrowWrap = styled.div`
   margin: 30px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  
+
   @media only screen and (max-width: 700px) {
     /* margin: 60px 5px; */
     display: none;
   }
-`
+`;
 
 const LeftRightWrap = styled.div`
   display: flex;
@@ -113,27 +113,20 @@ const LeftRightWrap = styled.div`
   @media only screen and (max-width: 700px) {
     width: 125px;
   }
-`
+`;
 
 type ControlPanelProps = {
   data: LinkedList | DoublyCircularlyLinkedList;
   activeNodeId: number;
   moveOperations: Record<string, (direction: Direction) => void>;
   plantOperations: Record<string, () => void>;
-    // an object - key: string, value: function
+  // an object - key: string, value: function
   nodeOperations: Record<string, (index: number) => void>;
-  // handleKeyDown: (e: any) => void;
 };
 
 const ControlPanel = (props: ControlPanelProps) => {
-  const {
-    activeNodeId,
-    moveOperations,
-    plantOperations,
-    nodeOperations,
-    // data,
-    // handleKeyDown
-  } = props;
+  const { activeNodeId, moveOperations, plantOperations, nodeOperations } =
+    props;
   const [controlsHeight, setControlsHeight] = useState(0);
   const [controlsWidth, setControlsWidth] = useState(0);
   const positionRef = useRef<HTMLDivElement>(null);
@@ -142,7 +135,7 @@ const ControlPanel = (props: ControlPanelProps) => {
   //   const dataStructure = data.constructor.name
   //   if (dataStructure === 'LinkedList') return '🎋'
   //   else if (dataStructure === 'DoublyCircularlyLinkedList') return '🌸'
-  // } 
+  // }
 
   useEffect(() => {
     setTimeout(() => {
@@ -160,40 +153,55 @@ const ControlPanel = (props: ControlPanelProps) => {
     // fix position
     <>
       <Html
-      calculatePosition={() => {
-        return [0, window.innerHeight - 200, 0]
-      }}>
-        <ArrowWrap
-          // onKeyDown={(e) => handleKeyDown(e)}
-        >
+        calculatePosition={() => {
+          return [0, window.innerHeight - 200, 0];
+        }}
+      >
+        <ArrowWrap>
           <Arrow
             onPointerDown={(e) => {
               e.stopPropagation();
-              moveOperations.move(Direction.UP)
-            }}>↑</Arrow>
+              moveOperations.move(Direction.UP);
+            }}
+          >
+            ↑
+          </Arrow>
           <LeftRightWrap>
             <Arrow
               onPointerDown={(e) => {
                 e.stopPropagation();
-                moveOperations.move(Direction.LEFT)
-              }}>←</Arrow>
+                moveOperations.move(Direction.LEFT);
+              }}
+            >
+              ←
+            </Arrow>
             <Arrow
-            onPointerDown={(e) => {
-              e.stopPropagation();
-              moveOperations.move(Direction.RIGHT)
-            }}>→</Arrow>
+              onPointerDown={(e) => {
+                e.stopPropagation();
+                moveOperations.move(Direction.RIGHT);
+              }}
+            >
+              →
+            </Arrow>
           </LeftRightWrap>
           <Arrow
             onPointerDown={(e) => {
               e.stopPropagation();
-              moveOperations.move(Direction.DOWN)
-            }}>↓</Arrow>
+              moveOperations.move(Direction.DOWN);
+            }}
+          >
+            ↓
+          </Arrow>
         </ArrowWrap>
       </Html>
       <Html
         // fullscreen
         calculatePosition={() => {
-          return [window.innerWidth - controlsWidth, window.innerHeight - controlsHeight, 0];
+          return [
+            window.innerWidth - controlsWidth,
+            window.innerHeight - controlsHeight,
+            0,
+          ];
         }}
       >
         <PositionWrap ref={positionRef}>
