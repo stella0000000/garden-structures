@@ -35,18 +35,18 @@ const Button = styled.button`
   }
 `;
 
-// const AddRemovePlant = styled.button`
-//   text-transform: uppercase;
-//   background: transparent;
-//   color: #ffffff;
-//   font-size: 14px;
-//   cursor: default;
-//   border: 1px solid transparent;
+const AddRemovePlant = styled.button`
+  text-transform: uppercase;
+  background: transparent;
+  color: #ffffff;
+  font-size: 14px;
+  cursor: default;
+  border: 1px solid transparent;
 
-//   &:hover {
-//     border: 1px solid transparent;
-//   }
-// `
+  &:hover {
+    border: 1px solid transparent;
+  }
+`;
 
 const PositionWrap = styled.div`
   display: flex;
@@ -125,17 +125,22 @@ type ControlPanelProps = {
 };
 
 const ControlPanel = (props: ControlPanelProps) => {
-  const { activeNodeId, moveOperations, plantOperations, nodeOperations } =
-    props;
+  const {
+    activeNodeId,
+    moveOperations,
+    plantOperations,
+    nodeOperations,
+    data,
+  } = props;
   const [controlsHeight, setControlsHeight] = useState(0);
   const [controlsWidth, setControlsWidth] = useState(0);
   const positionRef = useRef<HTMLDivElement>(null);
 
-  // const plantType =()=> {
-  //   const dataStructure = data.constructor.name
-  //   if (dataStructure === 'LinkedList') return '🎋'
-  //   else if (dataStructure === 'DoublyCircularlyLinkedList') return '🌸'
-  // }
+  const plantType = () => {
+    const dataStructure = data.constructor.name;
+    if (dataStructure === "LinkedList") return "🎋";
+    else if (dataStructure === "DoublyCircularlyLinkedList") return "🌸";
+  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -237,8 +242,8 @@ const ControlPanel = (props: ControlPanelProps) => {
               </Button>
             );
           })}
-          {/* <AddRemovePlant>plant {plantType()}</AddRemovePlant>
-          <AddRemovePlant>remove {plantType()}</AddRemovePlant> */}
+          <AddRemovePlant>plant {plantType()}</AddRemovePlant>
+          <AddRemovePlant>remove {plantType()}</AddRemovePlant>
         </PositionWrap>
       </Html>
     </>

@@ -1,5 +1,5 @@
-import { useReducer, useRef } from "react";
-import { Canvas, ThreeEvent } from "@react-three/fiber";
+import { useEffect, useReducer, useRef, useState } from "react";
+import { Canvas, ThreeEvent, useFrame } from "@react-three/fiber";
 import { LinkedList } from "../DataStructures/LinkedList";
 import { Box, Plane } from "@react-three/drei";
 import BambooStalk from "./BambooStalk";
@@ -14,10 +14,12 @@ import * as THREE from "three";
 import { Vector3, Euler } from "three";
 import { GraphNode, FlattenedGraph } from "../DataStructures/Graph";
 import Constellation from "./Constellation";
-import { dirtMaterial } from "../materials";
+// import { dirtMaterial } from "../materials";
 import PointerLockCameraControls from "./PointerLockCameraControls";
+import Ground from "./Ground";
+import GhostPlant from "./GhostPlant";
 
-const camera = new THREE.PerspectiveCamera(45, 2, 1, 1000);
+export const camera = new THREE.PerspectiveCamera(45, 2, 1, 1000);
 
 /* plant data is stored at the topmost level as a React antipattern,
  * until we figure out a better way to integrate ui controls inside the canvas
@@ -226,6 +228,13 @@ const GlobalCanvas = (props: GlobalCanvasProps) => {
   } = useActiveItem();
 
   const cameraRef = useRef(camera);
+  const raycaster = useRef(new THREE.Raycaster());
+  const plane = useRef<THREE.Mesh | null>(null);
+
+  const updateRaycaster = () => {
+    raycaster.current?.setFromCamera(new THREE.Vector2(), cameraRef.current);
+    // console.log(raycaster.current?.intersectObject(plane.current!));
+  };
 
   // useEffect(() => {
   //   console.log({ activePlant });
@@ -298,6 +307,9 @@ const GlobalCanvas = (props: GlobalCanvasProps) => {
         isPointerLock={isPointerLock}
         setIsPointerLock={setIsPointerLock}
         deselectAllPlants={deselectAllPlants}
+        // plane={plane}
+        // raycaster={raycaster}
+        updateRaycaster={updateRaycaster}
       />
       <ambientLight intensity={1} />
       <directionalLight intensity={1} />
@@ -318,19 +330,10 @@ const GlobalCanvas = (props: GlobalCanvasProps) => {
           })
         }
       />
-      <Plane
-        args={[1000, 1000]}
-        rotation={new Euler(-Math.PI / 2, 0, 0)}
-        material={dirtMaterial}
-      />
+      <Ground raycaster={raycaster} plane={plane} />
+      <GhostPlant raycaster={raycaster} plane={plane} />
       {children()}
-      {/* <Plane
-          args={[20, 20]}
-          rotation={[-1.57, 0, 0]}
-          material={dirtMaterial}
-        ></Plane> */}
     </Canvas>
-    // </KeyboardControls>
   );
 };
 

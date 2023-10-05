@@ -10,12 +10,28 @@ type PointerLockCameraControlsProps = {
   isPointerLock: boolean;
   setIsPointerLock: () => void;
   deselectAllPlants: () => void;
+  // plane: React.MutableRefObject<THREE.Mesh | null>;
+  // raycaster: React.MutableRefObject<THREE.Raycaster | null>;
+  updateRaycaster: () => void;
 };
 
 const PointerLockCameraControls = (props: PointerLockCameraControlsProps) => {
-  const { cameraRef, planting, deselectAllPlants } = props;
+  const {
+    cameraRef,
+    planting,
+    deselectAllPlants,
+    // plane,
+    // raycaster,
+    updateRaycaster,
+  } = props;
   const pointerLockRef = useRef<any>(null);
   const keyStates = useFirstPersonControls();
+
+  useFrame(() => {
+    // console.log(raycaster.current, plane.current);
+    updateRaycaster();
+    // console.log(raycaster.current?.intersectObject(plane.current!));
+  });
 
   useEffect(() => {
     if (planting) pointerLockRef.current.unlock();

@@ -22,7 +22,7 @@ const Box = styled.div`
   color: white;
   width: 50%;
   padding: 100px;
-  font-size: 17px;
+  font-size: 20px;
 `;
 
 const Instructions = () => {
