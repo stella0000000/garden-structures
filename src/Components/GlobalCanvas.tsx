@@ -1,7 +1,7 @@
-import { useEffect, useReducer, useRef, useState } from "react";
-import { Canvas, ThreeEvent, useFrame } from "@react-three/fiber";
+import { useReducer, useRef } from "react";
+import { Canvas, ThreeEvent } from "@react-three/fiber";
 import { LinkedList } from "../DataStructures/LinkedList";
-import { Box, Plane } from "@react-three/drei";
+import { Box } from "@react-three/drei";
 import BambooStalk from "./BambooStalk";
 import {
   CircularlyLinkedListFromArray,
@@ -11,7 +11,7 @@ import Flower from "./Flower";
 import useActiveItem from "../Hooks/useActiveItem";
 import gardenReducer from "../Hooks/Reducers/gardenReducer";
 import * as THREE from "three";
-import { Vector3, Euler } from "three";
+import { Vector3 } from "three";
 import { GraphNode, FlattenedGraph } from "../DataStructures/Graph";
 import Constellation from "./Constellation";
 // import { dirtMaterial } from "../materials";
