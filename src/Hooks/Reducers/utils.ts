@@ -4,7 +4,10 @@ import {
   BambooStalkData,
   FlowerData,
 } from "../../Components/GlobalCanvas";
-import { DoublyCircularlyLinkedList } from "../../DataStructures/DoublyCircularlyLinkedList";
+import {
+  CircularlyLinkedListFromArray,
+  DoublyCircularlyLinkedList,
+} from "../../DataStructures/DoublyCircularlyLinkedList";
 import { LinkedList } from "../../DataStructures/LinkedList";
 import { GardenReducerAction, Direction } from "./gardenReducer";
 
@@ -55,12 +58,39 @@ export const movePlant = (
 };
 
 /**
+ * @param flower
+ * @param action
+ */
+export const appendFlower = (
+  plantCollection: PlantCollection,
+  action: GardenReducerAction
+): PlantCollection => {
+  const { position, rotation } = action.payload;
+  if (position === undefined || rotation === undefined)
+    throw Error("Position + rot undefined");
+
+  console.log("append flower");
+  console.log(action.payload);
+
+  const data: FlowerData = {
+    kind: "FlowerData",
+    data: CircularlyLinkedListFromArray([2, 2, 2, 2, 2, 2]),
+    position: new Vector3(position[0], position[1], position[2]),
+    rotation: new Vector3(rotation[0], rotation[1], rotation[2]),
+  };
+
+  const newState: PlantCollection = [...plantCollection, data];
+
+  return Object.values(newState) as PlantCollection;
+};
+
+/**
  *
  * @param bamboo
  * @param action - APPEND
  * @returns fresh bamboo data PlantCollection
  */
-export const appendBamboo = (
+export const appendBambooNode = (
   plantCollection: PlantCollection,
   action: GardenReducerAction
 ): PlantCollection => {
@@ -89,7 +119,7 @@ export const appendBamboo = (
  * @param action - POP
  * @returns fresh bamboo data PlantCollection
  */
-export const popBamboo = (
+export const popBambooNode = (
   plantCollection: PlantCollection,
   action: GardenReducerAction
 ): PlantCollection => {
@@ -180,7 +210,7 @@ export const deleteAfterBamboo = (
  * @param action - INSERT
  * @returns fresh bamboo data PlantCollection
  */
-export const insertBamboo = (
+export const insertBambooNode = (
   plantCollection: PlantCollection,
   action: GardenReducerAction
 ): PlantCollection => {
@@ -209,7 +239,7 @@ export const insertBamboo = (
  * @param action - APPEND
  * @returns fresh flower data PlantCollection
  */
-export const appendFlower = (
+export const appendFlowerNode = (
   plantCollection: PlantCollection,
   action: GardenReducerAction
 ): PlantCollection => {

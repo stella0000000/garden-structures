@@ -1,17 +1,15 @@
 import { PlantCollection } from "../../Components/GlobalCanvas";
-// import { FlattenedGraph, GraphNode } from "../../DataStructures/Graph";
-// import { produce } from "immer";
 import {
-  appendBamboo,
+  appendBambooNode,
   appendFlower,
-  popBamboo,
+  appendFlowerNode,
+  deleteAfterBamboo,
   deleteAtIndexBamboo,
   deleteAtIndexFlower,
-  insertBamboo,
-  deleteAfterBamboo,
+  insertBambooNode,
   movePlant,
+  popBambooNode,
 } from "./utils";
-// import { v4 as v4 } from "uuid";
 
 export enum Direction {
   UP,
@@ -24,7 +22,6 @@ export enum PlantName {
   BAMBOO = "bamboo",
   FLOWER = "flower",
   TREE = "tree",
-  STAR = "star",
 }
 
 export enum OpName {
@@ -33,6 +30,7 @@ export enum OpName {
   INSERT = "insert",
   DELETE = "delete",
   POP = "pop",
+  UPDATE = "update",
 }
 
 export type GardenReducerAction = {
@@ -43,6 +41,8 @@ export type GardenReducerAction = {
     direction?: Direction;
     plantName?: PlantName;
     opName?: OpName;
+    position?: [number, number, number];
+    rotation?: [number, number, number];
   };
 };
 
@@ -52,19 +52,48 @@ export default function gardenReducer(
 ) {
   const { plantName, opName } = action.payload;
 
-  /* PLANT OPS */
-  if (action.type === "plantOperation") {
+  /* GARDEN OPS */
+  if (action.type === "gardenOperation") {
+    if (opName === OpName.APPEND) {
+      if (plantName === PlantName.FLOWER) {
+        return appendFlower(plantCollection, action);
+      } else if (plantName === PlantName.BAMBOO) {
+        throw Error(`Unimplemented ${opName} for ${plantName}`);
+      } else {
+        throw Error(`No ${opName} handler for ${plantName}`);
+      }
+    } else if (opName === OpName.DELETE) {
+      if (plantName === PlantName.FLOWER) {
+        throw Error(`Unimplemented ${opName} for ${plantName}`);
+      } else if (plantName === PlantName.BAMBOO) {
+        throw Error(`Unimplemented ${opName} for ${plantName}`);
+      } else {
+        throw Error(`No ${opName} handler for ${plantName}`);
+      }
+    } else if (opName === OpName.UPDATE) {
+      if (plantName === PlantName.FLOWER) {
+        throw Error(`Unimplemented ${opName} for ${plantName}`);
+      } else if (plantName === PlantName.BAMBOO) {
+        throw Error(`Unimplemented ${opName} for ${plantName}`);
+      } else {
+        throw Error(`No ${opName} handler for ${plantName}`);
+      }
+    } else {
+      throw Error(`No ${opName} handler for plant: ${plantName}`);
+    }
+    /* PLANT OPS */
+  } else if (action.type === "plantOperation") {
     if (opName === OpName.APPEND) {
       if (plantName === PlantName.BAMBOO) {
-        return appendBamboo(plantCollection, action);
+        return appendBambooNode(plantCollection, action);
       } else if (plantName === PlantName.FLOWER) {
-        return appendFlower(plantCollection, action);
+        return appendFlowerNode(plantCollection, action);
       } else {
         throw Error(`No append handler for ${plantName}`);
       }
     } else if (opName === OpName.POP) {
       if (plantName === PlantName.BAMBOO) {
-        return popBamboo(plantCollection, action);
+        return popBambooNode(plantCollection, action);
         // throw Error(`to do`)
       } else {
         throw Error(`No pop handler for ${plantName}`);
@@ -84,7 +113,7 @@ export default function gardenReducer(
       }
     } else if (opName === OpName.INSERT) {
       if (plantName === PlantName.BAMBOO) {
-        return insertBamboo(plantCollection, action);
+        return insertBambooNode(plantCollection, action);
       } else {
         throw Error(`No insert @ index handler for ${plantName}`);
       }

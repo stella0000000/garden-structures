@@ -15,6 +15,11 @@ export const starEdgeMaterial = new THREE.LineDashedMaterial({
   color: "white",
 });
 
+export const ghostMaterial = new THREE.MeshBasicMaterial({
+  wireframe: true,
+  color: "rgb(100, 100, 225)",
+});
+
 export const defaultBambooMaterial = new THREE.MeshBasicMaterial({
   wireframe: true,
   color: "rgb(26,255,0)",

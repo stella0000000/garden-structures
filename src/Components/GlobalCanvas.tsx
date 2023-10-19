@@ -14,14 +14,13 @@ import * as THREE from "three";
 import { Vector3 } from "three";
 import { GraphNode, FlattenedGraph } from "../DataStructures/Graph";
 import Constellation from "./Constellation";
-// import { dirtMaterial } from "../materials";
 import PointerLockCameraControls from "./PointerLockCameraControls";
 import Ground from "./Ground";
 import GhostPlant from "./GhostPlant";
 
 export const camera = new THREE.PerspectiveCamera(45, 2, 1, 1000);
 
-/* plant data is stored at the topmost level as a React antipattern,
+/* plant data is stored at the top most level as a React antipattern,
  * until we figure out a better way to integrate ui controls inside the canvas
  */
 type Transform3D = {
@@ -331,7 +330,7 @@ const GlobalCanvas = (props: GlobalCanvasProps) => {
         }
       />
       <Ground raycaster={raycaster} plane={plane} />
-      <GhostPlant raycaster={raycaster} plane={plane} />
+      <GhostPlant raycaster={raycaster} plane={plane} dispatch={dispatch} />
       {children()}
     </Canvas>
   );

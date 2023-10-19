@@ -8,7 +8,7 @@ import {
   OpName,
   PlantName,
 } from "../Hooks/Reducers/gardenReducer";
-import { Vector3 } from "three";
+import { Euler, Vector3 } from "three";
 import {
   defaultFlowerHubMaterial,
   defaultFlowerPetalMaterial,
@@ -54,8 +54,8 @@ const Flower = (props: FlowerProps) => {
     <Node3D
       value={2}
       key={-1}
-      position={position.clone().add(new Vector3(0, 0, 0.3))}
-      rotation={rotation.clone().add(new Vector3(0, 1.5708, 0))}
+      position={new Vector3(0, 0, 0.3)}
+      rotation={new Vector3(0, 0, 0)}
       geometry={cone}
       cylinderArgs={[1, 2, 0.5]}
       isSelected={false}
@@ -76,18 +76,16 @@ const Flower = (props: FlowerProps) => {
       <Node3D
         value={nodeValue}
         key={index}
-        position={position
-          .clone()
-          .add(
-            new Vector3(
-              (nodeValue * 2 - 1.5) *
-                Math.cos(((2 * Math.PI) / root.length) * index),
-              (nodeValue * 2 - 1.5) *
-                Math.sin(((2 * Math.PI) / root.length) * index),
-              index % 2 === 0 ? 0.05 : -0.05
-            )
-          )}
-        rotation={rotation.clone().add(new Vector3(0, 1.5708, 0))}
+        position={
+          new Vector3(
+            (nodeValue * 2 - 1.5) *
+              Math.cos(((2 * Math.PI) / root.length) * index),
+            index % 2 === 0 ? 0.05 : -0.05,
+            (nodeValue * 2 - 1.5) *
+              Math.sin(((2 * Math.PI) / root.length) * index)
+          )
+        }
+        rotation={new Vector3(0, 0, 0)}
         geometry={cylinder}
         cylinderArgs={[nodeValue, nodeValue, 0.1]}
         isSelected={isActive && activeItem === index}
@@ -150,7 +148,12 @@ const Flower = (props: FlowerProps) => {
 
   return (
     <>
-      {children}
+      <group
+        rotation={new Euler(rotation.x, rotation.y, rotation.z)}
+        position={position}
+      >
+        {children}
+      </group>
       {isActive && (
         <ControlPanel
           data={root}
