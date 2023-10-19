@@ -17,10 +17,16 @@ const GhostPlant = (props: GhostPlantProps) => {
   const { raycaster, plane, dispatch } = props;
   const [position, setPosition] = useState<[number, number, number]>([0, 0, 0]);
 
+  const handleKeyPress = (e: KeyboardEvent) => {
+    if (e.key == "g") {
+      handleInsert();
+    }
+  };
+
   useEffect(() => {
-    document.addEventListener("keypress", handleInsert);
+    document.addEventListener("keypress", handleKeyPress);
     return () => {
-      document.removeEventListener("keypress", handleInsert);
+      document.removeEventListener("keypress", handleKeyPress);
     };
     // window.addEventListener("click", handleInsert);
     // return () => {
