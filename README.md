@@ -21,10 +21,14 @@ The trio decided to collaborate on a project: (re)imagining data structures and 
 
 ### `Functionalities`<br>
 
-- Users are invited to garden data structures
-- Visualize algorithms
+- Under the hood, data structures are implemented and rendered as plants in React
+- Performance is heavily considered throughout the site, e.g. avoiding reinitializing meshes
 
-### `Future Considerations`<br>
+### `Ongoing and future considerations`<br>
 
-- Toggle data structure / natural view
-- Backend: database of gardens / user auth
+- Toggle: data structure / natural view
+- Trees
+- Backend database
+- Websockets for collaborative gardening
+- Visit your friend's gardens
+
