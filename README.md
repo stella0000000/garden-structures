@@ -22,7 +22,8 @@ The trio decided to collaborate on a project: (re)imagining data structures and 
 ### `Functionalities`<br>
 
 - Under the hood, data structures are implemented and rendered as plants in React
-- Performance is heavily considered throughout the site, e.g. avoiding reinitializing meshes
+- The constellation is implemented as a graph, and the stars sparkle via a DFS / BFS toggle
+- Performance is heavily considered throughout the site, e.g. avoid reinitializing meshes upholding modularity
 
 ### `Ongoing and future considerations`<br>
 
