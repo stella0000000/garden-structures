@@ -4,7 +4,7 @@
 
 ### `Motivation`<br>
 
-Ben, Stella, and Zack met at the Recurse Center. Ben has a background in 3D, and mathematics. Stella and Zack have backgrounds in research/teaching, and art/writing, respectively.<br><br>
+Ben, Stella, and Zack met at the Recurse Center. They have backgrounds in 3D/mathematics, research/teaching, and art/writing, respectively.<br><br>
 
 Stella was curious to ascertain a framework to acquire a deeper understanding of data structures and algorithms. She noticed the paper flowers hanging behind her desk resembled linked lists. Were the flower petals nodes of a circularly linked list?<br><br>
 
