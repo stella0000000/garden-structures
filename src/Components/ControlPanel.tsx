@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { DoublyCircularlyLinkedList } from "../DataStructures/DoublyCircularlyLinkedList";
-import { LinkedList } from "../DataStructures/LinkedList";
+// import { DoublyCircularlyLinkedList } from "../DataStructures/DoublyCircularlyLinkedList";
+// import { LinkedList } from "../DataStructures/LinkedList";
 import { Html } from "@react-three/drei";
 import styled from "styled-components";
 import { Direction } from "../Hooks/Reducers/gardenReducer";
@@ -32,19 +32,6 @@ const Button = styled.button`
     display: none;
     /* height: 30px;
     font-size: 12px; */
-  }
-`;
-
-const AddRemovePlant = styled.button`
-  text-transform: uppercase;
-  background: transparent;
-  color: #ffffff;
-  font-size: 14px;
-  cursor: default;
-  border: 1px solid transparent;
-
-  &:hover {
-    border: 1px solid transparent;
   }
 `;
 
@@ -116,7 +103,7 @@ const LeftRightWrap = styled.div`
 `;
 
 type ControlPanelProps = {
-  data: LinkedList | DoublyCircularlyLinkedList;
+  // data: LinkedList | DoublyCircularlyLinkedList;
   activeNodeId: number;
   moveOperations: Record<string, (direction: Direction) => void>;
   plantOperations: Record<string, () => void>;
@@ -130,17 +117,11 @@ const ControlPanel = (props: ControlPanelProps) => {
     moveOperations,
     plantOperations,
     nodeOperations,
-    data,
+    // data,
   } = props;
   const [controlsHeight, setControlsHeight] = useState(0);
   const [controlsWidth, setControlsWidth] = useState(0);
   const positionRef = useRef<HTMLDivElement>(null);
-
-  const plantType = () => {
-    const dataStructure = data.constructor.name;
-    if (dataStructure === "LinkedList") return "🎋";
-    else if (dataStructure === "DoublyCircularlyLinkedList") return "🌸";
-  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -242,8 +223,6 @@ const ControlPanel = (props: ControlPanelProps) => {
               </Button>
             );
           })}
-          <AddRemovePlant>plant {plantType()}</AddRemovePlant>
-          <AddRemovePlant>remove {plantType()}</AddRemovePlant>
         </PositionWrap>
       </Html>
     </>

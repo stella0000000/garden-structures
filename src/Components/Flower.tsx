@@ -156,7 +156,7 @@ const Flower = (props: FlowerProps) => {
       </group>
       {isActive && (
         <ControlPanel
-          data={root}
+          // data={root}
           activeNodeId={activeItem}
           moveOperations={moveOperations}
           plantOperations={plantOperations}

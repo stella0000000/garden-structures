@@ -14,7 +14,7 @@ function App() {
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
-      {/* {instructionsVisible && <Instructions />} */}
+      {instructionsVisible && <Instructions />}
       <GlobalCanvas
         isPointerLock={isPointerLock}
         setIsPointerLock={() => setIsPointerLock(false)}

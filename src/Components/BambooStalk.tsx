@@ -182,7 +182,7 @@ const BambooStalk = (props: BambooStalkProps) => {
 
       {isActive && (
         <ControlPanel
-          data={root}
+          // data={root}
           activeNodeId={activeNode}
           moveOperations={moveOperations}
           plantOperations={plantOperations}
