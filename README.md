@@ -9,7 +9,8 @@ Ben, Stella, and Zack met at the Recurse Center. Ben is backend leaning with a d
 Stella was curious to ascertain a framework to acquire a deeper understanding of data structures and algorithms. She noticed the paper flowers hanging behind her desk resembled linked lists. Were the flower petals nodes of a circularly linked list?<br><br>
 
 The trio decided to collaborate on a project: (re)imagining data structures and algorithms through nature. The project is unfolding as a video game.<br><br>
-<img width="700" alt="garden" src="https://github.com/stella0000000/garden-structures/assets/112890821/baeb1773-d058-41c9-b5e4-d3fca986c5b6">
+<img width="700" alt="Screenshot 2023-10-19 at 8 40 26 PM" src="https://github.com/stella0000000/garden-structures/assets/112890821/18dbb75d-a312-4e2b-a7c3-3a54fa63b43d">
+
 
 ### `Technologies`<br>
 
