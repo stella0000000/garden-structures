@@ -4,7 +4,7 @@
 
 ### `Motivation`<br>
 
-Ben, Stella, and Zack met at the Recurse Center. Ben is backend leaning with a deep appreciation for algorithms, 3D, and mathematics. Stella and Zack are frontend leaning with backgrounds in research/teaching, and art/writing, respectively.<br><br>
+Ben, Stella, and Zack met at the Recurse Center. Ben has a background in 3D, and mathematics. Stella and Zack have backgrounds in research/teaching, and art/writing, respectively.<br><br>
 
 Stella was curious to ascertain a framework to acquire a deeper understanding of data structures and algorithms. She noticed the paper flowers hanging behind her desk resembled linked lists. Were the flower petals nodes of a circularly linked list?<br><br>
 
@@ -25,7 +25,7 @@ The trio decided to collaborate on a project: (re)imagining data structures and 
 - A global context carries the `PlantCollection`
 - A constellation is implemented as a graph, and the stars sparkle toggling between DFS / BFS
 - Performance is heavily considered throughout the site, e.g. avoid reinitializing meshes upholding modularity
-- A raycaster is used to add plants at the user's pointer location - the temporary `ghost plant` is connected to the ground for its position to be controlled by the user's field of view
+- A raycaster is used to add plants at the user's pointer location - a temporary `ghost plant` is connected to the ground for its position to be controlled by the user's field of view
 
 ### `Ongoing and future considerations`<br>
 
@@ -34,4 +34,4 @@ The trio decided to collaborate on a project: (re)imagining data structures and 
 - UX minimizing menu assistance, and clicking
 - Backend database
 - Websockets for collaborative gardening
-- Visit friends' gardens
+- Visit your friend's gardens
