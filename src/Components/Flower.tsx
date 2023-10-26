@@ -149,7 +149,7 @@ const Flower = (props: FlowerProps) => {
   return (
     <>
       <group
-        rotation={new Euler(rotation.x, rotation.y, rotation.z)}
+        rotation={new Euler(1.5708 + rotation.x, rotation.y, rotation.z)}
         position={position}
       >
         {children}

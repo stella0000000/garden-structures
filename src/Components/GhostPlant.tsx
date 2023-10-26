@@ -6,6 +6,7 @@ import {
   OpName,
   PlantName,
 } from "../Hooks/Reducers/gardenReducer";
+import { Quaternion, Vector3 } from "three";
 
 type GhostPlantProps = {
   raycaster: React.MutableRefObject<THREE.Raycaster | null>;
@@ -16,6 +17,7 @@ type GhostPlantProps = {
 const GhostPlant = (props: GhostPlantProps) => {
   const { raycaster, plane, dispatch } = props;
   const [position, setPosition] = useState<[number, number, number]>([0, 0, 0]);
+  const [rotation, setRotation] = useState<Vector3>(new Vector3());
 
   const handleKeyPress = (e: KeyboardEvent) => {
     if (e.key == "g") {
@@ -39,6 +41,16 @@ const GhostPlant = (props: GhostPlantProps) => {
   // }, position);
 
   useFrame(() => {
+    ///////////
+    // Zack: Why the heck isn't cameraVec updating when camera moves????
+    //////////
+    const cameraQuat = raycaster.current?.camera.quaternion;
+    const cameraVec = new Vector3(0, 0, 0).applyQuaternion(
+      cameraQuat || new Quaternion()
+    );
+    console.log(cameraVec);
+    setRotation(cameraVec);
+
     // console.log(raycaster.current!.intersectObject(plane.current!)[0].point);
     const intersections = raycaster.current!.intersectObject(plane.current!);
     if (intersections.length) {
@@ -67,7 +79,11 @@ const GhostPlant = (props: GhostPlantProps) => {
   return (
     <GhostFlower
       position={[position[0], position[1] + 5, position[2]]}
-      rotation={[1.5708, 0, 0]}
+      rotation={[
+        rotation.getComponent(0),
+        rotation.getComponent(1),
+        rotation.getComponent(2),
+      ]}
     />
   );
 };

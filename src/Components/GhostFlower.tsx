@@ -1,5 +1,6 @@
 import { Cylinder } from "@react-three/drei";
 import { ghostMaterial } from "../materials";
+import { Euler } from "three";
 
 type GhostFlowerProps = {
   position: [number, number, number];
@@ -37,7 +38,10 @@ const GhostFlower = (props: GhostFlowerProps) => {
 
   return (
     <>
-      <group position={position} rotation={rotation}>
+      <group
+        position={position}
+        rotation={new Euler(1.5708 + rotation[0], rotation[1], rotation[2])}
+      >
         {children}
       </group>
     </>

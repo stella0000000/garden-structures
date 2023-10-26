@@ -79,7 +79,7 @@ const testingFlower1: FlowerData = {
   kind: "FlowerData",
   data: CircularlyLinkedListFromArray([2, 2, 2, 2, 2, 2]),
   position: new Vector3(12, 4, 2),
-  rotation: new Vector3(1.5708, 0, 0),
+  rotation: new Vector3(0, 0, 0),
 };
 
 // Fix generating constellation graph
