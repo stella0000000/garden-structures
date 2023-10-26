@@ -2,5 +2,11 @@
 - Trees
 - Graphs
 
+- new plants and ghost plant should face camera
+- toggle data-structure-vision/garden-vision
+- 2 UI modes (pointer-lock and menu)
+
+- plane boundaries
+
 Backend
 - database
