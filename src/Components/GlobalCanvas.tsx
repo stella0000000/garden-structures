@@ -330,7 +330,12 @@ const GlobalCanvas = (props: GlobalCanvasProps) => {
         }
       />
       <Ground raycaster={raycaster} plane={plane} />
-      <GhostPlant raycaster={raycaster} plane={plane} dispatch={dispatch} />
+      <GhostPlant
+        raycaster={raycaster}
+        plane={plane}
+        dispatch={dispatch}
+        camera={cameraRef}
+      />
       {children()}
     </Canvas>
   );

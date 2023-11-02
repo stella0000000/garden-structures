@@ -6,16 +6,17 @@ import {
   OpName,
   PlantName,
 } from "../Hooks/Reducers/gardenReducer";
-import { Quaternion, Vector3 } from "three";
+import { Camera, Euler, Quaternion, Vector3 } from "three";
 
 type GhostPlantProps = {
   raycaster: React.MutableRefObject<THREE.Raycaster | null>;
   plane: React.MutableRefObject<THREE.Mesh | null>;
   dispatch: React.Dispatch<GardenReducerAction>;
+  camera: React.MutableRefObject<Camera | null>;
 };
 
 const GhostPlant = (props: GhostPlantProps) => {
-  const { raycaster, plane, dispatch } = props;
+  const { raycaster, plane, dispatch, camera } = props;
   const [position, setPosition] = useState<[number, number, number]>([0, 0, 0]);
   const [rotation, setRotation] = useState<Vector3>(new Vector3());
 
@@ -44,13 +45,32 @@ const GhostPlant = (props: GhostPlantProps) => {
     ///////////
     // Zack: Why the heck isn't cameraVec updating when camera moves????
     //////////
-    const cameraQuat = raycaster.current?.camera.quaternion;
-    const cameraVec = new Vector3(0, 0, 0).applyQuaternion(
-      cameraQuat || new Quaternion()
-    );
-    console.log(cameraVec);
-    setRotation(cameraVec);
+    // const cameraQuat = raycaster.current?.camera.quaternion;
+    // console
+    //   .log
+    //   // `x: ${cameraQuat?.x}, y: ${cameraQuat?.y}, z: ${cameraQuat?.z}`
+    //   ();
+    // const cameraVec = new Vector3(0, 0, 0).applyQuaternion(
+    //   cameraQuat || new Quaternion()
+    // );
+    // console.log(cameraVec);
+    // setRotation(cameraVec);
 
+    if (raycaster.current && camera.current) {
+      const selfToCamera = new Quaternion().setFromUnitVectors(
+        camera.current.position,
+        new Vector3(position[0], position[1], position[2])
+      );
+
+      // wrong function
+      // wrong args
+      // 90 degree rotation
+
+      // console.log(selfToCamera.x, selfToCamera.y, selfToCamera.z);
+      const newRotEuler = new Euler().setFromQuaternion(selfToCamera);
+      //console.log(newRotEuler.x, newRotEuler.y, newRotEuler.z);
+      setRotation(new Vector3(newRotEuler.x, newRotEuler.y, newRotEuler.z));
+    }
     // console.log(raycaster.current!.intersectObject(plane.current!)[0].point);
     const intersections = raycaster.current!.intersectObject(plane.current!);
     if (intersections.length) {
