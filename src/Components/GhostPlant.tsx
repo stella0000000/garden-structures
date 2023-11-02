@@ -18,7 +18,13 @@ type GhostPlantProps = {
 const GhostPlant = (props: GhostPlantProps) => {
   const { raycaster, plane, dispatch, camera } = props;
   const [position, setPosition] = useState<[number, number, number]>([0, 0, 0]);
-  const [rotation, setRotation] = useState<Vector3>(new Vector3());
+  const [rotation, setRotation] = useState<[number, number, number]>([0, 0, 0]);
+
+  // convert state to Euler
+  // convert Euler to Quat
+  // apply manipulation
+  // convert back to Euler
+  // convert back to [number, number, number]
 
   const handleKeyPress = (e: KeyboardEvent) => {
     if (e.key == "g") {
@@ -37,39 +43,11 @@ const GhostPlant = (props: GhostPlantProps) => {
     // };
   }, [position]);
 
-  // useEffect(() => {
-  //   // console.log(position);
-  // }, position);
-
   useFrame(() => {
-    ///////////
-    // Zack: Why the heck isn't cameraVec updating when camera moves????
-    //////////
-    // const cameraQuat = raycaster.current?.camera.quaternion;
-    // console
-    //   .log
-    //   // `x: ${cameraQuat?.x}, y: ${cameraQuat?.y}, z: ${cameraQuat?.z}`
-    //   ();
-    // const cameraVec = new Vector3(0, 0, 0).applyQuaternion(
-    //   cameraQuat || new Quaternion()
-    // );
-    // console.log(cameraVec);
-    // setRotation(cameraVec);
-
+    // Force the ghost plant to look at the camera
     if (raycaster.current && camera.current) {
-      const selfToCamera = new Quaternion().setFromUnitVectors(
-        camera.current.position,
-        new Vector3(position[0], position[1], position[2])
-      );
-
-      // wrong function
-      // wrong args
-      // 90 degree rotation
-
-      // console.log(selfToCamera.x, selfToCamera.y, selfToCamera.z);
-      const newRotEuler = new Euler().setFromQuaternion(selfToCamera);
-      //console.log(newRotEuler.x, newRotEuler.y, newRotEuler.z);
-      setRotation(new Vector3(newRotEuler.x, newRotEuler.y, newRotEuler.z));
+      const cameraFacing = camera.current.rotation;
+      setRotation([cameraFacing.x, cameraFacing.y, cameraFacing.z]);
     }
     // console.log(raycaster.current!.intersectObject(plane.current!)[0].point);
     const intersections = raycaster.current!.intersectObject(plane.current!);
@@ -90,7 +68,7 @@ const GhostPlant = (props: GhostPlantProps) => {
         position: [position[0], position[1] + 5, position[2]],
         plantName: PlantName.FLOWER,
         opName: OpName.APPEND,
-        rotation: [1.5708, 0, 0],
+        rotation: rotation,
       },
     };
     dispatch(action);
@@ -99,11 +77,7 @@ const GhostPlant = (props: GhostPlantProps) => {
   return (
     <GhostFlower
       position={[position[0], position[1] + 5, position[2]]}
-      rotation={[
-        rotation.getComponent(0),
-        rotation.getComponent(1),
-        rotation.getComponent(2),
-      ]}
+      rotation={[rotation[0], rotation[1], rotation[2]]}
     />
   );
 };
