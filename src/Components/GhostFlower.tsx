@@ -1,6 +1,6 @@
 import { Cylinder } from "@react-three/drei";
 import { ghostMaterial } from "../materials";
-import { Euler, Quaternion } from "three";
+import { Euler } from "three";
 
 type GhostFlowerProps = {
   position: [number, number, number];

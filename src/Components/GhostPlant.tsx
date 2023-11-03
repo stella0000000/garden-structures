@@ -6,7 +6,7 @@ import {
   OpName,
   PlantName,
 } from "../Hooks/Reducers/gardenReducer";
-import { Camera, Euler, Quaternion, Vector3 } from "three";
+import { Camera } from "three";
 
 type GhostPlantProps = {
   raycaster: React.MutableRefObject<THREE.Raycaster | null>;
