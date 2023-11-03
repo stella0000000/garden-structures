@@ -55,7 +55,7 @@ const Flower = (props: FlowerProps) => {
       value={2}
       key={-1}
       position={new Vector3(0, 0, 0.3)}
-      rotation={new Vector3(0, 0, 0)}
+      rotation={new Vector3(1.5, 0, 0)}
       geometry={cone}
       cylinderArgs={[1, 2, 0.5]}
       isSelected={false}
@@ -80,12 +80,12 @@ const Flower = (props: FlowerProps) => {
           new Vector3(
             (nodeValue * 2 - 1.5) *
               Math.cos(((2 * Math.PI) / root.length) * index),
-            index % 2 === 0 ? 0.05 : -0.05,
             (nodeValue * 2 - 1.5) *
-              Math.sin(((2 * Math.PI) / root.length) * index)
+              Math.sin(((2 * Math.PI) / root.length) * index),
+            index % 2 === 0 ? 0.05 : -0.05
           )
         }
-        rotation={new Vector3(0, 0, 0)}
+        rotation={new Vector3(1.5, 0, 0)}
         geometry={cylinder}
         cylinderArgs={[nodeValue, nodeValue, 0.1]}
         isSelected={isActive && activeItem === index}

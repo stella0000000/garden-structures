@@ -28,7 +28,6 @@ const useFirstPersonControls = () => {
           if (key === "w") draft.forward = true;
           if (key === "s") draft.back = true;
           if (key === "a") {
-            console.log(draft.forward);
             draft.left = true;
           }
           if (key === "d") draft.right = true;
