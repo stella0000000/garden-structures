@@ -30,8 +30,9 @@ const Instructions = () => {
     <Screen>
       <Wrapper>
         <Box>
-          Move your mouse for direction + WASD keys to walk.<br></br>This
-          website is in progress.
+          Direction: move mouse<br></br>
+          Walk: `w, a, s, d` keys<br></br>
+          Planting: `g` key<br></br>[ This website is in progress. ]
         </Box>
       </Wrapper>
     </Screen>
