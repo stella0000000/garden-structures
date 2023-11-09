@@ -4,9 +4,7 @@
 
 ### `Motivation`<br>
 
-Ben, Stella, and Zack met at the Recurse Center during Daily Leetcode! They have backgrounds in 3D/mathematics, research/teaching, and art/writing, respectively.<br><br>
-
-Stella observed the paper flowers hanging behind her desk, and wondered: can flower petals be drawn as nodes of a doubly circularly linked list?<br><br>
+Ben, Stella, and Zack met at the Recurse Center during Daily Leetcode! They have backgrounds in 3D/mathematics, research/teaching, and art/writing, respectively. One day, Stella observed the paper flowers hanging behind her desk, and wondered: can flower petals be drawn as nodes of a doubly circularly linked list?<br><br>
 
 The trio decided to collaborate on a project inviting users to explore the world of data structures and algorithms through the lens of nature. The project is unfolding as a video game.<br><br>
 <img width="700" alt="Screenshot 2023-10-19 at 8 40 26 PM" src="https://github.com/stella0000000/garden-structures/assets/112890821/18dbb75d-a312-4e2b-a7c3-3a54fa63b43d">
