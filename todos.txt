@@ -21,6 +21,9 @@ Menu mode
 Keyboard shortcuts
 - w, a, s, d
 - g
+- q, e
 
 Bottom bar with scroll
 - ghost plant type
+- adjustable mouse sensitivity
+- keyboard shortcuts q, e

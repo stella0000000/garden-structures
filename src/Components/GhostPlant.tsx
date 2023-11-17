@@ -92,11 +92,12 @@ const GhostPlant = (props: GhostPlantProps) => {
     }
   }, [position]);
 
-  return (
-    // <GhostFlower
-    //   position={[position[0], position[1] + 5, position[2]]}
-    //   rotation={[rotation[0], rotation[1], rotation[2]]}
-    // />
+  return ghostTypeIdx === 0 ? (
+    <GhostFlower
+      position={[position[0], position[1] + 5, position[2]]}
+      rotation={[rotation[0], rotation[1], rotation[2]]}
+    />
+  ) : (
     <GhostBamboo
       position={[position[0], position[1] + 5, position[2]]}
       rotation={[rotation[0], rotation[1], rotation[2]]}

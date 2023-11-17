@@ -1,24 +1,48 @@
 import { Html } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useState } from "react";
+import styled from "styled-components";
 
 type CarouselProps = {};
+
+const Wrapper = styled.div`
+  border: 1px solid pink;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  bottom: 0px;
+  column-gap: 30px;
+  align-items: center;
+`;
+
+const Button = styled.div`
+  font-size: 30px;
+  width: 100%;
+`;
 
 const Carousel = () => {
   const items = ["empty hand", "flower", "bamboo"];
   const [selectedIdx, setSelectedIdx] = useState<number>(0);
   const [scrollY, setScrollY] = useState<number>(0);
-  const scrollSensitivity = 15;
+  const scrollSensitivity = 8;
   const stickyFactor = 1.1;
-  const maxDeltaY = 20;
+  const maxDeltaY = 2;
 
   useEffect(() => {
     addEventListener("wheel", handleWheel);
     return () => removeEventListener("wheel", handleWheel);
   }, []);
 
+  const closerToZero = (a: number, b: number) => {
+    if (Math.abs(a) < Math.abs(b)) {
+      return a;
+    } else {
+      return b;
+    }
+  };
+
   const handleWheel = (e: WheelEvent) => {
-    setScrollY((scrollY) => scrollY + Math.min(e.deltaY, maxDeltaY));
+    setScrollY((scrollY) => scrollY + closerToZero(e.deltaY, maxDeltaY));
   };
 
   useFrame(() => {
@@ -34,7 +58,7 @@ const Carousel = () => {
     } else {
       setScrollY((scrollY) => {
         console.log(scrollY / stickyFactor);
-        return Math.abs(scrollY / stickyFactor) < 1
+        return Math.abs(scrollY / stickyFactor) < 0.25
           ? 0
           : scrollY / stickyFactor;
       });
@@ -83,11 +107,16 @@ const Carousel = () => {
         return [0, window.innerHeight - 200, 0];
       }}
     >
-      {items.map((item, i) => (
-        <div key={i} style={selectedIdx === i ? { background: "blue" } : {}}>
-          {item}
-        </div>
-      ))}
+      <Wrapper>
+        {items.map((item, i) => (
+          <Button
+            key={i}
+            style={selectedIdx === i ? { background: "blue" } : {}}
+          >
+            {item}
+          </Button>
+        ))}
+      </Wrapper>
     </Html>
   );
 };
