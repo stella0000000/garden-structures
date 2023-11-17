@@ -69,12 +69,33 @@ export const appendFlower = (
   if (position === undefined || rotation === undefined)
     throw Error("Position + rot undefined");
 
-  console.log("append flower");
-  console.log(action.payload);
-
   const data: FlowerData = {
     kind: "FlowerData",
     data: CircularlyLinkedListFromArray([2, 2, 2, 2, 2, 2]),
+    position: new Vector3(position[0], position[1], position[2]),
+    rotation: new Vector3(rotation[0], rotation[1], rotation[2]),
+  };
+
+  const newState: PlantCollection = [...plantCollection, data];
+
+  return Object.values(newState) as PlantCollection;
+};
+
+/**
+ * @param bamboo
+ * @param action
+ */
+export const appendBamboo = (
+  plantCollection: PlantCollection,
+  action: GardenReducerAction
+): PlantCollection => {
+  const { position, rotation } = action.payload;
+  if (position === undefined || rotation === undefined)
+    throw Error("Position + rot undefined");
+
+  const data: BambooStalkData = {
+    kind: "BambooStalkData",
+    data: LinkedList.fromArray([2, 2, 2, 2, 2, 2]),
     position: new Vector3(position[0], position[1], position[2]),
     rotation: new Vector3(rotation[0], rotation[1], rotation[2]),
   };

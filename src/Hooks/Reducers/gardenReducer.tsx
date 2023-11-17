@@ -1,5 +1,6 @@
 import { PlantCollection } from "../../Components/GlobalCanvas";
 import {
+  appendBamboo,
   appendBambooNode,
   appendFlower,
   appendFlowerNode,
@@ -58,7 +59,7 @@ export default function gardenReducer(
       if (plantName === PlantName.FLOWER) {
         return appendFlower(plantCollection, action);
       } else if (plantName === PlantName.BAMBOO) {
-        throw Error(`Unimplemented ${opName} for ${plantName}`);
+        return appendBamboo(plantCollection, action);
       } else {
         throw Error(`No ${opName} handler for ${plantName}`);
       }

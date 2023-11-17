@@ -10,3 +10,17 @@
 
 Backend
 - database
+
+
+
+
+Menu mode
+- ghost plant carousel
+- append, delete, pop, insert, etc
+
+Keyboard shortcuts
+- w, a, s, d
+- g
+
+Bottom bar with scroll
+- ghost plant type
