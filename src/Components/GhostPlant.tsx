@@ -47,14 +47,7 @@ const GhostPlant = (props: GhostPlantProps) => {
   }, [position]);
 
   useFrame(() => {
-    // Force the ghost plant to look at the camera
-    if (ghostType === PlantName.FLOWER) {
-      // i.e. flower
-      if (raycaster.current && camera.current) {
-        const cameraFacing = camera.current.rotation;
-        setRotation([cameraFacing.x, cameraFacing.y, cameraFacing.z]);
-      }
-    }
+    updateGhostPlantRotation();
     // console.log(raycaster.current!.intersectObject(plane.current!)[0].point);
     const intersections = raycaster.current!.intersectObject(plane.current!);
     if (intersections.length) {
@@ -65,6 +58,19 @@ const GhostPlant = (props: GhostPlantProps) => {
       ]);
     }
   });
+
+  const updateGhostPlantRotation = () => {
+    // Force the ghost plant to look at the camera for flowers
+    if (ghostType === PlantName.FLOWER) {
+      if (raycaster.current && camera.current) {
+        const cameraFacing = camera.current.rotation;
+        setRotation([cameraFacing.x, cameraFacing.y, cameraFacing.z]);
+      }
+      // force bamboos rotation always upward
+    } else if (ghostType === PlantName.BAMBOO) {
+      setRotation([0, 0, 0]);
+    }
+  };
 
   const handleInsert = useCallback(() => {
     if (ghostType === PlantName.FLOWER) {

@@ -13,11 +13,11 @@ const GhostBamboo = (props: GhostBambooProps) => {
 
   const root = [2, 2, 2, 2, 2, 2];
   const children = [];
+  // root
   children.push(
     <Cylinder
       key={-1}
-      position={new Vector3(0, 0, 0.3)}
-      rotation={rotation}
+      position={new Vector3(0, -0.5, 0)}
       args={[1, 2, 1]}
       material={ghostMaterial}
     />
@@ -28,7 +28,6 @@ const GhostBamboo = (props: GhostBambooProps) => {
       <Cylinder
         key={index}
         position={new Vector3(0, cumulativeHeight + 0.5 * nodeValue, 0)}
-        rotation={new Euler(0, 0, 0)}
         args={[1, 1, nodeValue]}
         material={ghostMaterial}
       />

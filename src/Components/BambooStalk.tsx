@@ -9,7 +9,7 @@ import {
   OpName,
   PlantName,
 } from "../Hooks/Reducers/gardenReducer";
-import { Vector3 } from "three";
+import { Euler, Vector3 } from "three";
 import { defaultBambooMaterial, defaultBambooRootMaterial } from "../materials";
 import { cone, cylinder } from "../geometries";
 
@@ -49,8 +49,8 @@ const BambooStalk = (props: BambooStalkProps) => {
     <Node3D
       value={2}
       key={-1}
-      position={position.clone().add(new Vector3(0, 0, 0.3))}
-      rotation={rotation}
+      position={new Vector3(0, -0.5, 0)}
+      rotation={new Vector3()}
       geometry={cone}
       cylinderArgs={[1, 2, 1]}
       isSelected={false}
@@ -70,10 +70,8 @@ const BambooStalk = (props: BambooStalkProps) => {
       <Node3D
         value={nodeValue}
         key={index}
-        position={position
-          .clone()
-          .add(new Vector3(0, cumulativeHeight + 0.5 * nodeValue, 0))}
-        rotation={rotation.clone().add(new Vector3(0, 0, 0))}
+        position={new Vector3(0, cumulativeHeight + 0.5 * nodeValue, 0)}
+        rotation={new Vector3()}
         geometry={cylinder}
         cylinderArgs={[1, 1, nodeValue]}
         isSelected={isActive && activeNode === index}
@@ -178,7 +176,12 @@ const BambooStalk = (props: BambooStalkProps) => {
 
   return (
     <>
-      {children}
+      <group
+        position={position}
+        rotation={new Euler(rotation.x, rotation.y, rotation.z)}
+      >
+        {children}
+      </group>
 
       {isActive && (
         <ControlPanel
