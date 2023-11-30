@@ -22,7 +22,7 @@ export enum Direction {
 export enum PlantName {
   BAMBOO = "bamboo",
   FLOWER = "flower",
-  TREE = "tree",
+  // TREE = "tree",
 }
 
 export enum OpName {

@@ -17,7 +17,6 @@ import Constellation from "./Constellation";
 import PointerLockCameraControls from "./PointerLockCameraControls";
 import Ground from "./Ground";
 import GhostPlant from "./GhostPlant";
-import Carousel from "./Carousel";
 
 export const camera = new THREE.PerspectiveCamera(45, 2, 1, 1000);
 
@@ -331,7 +330,6 @@ const GlobalCanvas = (props: GlobalCanvasProps) => {
         }
       />
       <Ground raycaster={raycaster} plane={plane} />
-      <Carousel />
       <GhostPlant
         raycaster={raycaster}
         plane={plane}

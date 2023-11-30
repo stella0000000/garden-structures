@@ -8,6 +8,7 @@ import {
 } from "../Hooks/Reducers/gardenReducer";
 import { Camera } from "three";
 import GhostBamboo from "./GhostBamboo";
+import Carousel from "./Carousel";
 
 type GhostPlantProps = {
   raycaster: React.MutableRefObject<THREE.Raycaster | null>;
@@ -20,8 +21,7 @@ const GhostPlant = (props: GhostPlantProps) => {
   const { raycaster, plane, dispatch, camera } = props;
   const [position, setPosition] = useState<[number, number, number]>([0, 0, 0]);
   const [rotation, setRotation] = useState<[number, number, number]>([0, 0, 0]);
-  const ghostTypes = ["flower", "bamboo", "tree"];
-  const [ghostTypeIdx, setGhostTypeIdx] = useState<number>(1);
+  const [ghostType, setGhostType] = useState<PlantName>(PlantName.FLOWER);
 
   // convert state to Euler
   // convert Euler to Quat
@@ -48,7 +48,7 @@ const GhostPlant = (props: GhostPlantProps) => {
 
   useFrame(() => {
     // Force the ghost plant to look at the camera
-    if (ghostTypeIdx === 0) {
+    if (ghostType === PlantName.FLOWER) {
       // i.e. flower
       if (raycaster.current && camera.current) {
         const cameraFacing = camera.current.rotation;
@@ -67,7 +67,7 @@ const GhostPlant = (props: GhostPlantProps) => {
   });
 
   const handleInsert = useCallback(() => {
-    if (ghostTypeIdx === 0) {
+    if (ghostType === PlantName.FLOWER) {
       const action: GardenReducerAction = {
         type: "gardenOperation",
         payload: {
@@ -78,7 +78,7 @@ const GhostPlant = (props: GhostPlantProps) => {
         },
       };
       dispatch(action);
-    } else if (ghostTypeIdx === 1) {
+    } else if (ghostType === PlantName.BAMBOO) {
       const action: GardenReducerAction = {
         type: "gardenOperation",
         payload: {
@@ -92,16 +92,21 @@ const GhostPlant = (props: GhostPlantProps) => {
     }
   }, [position]);
 
-  return ghostTypeIdx === 0 ? (
-    <GhostFlower
-      position={[position[0], position[1] + 5, position[2]]}
-      rotation={[rotation[0], rotation[1], rotation[2]]}
-    />
-  ) : (
-    <GhostBamboo
-      position={[position[0], position[1] + 5, position[2]]}
-      rotation={[rotation[0], rotation[1], rotation[2]]}
-    />
+  return (
+    <>
+      {ghostType === PlantName.FLOWER ? (
+        <GhostFlower
+          position={[position[0], position[1] + 5, position[2]]}
+          rotation={[rotation[0], rotation[1], rotation[2]]}
+        />
+      ) : (
+        <GhostBamboo
+          position={[position[0], position[1] + 5, position[2]]}
+          rotation={[rotation[0], rotation[1], rotation[2]]}
+        />
+      )}
+      <Carousel {...{ setGhostType, ghostType }} />
+    </>
   );
 };
 

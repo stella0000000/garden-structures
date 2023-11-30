@@ -11,9 +11,6 @@
 Backend
 - database
 
-
-
-
 Menu mode
 - ghost plant carousel
 - append, delete, pop, insert, etc
@@ -27,3 +24,13 @@ Bottom bar with scroll
 - ghost plant type
 - adjustable mouse sensitivity
 - keyboard shortcuts q, e
+
+MODES (top level toggles)
+- placing plants
+- interacting with plants / nodes
+
+overall UI state
+- if placing mode, has plant type
+- if interaction mode, whole plant/type, node/type
+  - moving plants with 'ghost plant' interaction (zack's thought)
+  - all operations associated with keyboard shortcut labeled

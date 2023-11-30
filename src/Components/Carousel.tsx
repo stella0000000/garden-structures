@@ -2,8 +2,7 @@ import { Html } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-
-type CarouselProps = {};
+import { PlantName } from "../Hooks/Reducers/gardenReducer";
 
 const Wrapper = styled.div`
   border: 1px solid pink;
@@ -20,9 +19,15 @@ const Button = styled.div`
   width: 100%;
 `;
 
-const Carousel = () => {
-  const items = ["empty hand", "flower", "bamboo"];
-  const [selectedIdx, setSelectedIdx] = useState<number>(0);
+type CarouselProps = {
+  setGhostType: (a: PlantName) => void;
+  ghostType: PlantName;
+};
+
+const Carousel = (props: CarouselProps) => {
+  const { setGhostType, ghostType } = props;
+  const plantNames = Object.values(PlantName);
+  const currPlantIdx = plantNames.indexOf(ghostType);
   const [scrollY, setScrollY] = useState<number>(0);
   const scrollSensitivity = 8;
   const stickyFactor = 1.1;
@@ -30,6 +35,7 @@ const Carousel = () => {
 
   useEffect(() => {
     addEventListener("wheel", handleWheel);
+    // console.log(plantNames[selectedIdx]);
     return () => removeEventListener("wheel", handleWheel);
   }, []);
 
@@ -47,17 +53,20 @@ const Carousel = () => {
 
   useFrame(() => {
     if (scrollY > scrollSensitivity) {
-      setSelectedIdx((selectedIdx + 1) % items.length);
+      setGhostType(plantNames[(currPlantIdx + 1) % plantNames.length]);
       setScrollY(0);
-      console.log(0);
+      // console.log(0);
     } else if (scrollY < -scrollSensitivity) {
       // force positive modulo because javascript
-      setSelectedIdx((selectedIdx - 1 + items.length) % items.length);
+      // setSelectedIdx((selectedIdx - 1 + items.length) % items.length);
+      setGhostType(
+        plantNames[(currPlantIdx - 1 + plantNames.length) % plantNames.length]
+      );
       setScrollY(0);
-      console.log(0);
+      // console.log(0);
     } else {
       setScrollY((scrollY) => {
-        console.log(scrollY / stickyFactor);
+        // console.log(scrollY / stickyFactor);
         return Math.abs(scrollY / stickyFactor) < 0.25
           ? 0
           : scrollY / stickyFactor;
@@ -108,10 +117,10 @@ const Carousel = () => {
       }}
     >
       <Wrapper>
-        {items.map((item, i) => (
+        {plantNames.map((item, i) => (
           <Button
             key={i}
-            style={selectedIdx === i ? { background: "blue" } : {}}
+            style={currPlantIdx === i ? { background: "blue" } : {}}
           >
             {item}
           </Button>
