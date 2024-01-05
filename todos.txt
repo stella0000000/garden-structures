@@ -1,12 +1,12 @@
 - BST
 - Trees
-- Graphs
 
-- new plants and ghost plant should face camera
 - toggle data-structure-vision/garden-vision
 - 2 UI modes (pointer-lock and menu)
 
 - plane boundaries
+
+ - check naming of setIsPointerLock in App / Global Canvas => maybe endPointerLock?
 
 Backend
 - database

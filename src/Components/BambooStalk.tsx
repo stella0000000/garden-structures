@@ -12,6 +12,8 @@ import {
 import { Euler, Vector3 } from "three";
 import { defaultBambooMaterial, defaultBambooRootMaterial } from "../materials";
 import { cone, cylinder } from "../geometries";
+import { Camera } from "three";
+import { NodeNumber } from "./NodeNumber";
 
 type BambooStalkProps = {
   root: LinkedList;
@@ -22,6 +24,8 @@ type BambooStalkProps = {
   selectPlant: () => void;
   deselectAllPlants: () => void;
   isActive: boolean;
+  isDataMode: boolean;
+  cameraRef: React.MutableRefObject<Camera | null>;
 };
 
 const BambooStalk = (props: BambooStalkProps) => {
@@ -34,12 +38,15 @@ const BambooStalk = (props: BambooStalkProps) => {
     isActive,
     gardenDispatch,
     index,
+    isDataMode,
+    cameraRef,
   } = props;
   const {
     activeItem: activeNode,
     selectItem: selectNode,
     deselectAllItems: deselectAllNodes,
   } = useActiveItem();
+  // const [isFacingCamera, setIsFacingCamera] = useState<[number, number, number]>([0, 0, 0]);
 
   let cumulativeHeight = 0;
 
@@ -66,22 +73,34 @@ const BambooStalk = (props: BambooStalkProps) => {
   );
   root.intoArray().forEach((nodeValue, index) => {
     // plant nodes
-    children.push(
-      <Node3D
-        value={nodeValue}
-        key={index}
-        position={new Vector3(0, cumulativeHeight + 0.5 * nodeValue, 0)}
-        rotation={new Vector3()}
-        geometry={cylinder}
-        cylinderArgs={[1, 1, nodeValue]}
-        isSelected={isActive && activeNode === index}
-        deselectAllPlants={deselectAllPlants}
-        selectPlant={selectPlant}
-        defaultMaterial={defaultBambooMaterial}
-        deselectAllNodes={deselectAllNodes}
-        selectNode={() => selectNode(index)}
-      />
-    );
+    if (!isDataMode) {
+      children.push(
+        <Node3D
+          value={nodeValue}
+          key={index}
+          position={new Vector3(0, cumulativeHeight + 0.5 * nodeValue, 0)}
+          rotation={new Vector3()}
+          geometry={cylinder}
+          cylinderArgs={[1, 1, nodeValue]}
+          isSelected={isActive && activeNode === index}
+          deselectAllPlants={deselectAllPlants}
+          selectPlant={selectPlant}
+          defaultMaterial={defaultBambooMaterial}
+          deselectAllNodes={deselectAllNodes}
+          selectNode={() => selectNode(index)}
+        />
+      );
+    } else {
+      children.push(
+        <NodeNumber
+          key={index}
+          isDataMode={isDataMode}
+          cameraRef={cameraRef}
+          content={String(nodeValue)}
+          position={new Vector3(0, cumulativeHeight + 0.5 * nodeValue, 0)}
+        />
+      );
+    }
     cumulativeHeight += nodeValue;
   });
 

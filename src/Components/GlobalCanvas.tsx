@@ -1,7 +1,7 @@
 import { useReducer, useRef } from "react";
 import { Canvas, ThreeEvent } from "@react-three/fiber";
 import { LinkedList } from "../DataStructures/LinkedList";
-import { Box } from "@react-three/drei";
+import { Box, Html } from "@react-three/drei";
 import BambooStalk from "./BambooStalk";
 import {
   CircularlyLinkedListFromArray,
@@ -215,10 +215,12 @@ const initialTestingState: PlantCollection = [
 type GlobalCanvasProps = {
   isPointerLock: boolean;
   setIsPointerLock: () => void;
+  isDataMode: boolean;
+  // setIsDataMode: Dispatch<SetStateAction<boolean>>;
 };
 
 const GlobalCanvas = (props: GlobalCanvasProps) => {
-  const { isPointerLock, setIsPointerLock } = props;
+  const { isPointerLock, setIsPointerLock, isDataMode } = props;
   const [plantData, dispatch] = useReducer(gardenReducer, initialTestingState);
   const {
     activeItem: activePlant,
@@ -249,6 +251,7 @@ const GlobalCanvas = (props: GlobalCanvasProps) => {
             <BambooStalk
               key={index}
               index={index}
+              cameraRef={cameraRef}
               gardenDispatch={dispatch}
               root={plant.data}
               position={plant.position}
@@ -256,6 +259,7 @@ const GlobalCanvas = (props: GlobalCanvasProps) => {
               selectPlant={() => selectPlant(index)}
               deselectAllPlants={deselectAllPlants}
               isActive={activePlant === index}
+              isDataMode={isDataMode}
             />
           );
         }
@@ -336,6 +340,13 @@ const GlobalCanvas = (props: GlobalCanvasProps) => {
         dispatch={dispatch}
         camera={cameraRef}
       />
+      <Html
+        calculatePosition={() => {
+          return [0, 0, 0];
+        }}
+      >
+        {isDataMode ? "Data Mode" : "Garden Mode"}
+      </Html>
       {children()}
     </Canvas>
   );
