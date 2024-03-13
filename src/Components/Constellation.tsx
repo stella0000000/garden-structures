@@ -31,16 +31,8 @@ enum Search {
 }
 
 const Constellation = (props: ConstellationProps) => {
-  const {
-    data,
-    position,
-    rotation,
-    selectPlant,
-    deselectAllPlants,
-    isActive,
-    // gardenDispatch,
-    // index,
-  } = props;
+  const { data, position, rotation, selectPlant, deselectAllPlants, isActive } =
+    props;
 
   const root = GraphNode.unflatten(data);
   const [search, setSearch] = useState(Search.BFS);

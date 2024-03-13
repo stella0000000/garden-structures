@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 function App() {
   // const [instructionsVisible, setInstructionsVisible] = useState<boolean>(true);
   const [isPointerLock, setIsPointerLock] = useState(false);
-  const [isDataMode, setIsDataMode] = useState(true);
+  const [isDataMode, setIsDataMode] = useState(false);
 
   // setTimeout(() => {
   //   setInstructionsVisible(false);

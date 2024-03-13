@@ -1,4 +1,3 @@
-// import { useEffect, useState } from "react";
 import { LinkedList } from "../DataStructures/LinkedList";
 import Node3D from "./Node3D";
 import ControlPanel from "./ControlPanel";
@@ -14,43 +13,37 @@ import { defaultBambooMaterial, defaultBambooRootMaterial } from "../materials";
 import { cone, cylinder } from "../geometries";
 import { Camera } from "three";
 import { NodeNumber } from "./NodeNumber";
+import { useGardenStore } from "../gardenStore";
 
 type BambooStalkProps = {
   root: LinkedList;
-  index: number;
+  plantIndex: number;
   position: Vector3;
   rotation: Vector3;
   gardenDispatch: React.Dispatch<GardenReducerAction>;
-  selectPlant: () => void;
-  deselectAllPlants: () => void;
-  isActive: boolean;
   isDataMode: boolean;
   cameraRef: React.MutableRefObject<Camera | null>;
 };
 
-const BambooStalk = (props: BambooStalkProps) => {
-  const {
-    root,
-    position,
-    rotation,
-    selectPlant,
-    deselectAllPlants,
-    isActive,
-    gardenDispatch,
-    index,
-    isDataMode,
-    cameraRef,
-  } = props;
-  const {
-    activeItem: activeNode,
-    selectItem: selectNode,
-    deselectAllItems: deselectAllNodes,
-  } = useActiveItem();
-  // const [isFacingCamera, setIsFacingCamera] = useState<[number, number, number]>([0, 0, 0]);
-
+const BambooStalk = ({
+  root,
+  position,
+  rotation,
+  gardenDispatch,
+  plantIndex,
+  isDataMode,
+  cameraRef,
+}: BambooStalkProps) => {
+  const [activeNode, setActiveNode, unsetActiveNode] = useActiveItem();
+  const { activePlant, setActivePlant } = useGardenStore();
   let cumulativeHeight = 0;
-
+  const isSelected = activePlant === plantIndex;
   const children: React.ReactNode[] = [];
+
+  const selectThisBamboo = () => {
+    setActivePlant(plantIndex);
+  };
+
   // root node
   children.push(
     <Node3D
@@ -62,38 +55,33 @@ const BambooStalk = (props: BambooStalkProps) => {
       cylinderArgs={[1, 2, 1]}
       isSelected={false}
       defaultMaterial={defaultBambooRootMaterial}
-      deselectAllPlants={deselectAllPlants}
-      deselectAllNodes={() => {
-        deselectAllNodes();
-        deselectAllPlants();
-      }}
-      selectPlant={selectPlant}
-      selectNode={deselectAllNodes}
+      deselectAllNodes={unsetActiveNode}
+      selectParentPlant={selectThisBamboo}
+      selectNode={unsetActiveNode}
     />
   );
-  root.intoArray().forEach((nodeValue, index) => {
+  root.intoArray().forEach((nodeValue, nodeIndex) => {
     // plant nodes
     if (!isDataMode) {
       children.push(
         <Node3D
           value={nodeValue}
-          key={index}
+          key={nodeIndex}
           position={new Vector3(0, cumulativeHeight + 0.5 * nodeValue, 0)}
           rotation={new Vector3()}
           geometry={cylinder}
           cylinderArgs={[1, 1, nodeValue]}
-          isSelected={isActive && activeNode === index}
-          deselectAllPlants={deselectAllPlants}
-          selectPlant={selectPlant}
+          isSelected={nodeIndex === activeNode}
+          selectParentPlant={selectThisBamboo}
           defaultMaterial={defaultBambooMaterial}
-          deselectAllNodes={deselectAllNodes}
-          selectNode={() => selectNode(index)}
+          deselectAllNodes={unsetActiveNode}
+          selectNode={() => setActiveNode(nodeIndex)}
         />
       );
     } else {
       children.push(
         <NodeNumber
-          key={index}
+          key={nodeIndex}
           isDataMode={isDataMode}
           cameraRef={cameraRef}
           content={String(nodeValue)}
@@ -108,7 +96,7 @@ const BambooStalk = (props: BambooStalkProps) => {
     const action: GardenReducerAction = {
       type: "movePlant",
       payload: {
-        index,
+        index: plantIndex,
         direction,
       },
     };
@@ -121,7 +109,7 @@ const BambooStalk = (props: BambooStalkProps) => {
       payload: {
         plantName: PlantName.BAMBOO,
         opName: OpName.APPEND,
-        index,
+        index: plantIndex,
       },
     };
     gardenDispatch(action);
@@ -133,7 +121,7 @@ const BambooStalk = (props: BambooStalkProps) => {
       payload: {
         plantName: PlantName.BAMBOO,
         opName: OpName.POP,
-        index,
+        index: plantIndex,
       },
     };
     gardenDispatch(action);
@@ -145,7 +133,7 @@ const BambooStalk = (props: BambooStalkProps) => {
       payload: {
         plantName: PlantName.BAMBOO,
         opName: OpName.INSERT,
-        index,
+        index: plantIndex,
         nodeIndex,
       },
     };
@@ -158,7 +146,7 @@ const BambooStalk = (props: BambooStalkProps) => {
       payload: {
         plantName: PlantName.BAMBOO,
         opName: OpName.DELETE,
-        index,
+        index: plantIndex,
         nodeIndex,
       },
     };
@@ -171,7 +159,7 @@ const BambooStalk = (props: BambooStalkProps) => {
       payload: {
         plantName: PlantName.BAMBOO,
         opName: OpName.DELETEATINDEX,
-        index,
+        index: plantIndex,
         nodeIndex,
       },
     };
@@ -202,9 +190,8 @@ const BambooStalk = (props: BambooStalkProps) => {
         {children}
       </group>
 
-      {isActive && (
+      {isSelected && (
         <ControlPanel
-          // data={root}
           activeNodeId={activeNode}
           moveOperations={moveOperations}
           plantOperations={plantOperations}

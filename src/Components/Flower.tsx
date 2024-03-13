@@ -14,29 +14,18 @@ import {
   defaultFlowerPetalMaterial,
 } from "../materials";
 import { cone, cylinder } from "../geometries";
+import { useGardenStore } from "../gardenStore";
 
 type FlowerProps = {
   root: DoublyCircularlyLinkedList;
-  index: number;
+  plantIndex: number;
   gardenDispatch: React.Dispatch<GardenReducerAction>;
   position: Vector3;
   rotation: Vector3;
-  selectPlant: () => void;
-  deselectAllPlants: () => void;
-  isActive: boolean;
 };
 
 const Flower = (props: FlowerProps) => {
-  const {
-    root,
-    position,
-    rotation,
-    selectPlant,
-    deselectAllPlants,
-    isActive,
-    gardenDispatch,
-    index,
-  } = props;
+  const { root, position, rotation, gardenDispatch, plantIndex } = props;
 
   // 0 1 2 3
   // 0   2 3
@@ -46,8 +35,14 @@ const Flower = (props: FlowerProps) => {
   // delete @ idx 1
   // [1, _, 3, 4, 5, 6]
 
-  const { activeItem, selectItem, deselectAllItems } = useActiveItem();
+  const [activeNode, setActiveNode, unsetActiveNode] = useActiveItem();
+  const { activePlant, setActivePlant } = useGardenStore();
+  const isSelected = activePlant === plantIndex;
   const children: React.ReactNode[] = [];
+
+  const selectThisFlower = () => {
+    setActivePlant(plantIndex);
+  };
 
   // central hub node of the flower
   children.push(
@@ -60,40 +55,35 @@ const Flower = (props: FlowerProps) => {
       cylinderArgs={[1, 2, 0.5]}
       isSelected={false}
       defaultMaterial={defaultFlowerHubMaterial}
-      deselectAllPlants={deselectAllPlants}
-      deselectAllNodes={() => {
-        deselectAllItems();
-        deselectAllPlants();
-      }}
-      selectPlant={selectPlant}
-      selectNode={deselectAllItems}
+      deselectAllNodes={unsetActiveNode}
+      selectParentPlant={selectThisFlower}
+      selectNode={unsetActiveNode}
     />
   );
 
   // petal nodes of the flower
-  root.intoArray().forEach((nodeValue, index) => {
+  root.intoArray().forEach((nodeValue, nodeIndex) => {
     children.push(
       <Node3D
         value={nodeValue}
-        key={index}
+        key={nodeIndex}
         position={
           new Vector3(
             (nodeValue * 2 - 1.5) *
-              Math.cos(((2 * Math.PI) / root.length) * index),
+              Math.cos(((2 * Math.PI) / root.length) * nodeIndex),
             (nodeValue * 2 - 1.5) *
-              Math.sin(((2 * Math.PI) / root.length) * index),
-            index % 2 === 0 ? 0.05 : -0.05
+              Math.sin(((2 * Math.PI) / root.length) * nodeIndex),
+            nodeIndex % 2 === 0 ? 0.05 : -0.05
           )
         }
         rotation={new Vector3(1.5, 0, 0)}
         geometry={cylinder}
         cylinderArgs={[nodeValue, nodeValue, 0.1]}
-        isSelected={isActive && activeItem === index}
-        deselectAllNodes={deselectAllItems}
-        selectNode={() => selectItem(index)}
+        isSelected={isSelected}
+        deselectAllNodes={unsetActiveNode}
+        selectNode={() => setActiveNode(nodeIndex)}
         defaultMaterial={defaultFlowerPetalMaterial}
-        deselectAllPlants={deselectAllPlants}
-        selectPlant={selectPlant}
+        selectParentPlant={selectThisFlower}
       />
     );
   });
@@ -102,7 +92,7 @@ const Flower = (props: FlowerProps) => {
     const action: GardenReducerAction = {
       type: "movePlant",
       payload: {
-        index,
+        index: plantIndex,
         direction,
       },
     };
@@ -115,7 +105,7 @@ const Flower = (props: FlowerProps) => {
       payload: {
         plantName: PlantName.FLOWER,
         opName: OpName.APPEND,
-        index,
+        index: plantIndex,
       },
     };
     gardenDispatch(action);
@@ -127,7 +117,7 @@ const Flower = (props: FlowerProps) => {
       payload: {
         plantName: PlantName.FLOWER,
         opName: OpName.DELETEATINDEX,
-        index,
+        index: plantIndex,
         nodeIndex,
       },
     };
@@ -154,10 +144,9 @@ const Flower = (props: FlowerProps) => {
       >
         {children}
       </group>
-      {isActive && (
+      {isSelected && (
         <ControlPanel
-          // data={root}
-          activeNodeId={activeItem}
+          activeNodeId={activeNode}
           moveOperations={moveOperations}
           plantOperations={plantOperations}
           nodeOperations={nodeOperations}

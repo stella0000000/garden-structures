@@ -8,7 +8,6 @@ import {
   DoublyCircularlyLinkedList,
 } from "../DataStructures/DoublyCircularlyLinkedList";
 import Flower from "./Flower";
-import useActiveItem from "../Hooks/useActiveItem";
 import gardenReducer from "../Hooks/Reducers/gardenReducer";
 import * as THREE from "three";
 import { Vector3 } from "three";
@@ -17,6 +16,7 @@ import Constellation from "./Constellation";
 import PointerLockCameraControls from "./PointerLockCameraControls";
 import Ground from "./Ground";
 import GhostPlant from "./GhostPlant";
+import { useGardenStore } from "../gardenStore";
 
 export const camera = new THREE.PerspectiveCamera(45, 2, 1, 1000);
 
@@ -201,7 +201,6 @@ const testingConstellation1: ConstellationData = {
   data: testingConstellationStar1,
   position: new Vector3(),
   rotation: new Vector3(0, 1.5, 0),
-  // rotation: new Euler(0, 90, 0)
 };
 
 const initialTestingState: PlantCollection = [
@@ -216,17 +215,12 @@ type GlobalCanvasProps = {
   isPointerLock: boolean;
   setIsPointerLock: () => void;
   isDataMode: boolean;
-  // setIsDataMode: Dispatch<SetStateAction<boolean>>;
 };
 
 const GlobalCanvas = (props: GlobalCanvasProps) => {
   const { isPointerLock, setIsPointerLock, isDataMode } = props;
   const [plantData, dispatch] = useReducer(gardenReducer, initialTestingState);
-  const {
-    activeItem: activePlant,
-    selectItem: selectPlant,
-    deselectAllItems: deselectAllPlants,
-  } = useActiveItem();
+  const { activePlant, deselectAllPlants } = useGardenStore();
 
   const cameraRef = useRef(camera);
   const raycaster = useRef(new THREE.Raycaster());
@@ -234,12 +228,7 @@ const GlobalCanvas = (props: GlobalCanvasProps) => {
 
   const updateRaycaster = () => {
     raycaster.current?.setFromCamera(new THREE.Vector2(), cameraRef.current);
-    // console.log(raycaster.current?.intersectObject(plane.current!));
   };
-
-  // useEffect(() => {
-  //   console.log({ activePlant });
-  // }, [activePlant]);
 
   // renders the appropriate JSX for each plant in the PlantData based on type
   const children = () => {
@@ -250,15 +239,15 @@ const GlobalCanvas = (props: GlobalCanvasProps) => {
           return (
             <BambooStalk
               key={index}
-              index={index}
+              plantIndex={index}
               cameraRef={cameraRef}
               gardenDispatch={dispatch}
               root={plant.data}
               position={plant.position}
               rotation={plant.rotation}
-              selectPlant={() => selectPlant(index)}
-              deselectAllPlants={deselectAllPlants}
-              isActive={activePlant === index}
+              // selectPlant={() => selectPlant(index)}
+              // deselectAllPlants={deselectAllPlants}
+              // isActive={activePlant === index}
               isDataMode={isDataMode}
             />
           );
@@ -268,32 +257,30 @@ const GlobalCanvas = (props: GlobalCanvasProps) => {
           return (
             <Flower
               key={index}
-              index={index}
+              plantIndex={index}
               gardenDispatch={dispatch}
               root={plant.data}
               position={plant.position}
               rotation={plant.rotation}
-              selectPlant={() => selectPlant(index)}
-              deselectAllPlants={deselectAllPlants}
-              isActive={activePlant === index}
             />
           );
         }
-        case "ConstellationData": {
-          return (
-            <Constellation
-              key={index}
-              index={index}
-              gardenDispatch={dispatch}
-              data={plant.data}
-              position={plant.position}
-              rotation={plant.rotation}
-              selectPlant={() => selectPlant(index)}
-              deselectAllPlants={deselectAllPlants}
-              isActive={activePlant === index}
-            />
-          );
-        }
+
+        // case "ConstellationData": {
+        //   return (
+        //     <Constellation
+        //       key={index}
+        //       index={index}
+        //       gardenDispatch={dispatch}
+        //       data={plant.data}
+        //       position={plant.position}
+        //       rotation={plant.rotation}
+        //       selectPlant={() => selectPlant(index)}
+        //       deselectAllPlants={deselectAllPlants}
+        //       isActive={activePlant === index}
+        //     />
+        //   );
+        // }
         default: {
           // unreachable
           return <></>;
@@ -310,8 +297,6 @@ const GlobalCanvas = (props: GlobalCanvasProps) => {
         isPointerLock={isPointerLock}
         setIsPointerLock={setIsPointerLock}
         deselectAllPlants={deselectAllPlants}
-        // plane={plane}
-        // raycaster={raycaster}
         updateRaycaster={updateRaycaster}
       />
       <ambientLight intensity={1} />

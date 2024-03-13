@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import * as THREE from "three";
 import { Euler, Vector3 } from "three";
 import { selectedMaterial, hoveredMaterial } from "../materials";
+import { useGardenStore } from "../gardenStore";
 
 export type Node3DProps = {
   value: number;
@@ -14,27 +15,25 @@ export type Node3DProps = {
   defaultMaterial: THREE.Material;
   deselectAllNodes: () => void;
   selectNode: () => void;
-  deselectAllPlants: () => void;
-  selectPlant: () => void;
+  selectParentPlant: () => void;
   opacity?: number;
   transparent?: boolean;
 };
 
-const Node3D = (props: Node3DProps) => {
-  const {
-    position,
-    rotation,
-    deselectAllNodes,
-    selectNode,
-    deselectAllPlants,
-    selectPlant,
-    isSelected,
-    geometry,
-    cylinderArgs,
-    defaultMaterial,
-  } = props;
+const Node3D = ({
+  position,
+  rotation,
+  deselectAllNodes,
+  selectNode,
+  selectParentPlant,
+  isSelected,
+  geometry,
+  cylinderArgs,
+  defaultMaterial,
+}: Node3DProps) => {
   const meshRef = useRef<THREE.Mesh>(null!);
   const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
+  const { deselectAllPlants } = useGardenStore();
 
   return (
     <mesh
@@ -65,7 +64,7 @@ const Node3D = (props: Node3DProps) => {
       }}
       onPointerDown={(e: ThreeEvent<PointerEvent>) => {
         e.stopPropagation();
-        selectPlant();
+        selectParentPlant();
         selectNode();
       }}
     ></mesh>
