@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { defaultStarMaterial, starBlinkMaterial } from "../materials";
 import { cylinder } from "../geometries";
 import { Line } from "@react-three/drei";
+import { useGardenStore } from "../gardenStore";
 
 type ConstellationProps = {
   data: FlattenedGraph;
@@ -20,8 +21,6 @@ type ConstellationProps = {
   gardenDispatch: React.Dispatch<GardenReducerAction>;
   position: Vector3;
   rotation: Vector3;
-  selectPlant: () => void;
-  deselectAllPlants: () => void;
   isActive: boolean;
 };
 
@@ -30,14 +29,24 @@ enum Search {
   DFS,
 }
 
-const Constellation = (props: ConstellationProps) => {
-  const { data, position, rotation, selectPlant, deselectAllPlants, isActive } =
-    props;
+const Constellation = ({
+  data,
+  index,
+  position,
+  rotation,
+  isActive,
+}: ConstellationProps) => {
+  const [activeNode, setActiveNode, unsetActiveNode] = useActiveItem();
+  const { setActivePlant } = useGardenStore();
 
   const root = GraphNode.unflatten(data);
   const [search, setSearch] = useState(Search.BFS);
   const [allStars, setAllStars] = useState(root.bfs());
   const [currStarIdx, setCurrStarIdx] = useState(0);
+
+  const selectThisConstellation = () => {
+    setActivePlant(index);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -57,12 +66,6 @@ const Constellation = (props: ConstellationProps) => {
       }
     }
   }, [currStarIdx]);
-
-  const {
-    activeItem: activeNode,
-    selectItem: selectNode,
-    deselectAllItems: deselectAllNodes,
-  } = useActiveItem();
 
   const starChildren: React.ReactNode[] = [];
   const edgeChildren: React.ReactNode[] = [];
@@ -90,26 +93,25 @@ const Constellation = (props: ConstellationProps) => {
 
   // console.log('dfs: '+ root.dfs().map(node => node.uuid.slice(10)))
   // console.log('bfs: ' + root.bfs().map(node => node.uuid.slice(10)))
-  allStars.forEach((graphNode, index) => {
+  allStars.forEach((graphNode, nodeIndex) => {
     // plant nodes
     starChildren.push(
       <Node3D
         value={2}
-        key={index}
+        key={nodeIndex}
         position={position
           .clone()
           .add(new Vector3(graphNode.val[0], graphNode.val[1], 0))}
         rotation={rotation.clone()}
         geometry={cylinder}
         cylinderArgs={[0.125, 0.125, 0.125]}
-        isSelected={isActive && activeNode === index}
-        deselectAllPlants={deselectAllPlants}
-        selectPlant={selectPlant}
+        isSelected={isActive && activeNode === nodeIndex}
+        selectParentPlant={selectThisConstellation}
         defaultMaterial={
-          currStarIdx === index ? starBlinkMaterial : defaultStarMaterial
+          currStarIdx === nodeIndex ? starBlinkMaterial : defaultStarMaterial
         }
-        deselectAllNodes={deselectAllNodes}
-        selectNode={() => selectNode(index)}
+        deselectAllNodes={unsetActiveNode}
+        selectNode={() => setActiveNode(nodeIndex)}
       />
     );
   });

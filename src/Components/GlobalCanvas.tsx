@@ -8,6 +8,7 @@ import * as THREE from "three";
 import PointerLockCameraControls from "./PointerLockCameraControls";
 import Ground from "./Ground";
 import GhostPlant from "./GhostPlant";
+import Constellation from "./Constellation";
 import { useGardenStore } from "../gardenStore";
 import { initialState } from "../initialState";
 
@@ -63,21 +64,19 @@ const GlobalCanvas = ({
           );
         }
 
-        // case "ConstellationData": {
-        //   return (
-        //     <Constellation
-        //       key={index}
-        //       index={index}
-        //       gardenDispatch={dispatch}
-        //       data={plant.data}
-        //       position={plant.position}
-        //       rotation={plant.rotation}
-        //       selectPlant={() => selectPlant(index)}
-        //       deselectAllPlants={deselectAllPlants}
-        //       isActive={activePlant === index}
-        //     />
-        //   );
-        // }
+        case "ConstellationData": {
+          return (
+            <Constellation
+              key={index}
+              index={index}
+              gardenDispatch={dispatch}
+              data={plant.data}
+              position={plant.position}
+              rotation={plant.rotation}
+              isActive={activePlant === index}
+            />
+          );
+        }
         default: {
           // unreachable
           return <></>;
