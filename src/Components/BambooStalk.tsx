@@ -47,7 +47,7 @@ const BambooStalk = ({
     <Node3D
       value={2}
       key={-1}
-      position={new Vector3(0, -0.5, 0)}
+      position={new Vector3(0, 0.5, 0)}
       rotation={new Vector3()}
       geometry={cone}
       cylinderArgs={[1, 2, 1]}
