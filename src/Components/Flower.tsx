@@ -24,17 +24,13 @@ type FlowerProps = {
   rotation: Vector3;
 };
 
-const Flower = (props: FlowerProps) => {
-  const { root, position, rotation, gardenDispatch, plantIndex } = props;
-
-  // 0 1 2 3
-  // 0   2 3
-  // [0, _, 1, 2]
-
-  // [1, 2, 3, 4, 5, 6]
-  // delete @ idx 1
-  // [1, _, 3, 4, 5, 6]
-
+const Flower = ({
+  root,
+  position,
+  rotation,
+  gardenDispatch,
+  plantIndex,
+}: FlowerProps) => {
   const [activeNode, setActiveNode, unsetActiveNode] = useActiveItem();
   const { activePlant, setActivePlant } = useGardenStore();
   const isSelected = activePlant === plantIndex;

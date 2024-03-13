@@ -121,7 +121,7 @@ export const appendBambooNode = (
 
   const oldBambooData = plantCollection[index].data as LinkedList;
   const newLinkedList = oldBambooData.clone();
-  newLinkedList.append(Math.random() * 10);
+  newLinkedList.append(Math.round(Math.random() * 10));
 
   const newState: PlantCollection = {
     ...plantCollection,

@@ -21,7 +21,6 @@ type BambooStalkProps = {
   position: Vector3;
   rotation: Vector3;
   gardenDispatch: React.Dispatch<GardenReducerAction>;
-  isDataMode: boolean;
   cameraRef: React.MutableRefObject<Camera | null>;
 };
 
@@ -31,11 +30,10 @@ const BambooStalk = ({
   rotation,
   gardenDispatch,
   plantIndex,
-  isDataMode,
   cameraRef,
 }: BambooStalkProps) => {
   const [activeNode, setActiveNode, unsetActiveNode] = useActiveItem();
-  const { activePlant, setActivePlant } = useGardenStore();
+  const { activePlant, setActivePlant, isDataMode } = useGardenStore();
   let cumulativeHeight = 0;
   const isSelected = activePlant === plantIndex;
   const children: React.ReactNode[] = [];

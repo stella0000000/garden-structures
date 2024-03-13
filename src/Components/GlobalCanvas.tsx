@@ -214,11 +214,12 @@ const initialTestingState: PlantCollection = [
 type GlobalCanvasProps = {
   isPointerLock: boolean;
   setIsPointerLock: () => void;
-  isDataMode: boolean;
 };
 
-const GlobalCanvas = (props: GlobalCanvasProps) => {
-  const { isPointerLock, setIsPointerLock, isDataMode } = props;
+const GlobalCanvas = ({
+  isPointerLock,
+  setIsPointerLock,
+}: GlobalCanvasProps) => {
   const [plantData, dispatch] = useReducer(gardenReducer, initialTestingState);
   const { activePlant, deselectAllPlants } = useGardenStore();
 
@@ -245,10 +246,6 @@ const GlobalCanvas = (props: GlobalCanvasProps) => {
               root={plant.data}
               position={plant.position}
               rotation={plant.rotation}
-              // selectPlant={() => selectPlant(index)}
-              // deselectAllPlants={deselectAllPlants}
-              // isActive={activePlant === index}
-              isDataMode={isDataMode}
             />
           );
         }
@@ -325,13 +322,6 @@ const GlobalCanvas = (props: GlobalCanvasProps) => {
         dispatch={dispatch}
         camera={cameraRef}
       />
-      <Html
-        calculatePosition={() => {
-          return [0, 0, 0];
-        }}
-      >
-        {isDataMode ? "Data Mode" : "Garden Mode"}
-      </Html>
       {children()}
     </Canvas>
   );
