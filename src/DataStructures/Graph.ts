@@ -175,6 +175,117 @@ export class GraphNode {
   // CRUD
 }
 
+// Fix generating constellation graph
+// for visual purposes (dfs, bfs)
+// start @ [0, 0] root node
+// root.connect(nodeA)
+// nodeA.connect(nodeB)
+// BUT NOW for clear DFS viz, generate A, B nodes within quadrants + specify layers
+// B will ALWAYS have to have higher Math.abs(x, y) than A, and not switching quadrants = or keep X, while Y can flip
+// i.e. B is in outer ring of A
+
+/*
+    1. where is the root node and/or parent node is
+    2. calculate arc range param (cone variance)
+    3. calc vector from center of arc range to center of graph
+    4. pick random num from 0 to arc range
+    5. math to plot that coord on arc (?)
+*/
+
+export const buildGraph = (): GraphNode => {
+  const root = new GraphNode([0, 0], []);
+
+  const r = 4;
+  const arr = [];
+  let sum = 0;
+  const numNodesLayer1 = 4;
+  const numLayers = 5;
+  for (let i = 0; i < numLayers; i++) sum += Math.pow(2, i) * numNodesLayer1;
+  for (let i = 0; i < sum; i++) arr.push(Math.random() * 2 * Math.PI);
+  arr.sort();
+  const offset = Math.pow(2, numLayers) - 1;
+
+  for (let i = Math.floor(offset / 2) + 1; i < sum; i += offset) {
+    const node = traverse(numLayers, 1, i, arr, r);
+    if (node) root.connect(node);
+  }
+
+  return root;
+};
+
+const traverse = (
+  numLayers: number,
+  currLayer: number,
+  index: number,
+  arr: number[],
+  r: number
+) => {
+  if (currLayer > numLayers) return;
+  if (index >= arr.length) return;
+
+  const angle = arr[index];
+
+  const x = Math.cos(angle) * currLayer * r;
+  const y = Math.sin(angle) * currLayer * r;
+  const node = new GraphNode([x, y], []);
+
+  // jump is halved on each level
+  const remainingLayers = numLayers - currLayer;
+  const jump = Math.pow(2, remainingLayers - 1);
+
+  const left = traverse(numLayers, currLayer + 1, index - jump, arr, r);
+  const right = traverse(numLayers, currLayer + 1, index + jump, arr, r);
+
+  if (left) node.connect(left);
+  if (right) node.connect(right);
+
+  return node;
+};
+
+//  1   *   1   *    *     1   *    *    1
+// [ 5, 50, 90, 120, 200, 340, 345, 347, 350 ]
+
+// if (index % 3 === 1) l1
+// else l2
+
+// [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 ]
+
+// 4 + 2*4 + 4*4 + 8*4
+// 4 + (2*1)*4 + (2*2)*4 + (2*2*2)*4
+
+// 3 + 6 + 12 + 24 = 45
+// 4 8 16 = 28
+
+// let sum = 0
+// var branches = 4
+// for (let i=0; i<3; i++) {
+//     sum += Math.pow(2, i) * branches
+// }
+
+// 2^power of num layers   - 1
+//
+/*
+
+      3         10          17
+    /  \      /   \       /    \
+   1   5    8      12    15     19
+ /\    /\   /\     /\    /\     /\
+0 2   4 6  7
+
+
+0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16
+
+          9
+         / \
+            3
+            / \
+           5   8  
+          /\   /\
+         4  6 7  9
+*/
+
+// initial number is Math.floor(offset/2)
+
 // const root = new GraphNode([0, 0], []);
 // const node1 = new GraphNode([1, 1], []);
 // const node2 = new GraphNode([2, 2], []);

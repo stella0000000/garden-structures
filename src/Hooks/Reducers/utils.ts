@@ -3,7 +3,7 @@ import {
   PlantCollection,
   BambooStalkData,
   FlowerData,
-} from "../../Components/GlobalCanvas";
+} from "../../initialState";
 import {
   CircularlyLinkedListFromArray,
   DoublyCircularlyLinkedList,

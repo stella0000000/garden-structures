@@ -34,9 +34,10 @@ const BambooStalk = ({
 }: BambooStalkProps) => {
   const [activeNode, setActiveNode, unsetActiveNode] = useActiveItem();
   const { activePlant, setActivePlant, isDataMode } = useGardenStore();
-  let cumulativeHeight = 0;
+
   const isSelected = activePlant === plantIndex;
   const children: React.ReactNode[] = [];
+  let cumulativeHeight = 0;
 
   const selectThisBamboo = () => {
     setActivePlant(plantIndex);
