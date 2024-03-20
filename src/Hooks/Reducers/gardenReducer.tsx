@@ -1,4 +1,5 @@
-import { PlantCollection } from "../../Components/GlobalCanvas";
+import { PlantCollection } from "../../initialState";
+
 import {
   appendBamboo,
   appendBambooNode,
@@ -56,6 +57,7 @@ export default function gardenReducer(
   /* GARDEN OPS */
   if (action.type === "gardenOperation") {
     if (opName === OpName.APPEND) {
+      // MIGRATED TO gardenStore
       if (plantName === PlantName.FLOWER) {
         return appendFlower(plantCollection, action);
       } else if (plantName === PlantName.BAMBOO) {
@@ -82,6 +84,7 @@ export default function gardenReducer(
     } else {
       throw Error(`No ${opName} handler for plant: ${plantName}`);
     }
+
     /* PLANT OPS */
   } else if (action.type === "plantOperation") {
     if (opName === OpName.APPEND) {
@@ -102,6 +105,7 @@ export default function gardenReducer(
     } else {
       throw Error(`No ${opName} handler for plant: ${plantName}`);
     }
+
     /* NODE OPS */
   } else if (action.type === "nodeOperation") {
     if (opName === OpName.DELETEATINDEX) {

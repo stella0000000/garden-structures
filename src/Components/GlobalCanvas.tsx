@@ -23,8 +23,13 @@ const GlobalCanvas = ({
   isPointerLock,
   setIsPointerLock,
 }: GlobalCanvasProps) => {
-  const [plantData, dispatch] = useReducer(gardenReducer, initialState);
-  const { activePlant, deselectAllPlants } = useGardenStore();
+  const [_, dispatch] = useReducer(gardenReducer, initialState);
+
+  const {
+    activePlant,
+    deselectAllPlants,
+    plantCollection: plantData,
+  } = useGardenStore();
 
   const cameraRef = useRef(camera);
   const raycaster = useRef(new THREE.Raycaster());

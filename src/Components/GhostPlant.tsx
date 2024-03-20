@@ -9,6 +9,7 @@ import {
 import { Camera } from "three";
 import GhostBamboo from "./GhostBamboo";
 import Carousel from "./Carousel";
+import { useGardenStore } from "../gardenStore";
 
 type GhostPlantProps = {
   raycaster: React.MutableRefObject<THREE.Raycaster | null>;
@@ -22,6 +23,7 @@ const GhostPlant = (props: GhostPlantProps) => {
   const [position, setPosition] = useState<[number, number, number]>([0, 0, 0]);
   const [rotation, setRotation] = useState<[number, number, number]>([0, 0, 0]);
   const [ghostType, setGhostType] = useState<PlantName>(PlantName.FLOWER);
+  const { appendPlant } = useGardenStore();
 
   // convert state to Euler
   // convert Euler to Quat
@@ -72,31 +74,23 @@ const GhostPlant = (props: GhostPlantProps) => {
     }
   };
 
-  const handleInsert = useCallback(() => {
-    if (ghostType === PlantName.FLOWER) {
-      const action: GardenReducerAction = {
-        type: "gardenOperation",
-        payload: {
-          position: [position[0], position[1] + 5, position[2]],
-          plantName: PlantName.FLOWER,
-          opName: OpName.APPEND,
-          rotation: rotation,
-        },
-      };
-      dispatch(action);
-    } else if (ghostType === PlantName.BAMBOO) {
-      const action: GardenReducerAction = {
-        type: "gardenOperation",
-        payload: {
-          position: [position[0], position[1] + 5, position[2]],
-          plantName: PlantName.BAMBOO,
-          opName: OpName.APPEND,
-          rotation: rotation,
-        },
-      };
-      dispatch(action);
-    }
-  }, [position]);
+  const handleInsert = () => {
+    appendPlant(
+      ghostType,
+      [position[0], position[1] + 5, position[2]],
+      rotation
+    );
+    // const action: GardenReducerAction = {
+    //   type: "gardenOperation",
+    //   payload: {
+    //     position: [position[0], position[1] + 5, position[2]],
+    //     plantName: ghostType,
+    //     opName: OpName.APPEND,
+    //     rotation: rotation,
+    //   },
+    // };
+    // dispatch(action);
+  };
 
   return (
     <>
