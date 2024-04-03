@@ -1,14 +1,32 @@
 import { create } from "zustand";
-import { PlantCollection } from "./initialState";
+import { BambooStalkData, FlowerData, PlantCollection } from "./initialState";
 import { initialState } from "./initialState";
 import { OpName, PlantName } from "./Hooks/Reducers/gardenReducer";
-import { newBamboo, newFlower } from "./gardenStoreUtils";
+import {
+  deleteAtIdxBamboo,
+  deleteAtIdxFlower,
+  newBamboo,
+  newFlower,
+} from "./gardenStoreUtils";
 
 const opMap = {
   [OpName.APPEND]: {
     [PlantName.BAMBOO]: newBamboo,
     [PlantName.FLOWER]: newFlower,
   },
+  [OpName.DELETEATINDEX]: {
+    [PlantName.BAMBOO]: deleteAtIdxBamboo,
+    [PlantName.FLOWER]: deleteAtIdxFlower,
+  },
+  // [OpName.POP]: {
+  //   [PlantName.BAMBOO]: popBamboo
+  // }.
+  // [OpName.INSERT]: {
+  //   [PlantName.BAMBOO]: insertBamboo
+  // },
+  // [OpName.DELETE]: {
+  // [PlantName.BAMBOO]: deleteAfterBamboo
+  // }
 };
 
 interface StoreState {
@@ -23,6 +41,11 @@ interface StoreState {
     plantType: PlantName,
     position: [number, number, number],
     rotation: [number, number, number]
+  ) => void;
+  deleteAtIdx: (
+    plantType: PlantName,
+    plantIdx: number,
+    nodeIdx: number
   ) => void;
 }
 
@@ -41,5 +64,34 @@ export const useGardenStore = create<StoreState>((set) => ({
     set(({ plantCollection }) => ({
       plantCollection: [...plantCollection, handler(position, rotation)],
     }));
+  },
+
+  deleteAtIdx: (plantType, plantIdx, nodeIdx) => {
+    // const handler = opMap[OpName.DELETEATINDEX][plantType];
+
+    set(({ plantCollection }) => {
+      let newPlant;
+      if (plantType === PlantName.BAMBOO) {
+        newPlant = deleteAtIdxBamboo(
+          plantCollection[plantIdx] as BambooStalkData,
+          nodeIdx
+        );
+      } else {
+        newPlant = deleteAtIdxFlower(
+          plantCollection[plantIdx] as FlowerData,
+          nodeIdx
+        );
+      }
+
+      const newState = {
+        ...plantCollection,
+        [plantIdx]: {
+          ...plantCollection[plantIdx],
+          data: newPlant,
+        },
+      };
+
+      return { plantCollection: Object.values(newState) as PlantCollection };
+    });
   },
 }));

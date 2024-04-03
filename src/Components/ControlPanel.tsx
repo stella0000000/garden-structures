@@ -70,11 +70,6 @@ const Arrow = styled.button`
   }
 
   @media only screen and (max-width: 700px) {
-    /* font-size: 20px;
-    width: 40px;
-    height: 40px;
-    width: 40px;
-    height: 40px; */
     display: none;
   }
 `;
@@ -86,7 +81,6 @@ const ArrowWrap = styled.div`
   align-items: center;
 
   @media only screen and (max-width: 700px) {
-    /* margin: 60px 5px; */
     display: none;
   }
 `;

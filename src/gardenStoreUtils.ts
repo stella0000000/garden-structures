@@ -1,7 +1,26 @@
 import { Vector3 } from "three";
 import { LinkedList } from "./DataStructures/LinkedList";
 import { BambooStalkData, FlowerData } from "./initialState";
-import { CircularlyLinkedListFromArray } from "./DataStructures/DoublyCircularlyLinkedList";
+import {
+  CircularlyLinkedListFromArray,
+  DoublyCircularlyLinkedList,
+} from "./DataStructures/DoublyCircularlyLinkedList";
+
+export const deleteAtIdxBamboo = (bamboo: BambooStalkData, nodeIdx: number) => {
+  const oldBambooData = bamboo.data as LinkedList;
+  const newLinkedList = oldBambooData.clone();
+  newLinkedList.deleteAtIndex(nodeIdx);
+
+  return newLinkedList;
+};
+
+export const deleteAtIdxFlower = (flower: FlowerData, nodeIdx: number) => {
+  const oldFlowerData = flower.data as DoublyCircularlyLinkedList;
+  const newDoublyCircularlyLinkedList = oldFlowerData.clone();
+  newDoublyCircularlyLinkedList.delete(nodeIdx);
+
+  return newDoublyCircularlyLinkedList;
+};
 
 export const newBamboo = (
   position: [number, number, number],

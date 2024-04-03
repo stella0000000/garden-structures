@@ -1,6 +1,6 @@
 import { Cylinder } from "@react-three/drei";
 import { ghostMaterial } from "../materials";
-import { Euler, Vector3 } from "three";
+import { Vector3 } from "three";
 
 type GhostBambooProps = {
   position: [number, number, number];
