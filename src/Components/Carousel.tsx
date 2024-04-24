@@ -2,7 +2,7 @@ import { Html } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { PlantName } from "../Hooks/Reducers/gardenReducer";
+import { PlantName } from "../gardenStore";
 
 const Wrapper = styled.div`
   border: 1px solid pink;

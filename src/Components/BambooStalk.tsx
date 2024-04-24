@@ -2,25 +2,20 @@ import { LinkedList } from "../DataStructures/LinkedList";
 import Node3D from "./Node3D";
 import ControlPanel from "./ControlPanel";
 import useActiveItem from "../Hooks/useActiveItem";
-import {
-  Direction,
-  GardenReducerAction,
-  OpName,
-  PlantName,
-} from "../Hooks/Reducers/gardenReducer";
+
 import { Euler, Vector3 } from "three";
 import { defaultBambooMaterial, defaultBambooRootMaterial } from "../materials";
 import { cone, cylinder } from "../geometries";
 import { Camera } from "three";
 import { NodeNumber } from "./NodeNumber";
-import { useGardenStore } from "../gardenStore";
+import { useGardenStore, Direction, PlantName } from "../gardenStore";
+// import { useEffect } from "react";
 
 type BambooStalkProps = {
   root: LinkedList;
   plantIndex: number;
   position: Vector3;
   rotation: Vector3;
-  gardenDispatch: React.Dispatch<GardenReducerAction>;
   cameraRef: React.MutableRefObject<Camera | null>;
 };
 
@@ -28,7 +23,6 @@ const BambooStalk = ({
   root,
   position,
   rotation,
-  gardenDispatch,
   plantIndex,
   cameraRef,
 }: BambooStalkProps) => {
@@ -42,6 +36,7 @@ const BambooStalk = ({
     deleteAfterNode,
     insertNode,
     popNode,
+    movePlant,
   } = useGardenStore();
 
   const isSelected = activePlant === plantIndex;
@@ -101,14 +96,7 @@ const BambooStalk = ({
   });
 
   const handleMove = (direction: Direction) => {
-    const action: GardenReducerAction = {
-      type: "movePlant",
-      payload: {
-        index: plantIndex,
-        direction,
-      },
-    };
-    gardenDispatch(action);
+    return movePlant(plantIndex, direction);
   };
 
   const handleAppend = () => {

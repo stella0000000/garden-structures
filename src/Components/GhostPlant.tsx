@@ -1,25 +1,20 @@
 import { useFrame } from "@react-three/fiber";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import GhostFlower from "./GhostFlower";
-import {
-  GardenReducerAction,
-  OpName,
-  PlantName,
-} from "../Hooks/Reducers/gardenReducer";
+
 import { Camera } from "three";
 import GhostBamboo from "./GhostBamboo";
 import Carousel from "./Carousel";
-import { useGardenStore } from "../gardenStore";
+import { useGardenStore, PlantName } from "../gardenStore";
 
 type GhostPlantProps = {
   raycaster: React.MutableRefObject<THREE.Raycaster | null>;
   plane: React.MutableRefObject<THREE.Mesh | null>;
-  dispatch: React.Dispatch<GardenReducerAction>;
   camera: React.MutableRefObject<Camera | null>;
 };
 
 const GhostPlant = (props: GhostPlantProps) => {
-  const { raycaster, plane, dispatch, camera } = props;
+  const { raycaster, plane, camera } = props;
   const [position, setPosition] = useState<[number, number, number]>([0, 0, 0]);
   const [rotation, setRotation] = useState<[number, number, number]>([0, 0, 0]);
   const [ghostType, setGhostType] = useState<PlantName>(PlantName.FLOWER);

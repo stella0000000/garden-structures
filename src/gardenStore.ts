@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { BambooStalkData, FlowerData, PlantCollection } from "./initialState";
 import { initialState } from "./initialState";
-import { OpName, PlantName } from "./Hooks/Reducers/gardenReducer";
 import {
   deleteAtIdxBamboo,
   deleteAtIdxFlower,
@@ -12,8 +11,32 @@ import {
   deleteAfterNodeBamboo,
   popBamboo,
   insertNodeBamboo,
+  getGardenWithMovedPlant,
   // deleteAfterNodeFlower,
 } from "./gardenStoreUtils";
+
+export enum Direction {
+  UP,
+  DOWN,
+  LEFT,
+  RIGHT,
+}
+
+export enum PlantName {
+  BAMBOO = "bamboo",
+  FLOWER = "flower",
+  // TREE = "tree",
+}
+
+export enum OpName {
+  ADDPLANT = "addPlant",
+  APPEND = "appendNode",
+  DELETEATINDEX = "deleteAtIndex",
+  INSERT = "insert",
+  DELETE = "delete",
+  POP = "pop",
+  UPDATE = "update",
+}
 
 const opMap = {
   [OpName.ADDPLANT]: {
@@ -33,6 +56,8 @@ interface StoreState {
   isDataMode: boolean;
   setIsDataMode: (arg: boolean) => void;
   plantCollection: PlantCollection;
+
+  movePlant: (plantIdx: number, direction: Direction) => void;
 
   addPlant: (
     plantType: PlantName,
@@ -63,6 +88,20 @@ export const useGardenStore = create<StoreState>((set) => ({
   setIsDataMode: (arg: boolean) => set(() => ({ isDataMode: arg })),
 
   plantCollection: initialState,
+
+  movePlant: (plantIdx, direction) => {
+    set(({ plantCollection }) => {
+      const newPlantCollection = getGardenWithMovedPlant(
+        plantCollection,
+        plantIdx,
+        direction
+      );
+
+      return {
+        plantCollection: newPlantCollection,
+      };
+    });
+  },
 
   addPlant: (plantType, position, rotation) => {
     const handler = opMap[OpName.ADDPLANT][plantType];
@@ -145,8 +184,6 @@ export const useGardenStore = create<StoreState>((set) => ({
           data: newPlant,
         },
       };
-
-      console.log({ newState });
 
       return { plantCollection: Object.values(newState) as PlantCollection };
     });

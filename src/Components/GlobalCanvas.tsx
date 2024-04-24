@@ -1,16 +1,16 @@
-import { useReducer, useRef } from "react";
+import { useRef } from "react";
 import { Canvas, ThreeEvent } from "@react-three/fiber";
 import { Box } from "@react-three/drei";
 import BambooStalk from "./BambooStalk";
 import Flower from "./Flower";
-import gardenReducer from "../Hooks/Reducers/gardenReducer";
+// import gardenReducer from "../Hooks/Reducers/gardenReducer";
 import * as THREE from "three";
 import PointerLockCameraControls from "./PointerLockCameraControls";
 import Ground from "./Ground";
 import GhostPlant from "./GhostPlant";
-import Constellation from "./Constellation";
+// import Constellation from "./Constellation";
 import { useGardenStore } from "../gardenStore";
-import { initialState } from "../initialState";
+// import { initialState } from "../initialState";
 
 export const camera = new THREE.PerspectiveCamera(45, 2, 1, 1000);
 
@@ -23,7 +23,7 @@ const GlobalCanvas = ({
   isPointerLock,
   setIsPointerLock,
 }: GlobalCanvasProps) => {
-  const [_, dispatch] = useReducer(gardenReducer, initialState);
+  // const [_, dispatch] = useReducer(gardenReducer, initialState);
 
   const {
     activePlant,
@@ -49,7 +49,6 @@ const GlobalCanvas = ({
               key={index}
               plantIndex={index}
               cameraRef={cameraRef}
-              gardenDispatch={dispatch}
               root={plant.data}
               position={plant.position}
               rotation={plant.rotation}
@@ -61,7 +60,6 @@ const GlobalCanvas = ({
             <Flower
               key={index}
               plantIndex={index}
-              gardenDispatch={dispatch}
               root={plant.data}
               position={plant.position}
               rotation={plant.rotation}
@@ -69,19 +67,19 @@ const GlobalCanvas = ({
           );
         }
 
-        case "ConstellationData": {
-          return (
-            <Constellation
-              key={index}
-              index={index}
-              gardenDispatch={dispatch}
-              data={plant.data}
-              position={plant.position}
-              rotation={plant.rotation}
-              isActive={activePlant === index}
-            />
-          );
-        }
+        // case "ConstellationData": {
+        //   return (
+        //     <Constellation
+        //       key={index}
+        //       index={index}
+        //       gardenDispatch={dispatch}
+        //       data={plant.data}
+        //       position={plant.position}
+        //       rotation={plant.rotation}
+        //       isActive={activePlant === index}
+        //     />
+        //   );
+        // }
         default: {
           // unreachable
           return <></>;
@@ -123,7 +121,7 @@ const GlobalCanvas = ({
       <GhostPlant
         raycaster={raycaster}
         plane={plane}
-        dispatch={dispatch}
+        // dispatch={dispatch}
         camera={cameraRef}
       />
       {children()}

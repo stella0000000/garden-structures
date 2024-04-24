@@ -1,10 +1,58 @@
 import { Vector3 } from "three";
 import { LinkedList } from "./DataStructures/LinkedList";
-import { BambooStalkData, FlowerData } from "./initialState";
+import { BambooStalkData, FlowerData, PlantCollection } from "./initialState";
 import {
   CircularlyLinkedListFromArray,
   DoublyCircularlyLinkedList,
 } from "./DataStructures/DoublyCircularlyLinkedList";
+import { Direction } from "./gardenStore";
+
+export const getGardenWithMovedPlant = (
+  plantCollection: PlantCollection,
+  plantIdx: number,
+  direction: Direction
+): PlantCollection => {
+  if (plantIdx === undefined) {
+    throw Error("Please select a plant to move a plant.");
+  }
+
+  const currentPlant = plantCollection[plantIdx];
+  let currentPosition = currentPlant.position.clone();
+
+  if (direction === Direction.UP) {
+    currentPosition.add(new Vector3(0, 0, -1));
+  } else if (direction === Direction.DOWN) {
+    currentPosition.add(new Vector3(0, 0, 1));
+  } else if (direction === Direction.LEFT) {
+    currentPosition.add(new Vector3(-1, 0, 0));
+  } else if (direction === Direction.RIGHT) {
+    currentPosition.add(new Vector3(1, 0, 0));
+  }
+
+  if (currentPlant.kind === "BambooStalkData") {
+    const newPlant: BambooStalkData = {
+      kind: currentPlant.kind,
+      data: currentPlant.data,
+      position: currentPosition,
+      rotation: currentPlant.rotation,
+    };
+    plantCollection[plantIdx] = newPlant;
+
+    return [...plantCollection];
+  } else if (currentPlant.kind === "FlowerData") {
+    const newPlant: FlowerData = {
+      kind: currentPlant.kind,
+      data: currentPlant.data,
+      position: currentPosition,
+      rotation: currentPlant.rotation,
+    };
+    plantCollection[plantIdx] = newPlant;
+
+    return [...plantCollection];
+  } else {
+    throw Error("Invalid action - plant accessed by index is wrong type.");
+  }
+};
 
 export const popBamboo = (bamboo: BambooStalkData) => {
   const oldBambooData = bamboo.data as LinkedList;

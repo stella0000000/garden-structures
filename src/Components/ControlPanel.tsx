@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 // import { LinkedList } from "../DataStructures/LinkedList";
 import { Html } from "@react-three/drei";
 import styled from "styled-components";
-import { Direction } from "../Hooks/Reducers/gardenReducer";
+import { Direction } from "../gardenStore";
 
 const Button = styled.button`
   /* width: auto; */

@@ -2,37 +2,24 @@ import { DoublyCircularlyLinkedList } from "../DataStructures/DoublyCircularlyLi
 import Node3D from "./Node3D";
 import useActiveItem from "../Hooks/useActiveItem";
 import ControlPanel from "./ControlPanel";
-import {
-  Direction,
-  GardenReducerAction,
-  OpName,
-  PlantName,
-} from "../Hooks/Reducers/gardenReducer";
 import { Euler, Vector3 } from "three";
 import {
   defaultFlowerHubMaterial,
   defaultFlowerPetalMaterial,
 } from "../materials";
 import { cone, cylinder } from "../geometries";
-import { useGardenStore } from "../gardenStore";
+import { useGardenStore, Direction, PlantName } from "../gardenStore";
 
 type FlowerProps = {
   root: DoublyCircularlyLinkedList;
   plantIndex: number;
-  gardenDispatch: React.Dispatch<GardenReducerAction>;
   position: Vector3;
   rotation: Vector3;
 };
 
-const Flower = ({
-  root,
-  position,
-  rotation,
-  gardenDispatch,
-  plantIndex,
-}: FlowerProps) => {
+const Flower = ({ root, position, rotation, plantIndex }: FlowerProps) => {
   const [activeNode, setActiveNode, unsetActiveNode] = useActiveItem();
-  const { activePlant, setActivePlant, deleteAtIdx, appendNode } =
+  const { activePlant, setActivePlant, deleteAtIdx, appendNode, movePlant } =
     useGardenStore();
   const isSelected = activePlant === plantIndex;
   const children: React.ReactNode[] = [];
@@ -86,14 +73,7 @@ const Flower = ({
   });
 
   const handleMove = (direction: Direction) => {
-    const action: GardenReducerAction = {
-      type: "movePlant",
-      payload: {
-        index: plantIndex,
-        direction,
-      },
-    };
-    gardenDispatch(action);
+    return movePlant(plantIndex, direction);
   };
 
   const handleAppend = () => {
