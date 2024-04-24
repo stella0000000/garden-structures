@@ -27,7 +27,8 @@ export enum PlantName {
 }
 
 export enum OpName {
-  APPEND = "append",
+  ADDPLANT = "addPlant",
+  APPEND = "appendNode",
   DELETEATINDEX = "deleteAtIndex",
   INSERT = "insert",
   DELETE = "delete",
@@ -56,7 +57,7 @@ export default function gardenReducer(
 
   /* GARDEN OPS */
   if (action.type === "gardenOperation") {
-    if (opName === OpName.APPEND) {
+    if (opName === OpName.ADDPLANT) {
       // MIGRATED TO gardenStore
       if (plantName === PlantName.FLOWER) {
         return appendFlower(plantCollection, action);
@@ -87,7 +88,7 @@ export default function gardenReducer(
 
     /* PLANT OPS */
   } else if (action.type === "plantOperation") {
-    if (opName === OpName.APPEND) {
+    if (opName === OpName.ADDPLANT) {
       if (plantName === PlantName.BAMBOO) {
         return appendBambooNode(plantCollection, action);
       } else if (plantName === PlantName.FLOWER) {

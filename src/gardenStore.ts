@@ -7,10 +7,16 @@ import {
   deleteAtIdxFlower,
   newBamboo,
   newFlower,
+  appendNodeFlower,
+  appendNodeBamboo,
+  deleteAfterNodeBamboo,
+  popBamboo,
+  insertNodeBamboo,
+  // deleteAfterNodeFlower,
 } from "./gardenStoreUtils";
 
 const opMap = {
-  [OpName.APPEND]: {
+  [OpName.ADDPLANT]: {
     [PlantName.BAMBOO]: newBamboo,
     [PlantName.FLOWER]: newFlower,
   },
@@ -18,15 +24,6 @@ const opMap = {
     [PlantName.BAMBOO]: deleteAtIdxBamboo,
     [PlantName.FLOWER]: deleteAtIdxFlower,
   },
-  // [OpName.POP]: {
-  //   [PlantName.BAMBOO]: popBamboo
-  // }.
-  // [OpName.INSERT]: {
-  //   [PlantName.BAMBOO]: insertBamboo
-  // },
-  // [OpName.DELETE]: {
-  // [PlantName.BAMBOO]: deleteAfterBamboo
-  // }
 };
 
 interface StoreState {
@@ -37,11 +34,20 @@ interface StoreState {
   setIsDataMode: (arg: boolean) => void;
   plantCollection: PlantCollection;
 
-  appendPlant: (
+  addPlant: (
     plantType: PlantName,
     position: [number, number, number],
     rotation: [number, number, number]
   ) => void;
+
+  deleteAfterNode: (plantIdx: number, nodeIdx: number) => void;
+
+  insertNode: (plantIdx: number, nodeIdx: number) => void;
+
+  popNode: (plantIdx: number) => void;
+
+  appendNode: (plantType: PlantName, plantIdx: number) => void;
+
   deleteAtIdx: (
     plantType: PlantName,
     plantIdx: number,
@@ -58,17 +64,95 @@ export const useGardenStore = create<StoreState>((set) => ({
 
   plantCollection: initialState,
 
-  appendPlant: (plantType, position, rotation) => {
-    const handler = opMap[OpName.APPEND][plantType];
+  addPlant: (plantType, position, rotation) => {
+    const handler = opMap[OpName.ADDPLANT][plantType];
 
     set(({ plantCollection }) => ({
       plantCollection: [...plantCollection, handler(position, rotation)],
     }));
   },
 
-  deleteAtIdx: (plantType, plantIdx, nodeIdx) => {
-    // const handler = opMap[OpName.DELETEATINDEX][plantType];
+  popNode: (plantIdx) => {
+    set(({ plantCollection }) => {
+      const newPlant = popBamboo(plantCollection[plantIdx] as BambooStalkData);
 
+      const newState = {
+        ...plantCollection,
+        [plantIdx]: {
+          ...plantCollection[plantIdx],
+          data: newPlant,
+        },
+      };
+
+      return { plantCollection: Object.values(newState) as PlantCollection };
+    });
+  },
+
+  insertNode: (plantIdx, nodeIdx) => {
+    set(({ plantCollection }) => {
+      const newPlant = insertNodeBamboo(
+        plantCollection[plantIdx] as BambooStalkData,
+        nodeIdx
+      );
+
+      const newState = {
+        ...plantCollection,
+        [plantIdx]: {
+          ...plantCollection[plantIdx],
+          data: newPlant,
+        },
+      };
+
+      return { plantCollection: Object.values(newState) as PlantCollection };
+    });
+  },
+
+  // BAMBOO ONLY
+  deleteAfterNode: (plantIdx, nodeIdx) => {
+    set(({ plantCollection }) => {
+      const newPlant = deleteAfterNodeBamboo(
+        plantCollection[plantIdx] as BambooStalkData,
+        nodeIdx
+      );
+
+      const newState = {
+        ...plantCollection,
+        [plantIdx]: {
+          ...plantCollection[plantIdx],
+          data: newPlant,
+        },
+      };
+
+      return { plantCollection: Object.values(newState) as PlantCollection };
+    });
+  },
+
+  appendNode: (plantType, plantIdx) => {
+    set(({ plantCollection }) => {
+      let newPlant;
+      if (plantType === PlantName.BAMBOO) {
+        newPlant = appendNodeBamboo(
+          plantCollection[plantIdx] as BambooStalkData
+        );
+      } else {
+        newPlant = appendNodeFlower(plantCollection[plantIdx] as FlowerData);
+      }
+
+      const newState = {
+        ...plantCollection,
+        [plantIdx]: {
+          ...plantCollection[plantIdx],
+          data: newPlant,
+        },
+      };
+
+      console.log({ newState });
+
+      return { plantCollection: Object.values(newState) as PlantCollection };
+    });
+  },
+
+  deleteAtIdx: (plantType, plantIdx, nodeIdx) => {
     set(({ plantCollection }) => {
       let newPlant;
       if (plantType === PlantName.BAMBOO) {

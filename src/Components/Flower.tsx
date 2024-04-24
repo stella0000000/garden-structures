@@ -32,7 +32,8 @@ const Flower = ({
   plantIndex,
 }: FlowerProps) => {
   const [activeNode, setActiveNode, unsetActiveNode] = useActiveItem();
-  const { activePlant, setActivePlant, deleteAtIdx } = useGardenStore();
+  const { activePlant, setActivePlant, deleteAtIdx, appendNode } =
+    useGardenStore();
   const isSelected = activePlant === plantIndex;
   const children: React.ReactNode[] = [];
 
@@ -96,19 +97,11 @@ const Flower = ({
   };
 
   const handleAppend = () => {
-    const action: GardenReducerAction = {
-      type: "plantOperation",
-      payload: {
-        plantName: PlantName.FLOWER,
-        opName: OpName.APPEND,
-        index: plantIndex,
-      },
-    };
-    gardenDispatch(action);
+    appendNode(PlantName.FLOWER, plantIndex);
   };
 
   const handleDeleteAtIndex = (nodeIdx: number) => {
-    return deleteAtIdx(PlantName.FLOWER, plantIndex, nodeIdx);
+    deleteAtIdx(PlantName.FLOWER, plantIndex, nodeIdx);
   };
 
   const moveOperations = {

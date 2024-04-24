@@ -33,8 +33,16 @@ const BambooStalk = ({
   cameraRef,
 }: BambooStalkProps) => {
   const [activeNode, setActiveNode, unsetActiveNode] = useActiveItem();
-  const { activePlant, setActivePlant, isDataMode, deleteAtIdx } =
-    useGardenStore();
+  const {
+    activePlant,
+    setActivePlant,
+    isDataMode,
+    deleteAtIdx,
+    appendNode,
+    deleteAfterNode,
+    insertNode,
+    popNode,
+  } = useGardenStore();
 
   const isSelected = activePlant === plantIndex;
   const children: React.ReactNode[] = [];
@@ -104,70 +112,23 @@ const BambooStalk = ({
   };
 
   const handleAppend = () => {
-    const action: GardenReducerAction = {
-      type: "plantOperation",
-      payload: {
-        plantName: PlantName.BAMBOO,
-        opName: OpName.APPEND,
-        index: plantIndex,
-      },
-    };
-    gardenDispatch(action);
+    appendNode(PlantName.BAMBOO, plantIndex);
   };
 
   const handlePop = () => {
-    const action: GardenReducerAction = {
-      type: "plantOperation",
-      payload: {
-        plantName: PlantName.BAMBOO,
-        opName: OpName.POP,
-        index: plantIndex,
-      },
-    };
-    gardenDispatch(action);
+    popNode(plantIndex);
   };
 
   const handleInsert = (nodeIndex: number) => {
-    const action: GardenReducerAction = {
-      type: "nodeOperation",
-      payload: {
-        plantName: PlantName.BAMBOO,
-        opName: OpName.INSERT,
-        index: plantIndex,
-        nodeIndex,
-      },
-    };
-    gardenDispatch(action);
+    insertNode(plantIndex, nodeIndex);
   };
 
-  const handleDelete = (nodeIndex: number) => {
-    const action: GardenReducerAction = {
-      type: "nodeOperation",
-      payload: {
-        plantName: PlantName.BAMBOO,
-        opName: OpName.DELETE,
-        index: plantIndex,
-        nodeIndex,
-      },
-    };
-    gardenDispatch(action);
+  const handleDeleteAfterIdx = () => {
+    deleteAfterNode(plantIndex, activeNode);
   };
-
-  // const handleDeleteAtIndex = (nodeIndex: number) => {
-  //   const action: GardenReducerAction = {
-  //     type: "nodeOperation",
-  //     payload: {
-  //       plantName: PlantName.BAMBOO,
-  //       opName: OpName.DELETEATINDEX,
-  //       index: plantIndex,
-  //       nodeIndex,
-  //     },
-  //   };
-  //   gardenDispatch(action);
-  // };
 
   const handleDeleteAtIdx = (nodeIndex: number) => {
-    return deleteAtIdx(PlantName.BAMBOO, plantIndex, nodeIndex);
+    deleteAtIdx(PlantName.BAMBOO, plantIndex, nodeIndex);
   };
 
   const moveOperations = {
@@ -181,7 +142,7 @@ const BambooStalk = ({
 
   const nodeOperations = {
     insert: handleInsert,
-    deleteAfter: handleDelete,
+    deleteAfter: handleDeleteAfterIdx,
     deleteAtIndex: handleDeleteAtIdx,
   };
 

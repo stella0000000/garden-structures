@@ -23,7 +23,7 @@ const GhostPlant = (props: GhostPlantProps) => {
   const [position, setPosition] = useState<[number, number, number]>([0, 0, 0]);
   const [rotation, setRotation] = useState<[number, number, number]>([0, 0, 0]);
   const [ghostType, setGhostType] = useState<PlantName>(PlantName.FLOWER);
-  const { appendPlant } = useGardenStore();
+  const { addPlant: appendPlant } = useGardenStore();
 
   // convert state to Euler
   // convert Euler to Quat
