@@ -68,7 +68,7 @@ export const deleteAfterNodeBamboo = (
 ) => {
   const oldBambooData = bamboo.data as LinkedList;
   const newLinkedList = oldBambooData.clone();
-  newLinkedList.delete(nodeIdx);
+  newLinkedList.delete(nodeIdx + 1);
 
   return newLinkedList;
 };

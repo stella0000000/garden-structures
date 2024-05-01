@@ -1,7 +1,6 @@
 import { LinkedList } from "../DataStructures/LinkedList";
 import Node3D from "./Node3D";
 import ControlPanel from "./ControlPanel";
-import useActiveItem from "../Hooks/useActiveItem";
 
 import { Euler, Vector3 } from "three";
 import { defaultBambooMaterial, defaultBambooRootMaterial } from "../materials";
@@ -26,10 +25,14 @@ const BambooStalk = ({
   plantIndex,
   cameraRef,
 }: BambooStalkProps) => {
-  const [activeNode, setActiveNode, unsetActiveNode] = useActiveItem();
   const {
     activePlant,
     setActivePlant,
+
+    activeNode,
+    setActiveNode,
+    deselectAllNodes,
+
     isDataMode,
     deleteAtIdx,
     appendNode,
@@ -39,7 +42,9 @@ const BambooStalk = ({
     movePlant,
   } = useGardenStore();
 
-  const isSelected = activePlant === plantIndex;
+  // true if the root is selected without a node
+  const isPlantSelected = activePlant === plantIndex;
+
   const children: React.ReactNode[] = [];
   let cumulativeHeight = 0;
 
@@ -58,12 +63,15 @@ const BambooStalk = ({
       cylinderArgs={[1, 2, 1]}
       isSelected={false}
       defaultMaterial={defaultBambooRootMaterial}
-      deselectAllNodes={unsetActiveNode}
+      deselectAllNodes={deselectAllNodes}
       selectParentPlant={selectThisBamboo}
-      selectNode={unsetActiveNode}
+      selectNode={deselectAllNodes}
     />
   );
   root.intoArray().forEach((nodeValue, nodeIndex) => {
+    const isNodeSelected =
+      nodeIndex === activeNode && plantIndex === activePlant;
+
     // plant nodes
     if (!isDataMode) {
       children.push(
@@ -74,10 +82,10 @@ const BambooStalk = ({
           rotation={new Vector3()}
           geometry={cylinder}
           cylinderArgs={[1, 1, nodeValue]}
-          isSelected={nodeIndex === activeNode}
+          isSelected={isNodeSelected}
           selectParentPlant={selectThisBamboo}
           defaultMaterial={defaultBambooMaterial}
-          deselectAllNodes={unsetActiveNode}
+          deselectAllNodes={deselectAllNodes}
           selectNode={() => setActiveNode(nodeIndex)}
         />
       );
@@ -143,7 +151,7 @@ const BambooStalk = ({
         {children}
       </group>
 
-      {isSelected && (
+      {isPlantSelected && (
         <ControlPanel
           activeNodeId={activeNode}
           moveOperations={moveOperations}

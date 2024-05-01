@@ -1,12 +1,8 @@
 import { FlattenedGraph, GraphNode } from "../DataStructures/Graph";
-import {
-  GardenReducerAction,
-  // PlantName,
-} from "../Hooks/Reducers/gardenReducer";
 import { Euler, Vector3 } from "three";
 // import * as THREE from "three";
 import Node3D from "./Node3D";
-import useActiveItem from "../Hooks/useActiveItem";
+// import useActiveItem from "../Hooks/useActiveItem";
 // import { Line, ScreenSpace } from "@react-three/drei";
 // import { ScreenSpace } from '@react-three/drei'
 import { useEffect, useState } from "react";
@@ -18,7 +14,6 @@ import { useGardenStore } from "../gardenStore";
 type ConstellationProps = {
   data: FlattenedGraph;
   index: number;
-  gardenDispatch: React.Dispatch<GardenReducerAction>;
   position: Vector3;
   rotation: Vector3;
   isActive: boolean;
@@ -36,8 +31,8 @@ const Constellation = ({
   rotation,
   isActive,
 }: ConstellationProps) => {
-  const [activeNode, setActiveNode, unsetActiveNode] = useActiveItem();
-  const { setActivePlant } = useGardenStore();
+  const { setActivePlant, activeNode, setActiveNode, deselectAllNodes } =
+    useGardenStore();
 
   const root = GraphNode.unflatten(data);
   const [search, setSearch] = useState(Search.BFS);
@@ -110,7 +105,7 @@ const Constellation = ({
         defaultMaterial={
           currStarIdx === nodeIndex ? starBlinkMaterial : defaultStarMaterial
         }
-        deselectAllNodes={unsetActiveNode}
+        deselectAllNodes={deselectAllNodes}
         selectNode={() => setActiveNode(nodeIndex)}
       />
     );

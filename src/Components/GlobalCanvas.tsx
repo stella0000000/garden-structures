@@ -3,14 +3,12 @@ import { Canvas, ThreeEvent } from "@react-three/fiber";
 import { Box } from "@react-three/drei";
 import BambooStalk from "./BambooStalk";
 import Flower from "./Flower";
-// import gardenReducer from "../Hooks/Reducers/gardenReducer";
 import * as THREE from "three";
 import PointerLockCameraControls from "./PointerLockCameraControls";
 import Ground from "./Ground";
 import GhostPlant from "./GhostPlant";
-// import Constellation from "./Constellation";
+import Constellation from "./Constellation";
 import { useGardenStore } from "../gardenStore";
-// import { initialState } from "../initialState";
 
 export const camera = new THREE.PerspectiveCamera(45, 2, 1, 1000);
 
@@ -67,19 +65,18 @@ const GlobalCanvas = ({
           );
         }
 
-        // case "ConstellationData": {
-        //   return (
-        //     <Constellation
-        //       key={index}
-        //       index={index}
-        //       gardenDispatch={dispatch}
-        //       data={plant.data}
-        //       position={plant.position}
-        //       rotation={plant.rotation}
-        //       isActive={activePlant === index}
-        //     />
-        //   );
-        // }
+        case "ConstellationData": {
+          return (
+            <Constellation
+              key={index}
+              index={index}
+              data={plant.data}
+              position={plant.position}
+              rotation={plant.rotation}
+              isActive={activePlant === index}
+            />
+          );
+        }
         default: {
           // unreachable
           return <></>;

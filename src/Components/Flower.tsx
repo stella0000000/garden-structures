@@ -1,6 +1,5 @@
 import { DoublyCircularlyLinkedList } from "../DataStructures/DoublyCircularlyLinkedList";
 import Node3D from "./Node3D";
-import useActiveItem from "../Hooks/useActiveItem";
 import ControlPanel from "./ControlPanel";
 import { Euler, Vector3 } from "three";
 import {
@@ -18,10 +17,19 @@ type FlowerProps = {
 };
 
 const Flower = ({ root, position, rotation, plantIndex }: FlowerProps) => {
-  const [activeNode, setActiveNode, unsetActiveNode] = useActiveItem();
-  const { activePlant, setActivePlant, deleteAtIdx, appendNode, movePlant } =
-    useGardenStore();
-  const isSelected = activePlant === plantIndex;
+  const {
+    activePlant,
+    setActivePlant,
+    deleteAtIdx,
+    appendNode,
+    movePlant,
+    activeNode,
+    setActiveNode,
+    deselectAllNodes,
+  } = useGardenStore();
+  // true if root but no node selected
+  const isPlantSelected = plantIndex === activePlant;
+
   const children: React.ReactNode[] = [];
 
   const selectThisFlower = () => {
@@ -39,14 +47,17 @@ const Flower = ({ root, position, rotation, plantIndex }: FlowerProps) => {
       cylinderArgs={[1, 2, 0.5]}
       isSelected={false}
       defaultMaterial={defaultFlowerHubMaterial}
-      deselectAllNodes={unsetActiveNode}
+      deselectAllNodes={deselectAllNodes}
       selectParentPlant={selectThisFlower}
-      selectNode={unsetActiveNode}
+      selectNode={deselectAllNodes}
     />
   );
 
   // petal nodes of the flower
   root.intoArray().forEach((nodeValue, nodeIndex) => {
+    const isNodeSelected =
+      nodeIndex === activeNode && plantIndex === activePlant;
+
     children.push(
       <Node3D
         value={nodeValue}
@@ -63,8 +74,8 @@ const Flower = ({ root, position, rotation, plantIndex }: FlowerProps) => {
         rotation={new Vector3(1.5, 0, 0)}
         geometry={cylinder}
         cylinderArgs={[nodeValue, nodeValue, 0.1]}
-        isSelected={isSelected}
-        deselectAllNodes={unsetActiveNode}
+        isSelected={isNodeSelected}
+        deselectAllNodes={deselectAllNodes}
         selectNode={() => setActiveNode(nodeIndex)}
         defaultMaterial={defaultFlowerPetalMaterial}
         selectParentPlant={selectThisFlower}
@@ -104,7 +115,7 @@ const Flower = ({ root, position, rotation, plantIndex }: FlowerProps) => {
       >
         {children}
       </group>
-      {isSelected && (
+      {isPlantSelected && (
         <ControlPanel
           activeNodeId={activeNode}
           moveOperations={moveOperations}
