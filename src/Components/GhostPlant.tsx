@@ -4,7 +4,6 @@ import GhostFlower from "./GhostFlower";
 
 import { Camera } from "three";
 import GhostBamboo from "./GhostBamboo";
-import Carousel from "./Carousel";
 import { useGardenStore, PlantName } from "../gardenStore";
 
 type GhostPlantProps = {
@@ -13,11 +12,10 @@ type GhostPlantProps = {
   camera: React.MutableRefObject<Camera | null>;
 };
 
-const GhostPlant = (props: GhostPlantProps) => {
-  const { raycaster, plane, camera } = props;
+const GhostPlant = ({ raycaster, plane, camera }: GhostPlantProps) => {
+  const { ghostType } = useGardenStore();
   const [position, setPosition] = useState<[number, number, number]>([0, 0, 0]);
   const [rotation, setRotation] = useState<[number, number, number]>([0, 0, 0]);
-  const [ghostType, setGhostType] = useState<PlantName>(PlantName.FLOWER);
   const { addPlant: appendPlant } = useGardenStore();
 
   // convert state to Euler
@@ -75,16 +73,6 @@ const GhostPlant = (props: GhostPlantProps) => {
       [position[0], position[1] + 5, position[2]],
       rotation
     );
-    // const action: GardenReducerAction = {
-    //   type: "gardenOperation",
-    //   payload: {
-    //     position: [position[0], position[1] + 5, position[2]],
-    //     plantName: ghostType,
-    //     opName: OpName.APPEND,
-    //     rotation: rotation,
-    //   },
-    // };
-    // dispatch(action);
   };
 
   return (
@@ -100,7 +88,6 @@ const GhostPlant = (props: GhostPlantProps) => {
           rotation={[rotation[0], rotation[1], rotation[2]]}
         />
       )}
-      <Carousel {...{ setGhostType, ghostType }} />
     </>
   );
 };

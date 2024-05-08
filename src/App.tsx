@@ -1,13 +1,12 @@
 import "./App.css";
 import GlobalCanvas from "./Components/GlobalCanvas";
 // import Instructions from "./Components/Instructions";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useGardenStore } from "./gardenStore";
 
 function App() {
   // const [instructionsVisible, setInstructionsVisible] = useState<boolean>(true);
-  const [isPointerLock, setIsPointerLock] = useState(false);
-  const { isDataMode, setIsDataMode } = useGardenStore();
+  const { isDataMode, setIsDataMode, isPointerLock } = useGardenStore();
 
   // setTimeout(() => {
   //   setInstructionsVisible(false);
@@ -27,14 +26,7 @@ function App() {
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
       {/* {instructionsVisible && <Instructions />} */}
-      <GlobalCanvas
-        {...{
-          isPointerLock,
-          setIsPointerLock: () => setIsPointerLock(false),
-          // isDataMode,
-          // setIsDataMode,
-        }}
-      />
+      <GlobalCanvas />
 
       {/* Invisible screen over the Canvas to enable PointerLockControls */}
       {!isPointerLock && (

@@ -10,8 +10,12 @@ type NodeNumberProps = {
   position: Vector3;
 };
 
-export const NodeNumber = (props: NodeNumberProps) => {
-  const { cameraRef, isDataMode, content, position } = props;
+export const NodeNumber = ({
+  cameraRef,
+  isDataMode,
+  content,
+  position,
+}: NodeNumberProps) => {
   const nodeRef = useRef<THREE.Mesh | null>(null);
 
   useFrame(() => {

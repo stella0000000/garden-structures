@@ -50,6 +50,15 @@ const opMap = {
 };
 
 interface StoreState {
+  ghostType: PlantName;
+  setGhostType: (arg: PlantName) => void;
+
+  isPointerLock: boolean;
+  setIsPointerLock: (arg: boolean) => void;
+
+  menuOpen: boolean;
+  setMenuOpen: (arg: boolean) => void;
+
   activePlant: number;
   setActivePlant: (num: number) => void;
   deselectAllPlants: () => void;
@@ -86,6 +95,15 @@ interface StoreState {
 }
 
 export const useGardenStore = create<StoreState>((set) => ({
+  isPointerLock: true,
+  setIsPointerLock: (arg: boolean) => set(() => ({ isPointerLock: arg })),
+
+  menuOpen: false,
+  setMenuOpen: (arg: boolean) => set(() => ({ menuOpen: arg })),
+
+  ghostType: PlantName.FLOWER,
+  setGhostType: (arg: PlantName) => set(() => ({ ghostType: arg })),
+
   activePlant: -1,
   setActivePlant: (idx: number) => set(() => ({ activePlant: idx })),
   deselectAllPlants: () => set(() => ({ activePlant: -1 })),

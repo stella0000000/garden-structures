@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Canvas, ThreeEvent } from "@react-three/fiber";
 import { Box } from "@react-three/drei";
 import BambooStalk from "./BambooStalk";
@@ -9,25 +9,37 @@ import Ground from "./Ground";
 import GhostPlant from "./GhostPlant";
 import Constellation from "./Constellation";
 import { useGardenStore } from "../gardenStore";
+import { MainMenu } from "./MainMenu";
 
 export const camera = new THREE.PerspectiveCamera(45, 2, 1, 1000);
 
-type GlobalCanvasProps = {
-  isPointerLock: boolean;
-  setIsPointerLock: () => void;
-};
-
-const GlobalCanvas = ({
-  isPointerLock,
-  setIsPointerLock,
-}: GlobalCanvasProps) => {
-  // const [_, dispatch] = useReducer(gardenReducer, initialState);
-
+const GlobalCanvas = ({}) => {
   const {
     activePlant,
     deselectAllPlants,
     plantCollection: plantData,
+    setMenuOpen,
+    menuOpen,
+    setIsPointerLock,
   } = useGardenStore();
+
+  useEffect(() => {
+    const handleKeypress = (e: KeyboardEvent) => {
+      if (e.key === "e") {
+        if (menuOpen) {
+          setMenuOpen(false);
+          setIsPointerLock(true);
+        } else {
+          setMenuOpen(true);
+          setIsPointerLock(false);
+        }
+      }
+    };
+
+    addEventListener("keypress", handleKeypress);
+    // console.log(plantNames[selectedIdx]);
+    return () => removeEventListener("keypress", handleKeypress);
+  }, [menuOpen, setMenuOpen]);
 
   const cameraRef = useRef(camera);
   const raycaster = useRef(new THREE.Raycaster());
@@ -90,8 +102,6 @@ const GlobalCanvas = ({
       <PointerLockCameraControls
         cameraRef={cameraRef}
         planting={activePlant !== -1}
-        isPointerLock={isPointerLock}
-        setIsPointerLock={setIsPointerLock}
         deselectAllPlants={deselectAllPlants}
         updateRaycaster={updateRaycaster}
       />
@@ -115,13 +125,9 @@ const GlobalCanvas = ({
         }
       />
       <Ground raycaster={raycaster} plane={plane} />
-      <GhostPlant
-        raycaster={raycaster}
-        plane={plane}
-        // dispatch={dispatch}
-        camera={cameraRef}
-      />
+      <GhostPlant raycaster={raycaster} plane={plane} camera={cameraRef} />
       {children()}
+      {menuOpen && <MainMenu />}
     </Canvas>
   );
 };
