@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { useGardenStore } from "../gardenStore";
+import { useEffect } from "react";
 
 const Screen = styled.div`
   height: 100vh;
@@ -26,8 +28,21 @@ const Box = styled.div`
 `;
 
 const Instructions = () => {
+  const { setInstructionsVisible, instructionsVisible, setIsPointerLock } =
+    useGardenStore();
+
+  useEffect(() => {
+    console.log({ instructionsVisible });
+  }, [instructionsVisible]);
+
+  const handleClick = () => {
+    console.log("clickity");
+    setInstructionsVisible(false);
+    setIsPointerLock(true);
+  };
+
   return (
-    <Screen>
+    <Screen onClick={handleClick}>
       <Wrapper>
         <Box>
           Direction: move mouse<br></br>

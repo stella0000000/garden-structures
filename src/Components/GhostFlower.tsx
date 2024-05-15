@@ -5,11 +5,10 @@ import { Euler } from "three";
 type GhostFlowerProps = {
   position: [number, number, number];
   rotation: [number, number, number];
+  // onClick: (e: any) => void;
 };
 
-const GhostFlower = (props: GhostFlowerProps) => {
-  const { position, rotation } = props;
-
+const GhostFlower = ({ position, rotation }: GhostFlowerProps) => {
   const root = [2, 2, 2, 2, 2, 2];
   const children = [];
 
@@ -30,6 +29,7 @@ const GhostFlower = (props: GhostFlowerProps) => {
       args={[1, 2, 0.5]}
       material={ghostMaterial}
       rotation={new Euler(1.5, 0, 0)}
+      // onClick={onClick}
     />
   );
 
@@ -48,6 +48,7 @@ const GhostFlower = (props: GhostFlowerProps) => {
         ]}
         args={[nodeValue, nodeValue, 0.1]}
         material={ghostMaterial}
+        // onClick={onClick}
       />
     );
   });
@@ -62,3 +63,5 @@ const GhostFlower = (props: GhostFlowerProps) => {
 };
 
 export default GhostFlower;
+
+// replace keypress - g - with clicking to plant

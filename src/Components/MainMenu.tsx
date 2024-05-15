@@ -52,7 +52,9 @@ export const MainMenu = () => {
     >
       <StyledMenu>
         {plantNames.map((item, i) => {
-          const handleClick = () => {
+          const handleClick = (e: any) => {
+            e.stopPropagation();
+            e.preventDefault();
             setMenuOpen(false);
             setIsPointerLock(true);
             setGhostType(item);

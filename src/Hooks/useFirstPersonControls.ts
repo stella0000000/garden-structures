@@ -16,10 +16,6 @@ const useFirstPersonControls = () => {
     right: false,
   });
 
-  // useEffect(() => {
-  //   console.log({ keyStates })
-  // }, [keyStates])
-
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       let key = e.key;
@@ -27,9 +23,7 @@ const useFirstPersonControls = () => {
         produce((draft) => {
           if (key === "w") draft.forward = true;
           if (key === "s") draft.back = true;
-          if (key === "a") {
-            draft.left = true;
-          }
+          if (key === "a") draft.left = true;
           if (key === "d") draft.right = true;
         })
       );

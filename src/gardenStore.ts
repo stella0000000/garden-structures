@@ -50,8 +50,11 @@ const opMap = {
 };
 
 interface StoreState {
-  ghostType: PlantName;
-  setGhostType: (arg: PlantName) => void;
+  instructionsVisible: boolean;
+  setInstructionsVisible: (arg: boolean) => void;
+
+  ghostType: PlantName | undefined;
+  setGhostType: (arg: PlantName | undefined) => void;
 
   isPointerLock: boolean;
   setIsPointerLock: (arg: boolean) => void;
@@ -95,25 +98,30 @@ interface StoreState {
 }
 
 export const useGardenStore = create<StoreState>((set) => ({
-  isPointerLock: true,
-  setIsPointerLock: (arg: boolean) => set(() => ({ isPointerLock: arg })),
+  instructionsVisible: true,
+  setInstructionsVisible: (arg) => set(() => ({ instructionsVisible: arg })),
+
+  isPointerLock: false,
+  setIsPointerLock: (arg) => set(() => ({ isPointerLock: arg })),
 
   menuOpen: false,
-  setMenuOpen: (arg: boolean) => set(() => ({ menuOpen: arg })),
+  setMenuOpen: (arg) => set(() => ({ menuOpen: arg })),
 
-  ghostType: PlantName.FLOWER,
-  setGhostType: (arg: PlantName) => set(() => ({ ghostType: arg })),
+  ghostType: undefined,
+  setGhostType: (arg) => set(() => ({ ghostType: arg })),
 
   activePlant: -1,
-  setActivePlant: (idx: number) => set(() => ({ activePlant: idx })),
+  setActivePlant: (idx) =>
+    set(() => ({ activePlant: idx, isPointerLock: idx !== -1 && false })),
   deselectAllPlants: () => set(() => ({ activePlant: -1 })),
 
   activeNode: -1,
-  setActiveNode: (idx: number) => set(() => ({ activeNode: idx })),
+  setActiveNode: (idx) =>
+    set(() => ({ activeNode: idx, isPointerLock: idx !== -1 && false })),
   deselectAllNodes: () => set(() => ({ activeNode: -1 })),
 
   isDataMode: false,
-  setIsDataMode: (arg: boolean) => set(() => ({ isDataMode: arg })),
+  setIsDataMode: (arg) => set(() => ({ isDataMode: arg })),
 
   plantCollection: initialState,
 

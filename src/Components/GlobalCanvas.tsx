@@ -21,15 +21,18 @@ const GlobalCanvas = ({}) => {
     setMenuOpen,
     menuOpen,
     setIsPointerLock,
+    ghostType,
   } = useGardenStore();
 
   useEffect(() => {
     const handleKeypress = (e: KeyboardEvent) => {
       if (e.key === "e") {
         if (menuOpen) {
+          // closing the menu
           setMenuOpen(false);
           setIsPointerLock(true);
         } else {
+          // opening the menu
           setMenuOpen(true);
           setIsPointerLock(false);
         }
@@ -37,7 +40,6 @@ const GlobalCanvas = ({}) => {
     };
 
     addEventListener("keypress", handleKeypress);
-    // console.log(plantNames[selectedIdx]);
     return () => removeEventListener("keypress", handleKeypress);
   }, [menuOpen, setMenuOpen]);
 
@@ -125,7 +127,9 @@ const GlobalCanvas = ({}) => {
         }
       />
       <Ground raycaster={raycaster} plane={plane} />
-      <GhostPlant raycaster={raycaster} plane={plane} camera={cameraRef} />
+      {ghostType && (
+        <GhostPlant raycaster={raycaster} plane={plane} camera={cameraRef} />
+      )}
       {children()}
       {menuOpen && <MainMenu />}
     </Canvas>
