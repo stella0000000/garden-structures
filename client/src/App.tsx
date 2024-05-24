@@ -1,12 +1,23 @@
 import "./App.css";
 import GlobalCanvas from "./Components/GlobalCanvas";
 import Instructions from "./Components/Instructions";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useGardenStore } from "./gardenStore";
 
 function App() {
   const { isDataMode, setIsDataMode, isPointerLock, instructionsVisible } =
     useGardenStore();
+
+  // testing server
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    fetch("/api")
+      .then((res) => res.json())
+      .then((data) => setData(data.message));
+  }, []);
+  useEffect(() => {
+    console.log({ data });
+  }, [data]);
 
   useEffect(() => {
     document.addEventListener("keypress", handleKeyPress);
