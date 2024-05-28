@@ -11,7 +11,7 @@ function App() {
   // testing server
   const [data, setData] = useState(null);
   useEffect(() => {
-    fetch("/api")
+    fetch("/plants")
       .then((res) => res.json())
       .then((data) => setData(data.message));
   }, []);
