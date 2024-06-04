@@ -13,7 +13,7 @@ const router = express.Router();
 
 // This section will help you get a list of all the records.
 router.get("/", async (req, res) => {
-  console.log("plants");
+  console.log("plants!!");
   let collection = await db.collection("plants");
   let results = await collection.find({}).toArray();
   console.log(results);

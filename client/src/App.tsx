@@ -3,21 +3,56 @@ import GlobalCanvas from "./Components/GlobalCanvas";
 import Instructions from "./Components/Instructions";
 import { useEffect, useState } from "react";
 import { useGardenStore } from "./gardenStore";
+import { Vector3 } from "three";
+import { LinkedList } from "./DataStructures/LinkedList";
+import { CircularlyLinkedListFromArray } from "./DataStructures/DoublyCircularlyLinkedList";
+import { initialState } from "./initialState";
+
+type PlantDBData = {
+  _id: string;
+  type: string;
+  data: number[];
+  position: number[];
+  rotation: number[];
+};
 
 function App() {
-  const { isDataMode, setIsDataMode, isPointerLock, instructionsVisible } =
-    useGardenStore();
+  const {
+    isDataMode,
+    setIsDataMode,
+    isPointerLock,
+    instructionsVisible,
+    setPlantCollection,
+    plantCollection,
+  } = useGardenStore();
 
-  // testing server
-  const [data, setData] = useState(null);
+  const convertPlantToData = ({
+    _id,
+    type,
+    data,
+    position,
+    rotation,
+  }: PlantDBData) => ({
+    _id,
+    kind: type,
+    data:
+      type === "bambooStalkData"
+        ? LinkedList.fromArray(data)
+        : CircularlyLinkedListFromArray(data),
+    position: new Vector3(position[0], position[1], position[2]),
+    rotation: new Vector3(rotation[0], rotation[1], rotation[2]),
+  });
+
   useEffect(() => {
     fetch("/plants")
       .then((res) => res.json())
-      .then((data) => setData(data.message));
+      .then((data) => setPlantCollection(data.map(convertPlantToData)));
   }, []);
+
   useEffect(() => {
-    console.log({ data });
-  }, [data]);
+    console.log({ plantCollection });
+    console.log({ initialState });
+  }, [plantCollection]);
 
   useEffect(() => {
     document.addEventListener("keypress", handleKeyPress);

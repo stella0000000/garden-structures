@@ -37,12 +37,12 @@ export type PlantCollection = (
   | ConstellationData
 )[];
 
-const testingBamboo: BambooStalkData = {
-  kind: "BambooStalkData",
-  data: LinkedList.fromArray([2, 8, 12, 2]),
-  position: new Vector3(0, 0, 0),
-  rotation: new Vector3(0, 0, 0),
-};
+// const testingBamboo: BambooStalkData = {
+//   kind: "BambooStalkData",
+//   data: LinkedList.fromArray([2, 8, 12, 2]),
+//   position: new Vector3(0, 0, 0),
+//   rotation: new Vector3(0, 0, 0),
+// };
 
 const testingBamboo2: BambooStalkData = {
   kind: "BambooStalkData",
@@ -57,12 +57,12 @@ const testingBamboo3: BambooStalkData = {
   rotation: new Vector3(0, 0, 0),
 };
 
-const testingFlower1: FlowerData = {
-  kind: "FlowerData",
-  data: CircularlyLinkedListFromArray([2, 2, 2, 2, 2, 2]),
-  position: new Vector3(12, 4, 2),
-  rotation: new Vector3(0, 0, 0),
-};
+// const testingFlower1: FlowerData = {
+//   kind: "FlowerData",
+//   data: CircularlyLinkedListFromArray([2, 2, 2, 2, 2, 2]),
+//   position: new Vector3(12, 4, 2),
+//   rotation: new Vector3(0, 0, 0),
+// };
 
 const testingConstellation1: ConstellationData = {
   kind: "ConstellationData",
@@ -72,9 +72,9 @@ const testingConstellation1: ConstellationData = {
 };
 
 export const initialState: PlantCollection = [
-  testingBamboo,
+  // testingBamboo,
   testingBamboo2,
   testingBamboo3,
-  testingFlower1,
+  // testingFlower1,
   testingConstellation1,
 ];

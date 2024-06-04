@@ -72,7 +72,9 @@ interface StoreState {
 
   isDataMode: boolean;
   setIsDataMode: (arg: boolean) => void;
+
   plantCollection: PlantCollection;
+  setPlantCollection: (allPlants: PlantCollection) => void;
 
   movePlant: (plantIdx: number, direction: Direction) => void;
 
@@ -124,6 +126,7 @@ export const useGardenStore = create<StoreState>((set) => ({
   setIsDataMode: (arg) => set(() => ({ isDataMode: arg })),
 
   plantCollection: initialState,
+  setPlantCollection: (allPlants) => set({ plantCollection: allPlants }),
 
   movePlant: (plantIdx, direction) => {
     set(({ plantCollection }) => {
