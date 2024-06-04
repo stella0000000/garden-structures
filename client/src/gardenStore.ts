@@ -145,6 +145,8 @@ export const useGardenStore = create<StoreState>((set) => ({
   addPlant: (plantType, position, rotation) => {
     const handler = opMap[OpName.ADDPLANT][plantType];
 
+    // API CALL??
+
     set(({ plantCollection }) => ({
       plantCollection: [...plantCollection, handler(position, rotation)],
     }));
@@ -207,14 +209,16 @@ export const useGardenStore = create<StoreState>((set) => ({
 
   appendNode: (plantType, plantIdx) => {
     set(({ plantCollection }) => {
-      let newPlant;
-      if (plantType === PlantName.BAMBOO) {
-        newPlant = appendNodeBamboo(
-          plantCollection[plantIdx] as BambooStalkData
-        );
-      } else {
-        newPlant = appendNodeFlower(plantCollection[plantIdx] as FlowerData);
-      }
+      const newPlant =
+        plantType === PlantName.BAMBOO
+          ? appendNodeBamboo(plantCollection[plantIdx] as BambooStalkData)
+          : appendNodeFlower(plantCollection[plantIdx] as FlowerData);
+
+      // Convert to arrays for DB
+      const DBArray = newPlant.intoArray();
+      console.log(DBArray);
+      // something like this
+      // fetch(`/plants/set/${plantIdx}`)
 
       const newState = {
         ...plantCollection,

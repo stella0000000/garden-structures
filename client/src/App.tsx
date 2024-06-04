@@ -51,7 +51,6 @@ function App() {
 
   useEffect(() => {
     console.log({ plantCollection });
-    console.log({ initialState });
   }, [plantCollection]);
 
   useEffect(() => {

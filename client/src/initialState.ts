@@ -6,7 +6,8 @@ import {
 import { FlattenedGraph, buildGraph } from "./DataStructures/Graph";
 import { LinkedList } from "./DataStructures/LinkedList";
 
-type Transform3D = {
+type BaseData = {
+  _id: string;
   position: Vector3;
   rotation: Vector3;
 };
@@ -16,20 +17,20 @@ export type BambooStalk = {
   data: LinkedList;
 };
 
-export type BambooStalkData = BambooStalk & Transform3D;
+export type BambooStalkData = BambooStalk & BaseData;
 
 export type Flower = {
   kind: "FlowerData";
   data: DoublyCircularlyLinkedList;
 };
-export type FlowerData = Flower & Transform3D;
+export type FlowerData = Flower & BaseData;
 
 export type Constellation = {
   kind: "ConstellationData";
   data: FlattenedGraph;
 };
 
-export type ConstellationData = Constellation & Transform3D;
+export type ConstellationData = Constellation & BaseData;
 
 export type PlantCollection = (
   | BambooStalkData
@@ -37,34 +38,39 @@ export type PlantCollection = (
   | ConstellationData
 )[];
 
-// const testingBamboo: BambooStalkData = {
-//   kind: "BambooStalkData",
-//   data: LinkedList.fromArray([2, 8, 12, 2]),
-//   position: new Vector3(0, 0, 0),
-//   rotation: new Vector3(0, 0, 0),
-// };
+const testingBamboo: BambooStalkData = {
+  _id: "superbamboo1",
+  kind: "BambooStalkData",
+  data: LinkedList.fromArray([2, 8, 12, 2]),
+  position: new Vector3(0, 0, 0),
+  rotation: new Vector3(0, 0, 0),
+};
 
 const testingBamboo2: BambooStalkData = {
+  _id: "ultimatekingherobamboo2",
   kind: "BambooStalkData",
   data: LinkedList.fromArray([4, 6, 8, 2]),
   position: new Vector3(4, 0, 1),
   rotation: new Vector3(0, 0, 0),
 };
 const testingBamboo3: BambooStalkData = {
+  _id: "lightningbamboo3",
   kind: "BambooStalkData",
   data: LinkedList.fromArray([2, 6, 4, 2]),
   position: new Vector3(2, 0, 2),
   rotation: new Vector3(0, 0, 0),
 };
 
-// const testingFlower1: FlowerData = {
-//   kind: "FlowerData",
-//   data: CircularlyLinkedListFromArray([2, 2, 2, 2, 2, 2]),
-//   position: new Vector3(12, 4, 2),
-//   rotation: new Vector3(0, 0, 0),
-// };
+const testingFlower1: FlowerData = {
+  _id: "prettyflower1",
+  kind: "FlowerData",
+  data: CircularlyLinkedListFromArray([2, 2, 2, 2, 2, 2]),
+  position: new Vector3(12, 4, 2),
+  rotation: new Vector3(0, 0, 0),
+};
 
 const testingConstellation1: ConstellationData = {
+  _id: "dangerousflower2",
   kind: "ConstellationData",
   data: buildGraph().flatten(),
   position: new Vector3(),
@@ -72,9 +78,9 @@ const testingConstellation1: ConstellationData = {
 };
 
 export const initialState: PlantCollection = [
-  // testingBamboo,
+  testingBamboo,
   testingBamboo2,
   testingBamboo3,
-  // testingFlower1,
+  testingFlower1,
   testingConstellation1,
 ];
