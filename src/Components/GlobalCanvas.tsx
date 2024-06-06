@@ -89,7 +89,7 @@ const GlobalCanvas = ({
   };
 
   return (
-    <Canvas camera={cameraRef.current}>
+    <Canvas camera={cameraRef.current} style={{ background: "#20a7db" }}>
       <PointerLockCameraControls
         cameraRef={cameraRef}
         planting={activePlant !== -1}

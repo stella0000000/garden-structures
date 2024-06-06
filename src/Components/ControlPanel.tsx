@@ -18,6 +18,7 @@ const Button = styled.button`
   align-items: center;
   font-size: 14px;
   color: #e4e4e4;
+  background-color: black;
 
   &:hover {
     border: 1px solid #ddff00;
@@ -64,6 +65,7 @@ const Arrow = styled.button`
   background: transparent;
   color: #e4e4e4;
   cursor: default;
+  background-color: black;
 
   &:hover {
     border: 1px solid #ddff00;

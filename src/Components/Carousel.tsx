@@ -12,6 +12,7 @@ const Wrapper = styled.div`
   bottom: 0px;
   column-gap: 30px;
   align-items: center;
+  background-color: black;
 `;
 
 const Button = styled.div`
