@@ -40,6 +40,7 @@ const BambooStalk = ({
   } = useGardenStore();
 
   const isSelected = activePlant === plantIndex;
+
   const children: React.ReactNode[] = [];
   let cumulativeHeight = 0;
 

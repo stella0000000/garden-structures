@@ -21,7 +21,9 @@ const Flower = ({ root, position, rotation, plantIndex }: FlowerProps) => {
   const [activeNode, setActiveNode, unsetActiveNode] = useActiveItem();
   const { activePlant, setActivePlant, deleteAtIdx, appendNode, movePlant } =
     useGardenStore();
+
   const isSelected = activePlant === plantIndex;
+
   const children: React.ReactNode[] = [];
 
   const selectThisFlower = () => {
@@ -63,7 +65,7 @@ const Flower = ({ root, position, rotation, plantIndex }: FlowerProps) => {
         rotation={new Vector3(1.5, 0, 0)}
         geometry={cylinder}
         cylinderArgs={[nodeValue, nodeValue, 0.1]}
-        isSelected={isSelected}
+        isSelected={nodeIndex === activeNode}
         deselectAllNodes={unsetActiveNode}
         selectNode={() => setActiveNode(nodeIndex)}
         defaultMaterial={defaultFlowerPetalMaterial}

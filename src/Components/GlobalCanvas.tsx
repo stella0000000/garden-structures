@@ -118,12 +118,15 @@ const GlobalCanvas = ({
         }
       />
       <Ground raycaster={raycaster} plane={plane} />
-      <GhostPlant
-        raycaster={raycaster}
-        plane={plane}
-        // dispatch={dispatch}
-        camera={cameraRef}
-      />
+      {activePlant === -1 && (
+        <GhostPlant
+          raycaster={raycaster}
+          plane={plane}
+          // dispatch={dispatch}
+          camera={cameraRef}
+        />
+      )}
+
       {children()}
     </Canvas>
   );

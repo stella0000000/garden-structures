@@ -13,6 +13,20 @@ const Wrapper = styled.div`
   column-gap: 30px;
   align-items: center;
   background-color: black;
+  position: relative;
+  top: 100dvh;
+  transform: translateY(-100%);
+`;
+
+const Reticle = styled.div`
+  width: 20px;
+  height: 20px;
+  border: 1px solid white;
+  border-radius: 50%;
+  position: fixed;
+  left: 50dvw;
+  top: 50dvh;
+  transform: translate(-50%, -50%);
 `;
 
 const Button = styled.div`
@@ -114,7 +128,7 @@ const Carousel = (props: CarouselProps) => {
   return (
     <Html
       calculatePosition={() => {
-        return [0, window.innerHeight - 200, 0];
+        return [0, 0, 0];
       }}
     >
       <Wrapper>
@@ -127,6 +141,7 @@ const Carousel = (props: CarouselProps) => {
           </Button>
         ))}
       </Wrapper>
+      <Reticle />
     </Html>
   );
 };
