@@ -118,7 +118,13 @@ const ControlPanel = ({
   nodeOperations,
 }: // data,
 ControlPanelProps) => {
-  const { setIsPointerLock, setActiveNode, setActivePlant } = useGardenStore();
+  const {
+    setIsPointerLock,
+    setActiveNode,
+    setActivePlant,
+    menuOpen,
+    setMenuOpen,
+  } = useGardenStore();
 
   const [controlsHeight, setControlsHeight] = useState(0);
   const [controlsWidth, setControlsWidth] = useState(0);
@@ -136,11 +142,18 @@ ControlPanelProps) => {
     });
   }, []);
 
+  useEffect(() => {
+    setIsPointerLock(false);
+    return () => {
+      setIsPointerLock(true);
+    };
+  }, []);
+
   const handleClick = () => {
     // e.preventDefault();
     // e.stopPropagation();
     console.log("screen clicked");
-    setIsPointerLock(true);
+    // setIsPointerLock(true);
     setActiveNode(-1);
     setActivePlant(-1);
   };
@@ -153,7 +166,7 @@ ControlPanelProps) => {
       }}
     >
       <Screen onClick={handleClick}>
-        <ArrowWrap>
+        {/* <ArrowWrap>
           <Arrow
             onPointerDown={(e) => {
               e.stopPropagation();
@@ -189,7 +202,7 @@ ControlPanelProps) => {
           >
             ↓
           </Arrow>
-        </ArrowWrap>
+        </ArrowWrap> */}
         <PositionWrap ref={positionRef}>
           {Object.keys(plantOperations).map((opName, index) => {
             const operation = plantOperations[opName];
@@ -230,3 +243,13 @@ ControlPanelProps) => {
 };
 
 export default ControlPanel;
+
+/*
+click on node, or plant
+- delete, append, pop, etc buttons
+- lose pointerLock
+- move button
+  - engage pointerlock
+  - lock plant with "mouse"
+  - click to place plant in new location
+*/

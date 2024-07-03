@@ -1,6 +1,7 @@
 import { Html } from "@react-three/drei";
 import styled from "styled-components";
 import { useGardenStore, PlantName } from "../gardenStore";
+import { useEffect } from "react";
 
 const StyledMenu = styled.div`
   width: 100vw;
@@ -35,14 +36,19 @@ const Button = styled.button`
 
   @media only screen and (max-width: 700px) {
     display: none;
-    /* height: 30px;
-    font-size: 12px; */
   }
 `;
 
 export const MainMenu = () => {
   const plantNames = Object.values(PlantName);
   const { setGhostType, setMenuOpen, setIsPointerLock } = useGardenStore();
+
+  useEffect(() => {
+    setIsPointerLock(false);
+    return () => {
+      setIsPointerLock(true);
+    };
+  }, []);
 
   return (
     <Html

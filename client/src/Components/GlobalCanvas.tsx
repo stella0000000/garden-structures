@@ -13,28 +13,24 @@ import { MainMenu } from "./MainMenu";
 
 export const camera = new THREE.PerspectiveCamera(45, 2, 1, 1000);
 
-const GlobalCanvas = ({}) => {
+const GlobalCanvas = () => {
   const {
     activePlant,
     deselectAllPlants,
     plantCollection: plantData,
     setMenuOpen,
     menuOpen,
-    setIsPointerLock,
     ghostType,
   } = useGardenStore();
 
   useEffect(() => {
     const handleKeypress = (e: KeyboardEvent) => {
       if (e.key === "e") {
-        if (menuOpen) {
-          // closing the menu
-          setMenuOpen(false);
-          setIsPointerLock(true);
-        } else {
-          // opening the menu
+        // toggle main menu on off
+        if (!menuOpen) {
           setMenuOpen(true);
-          setIsPointerLock(false);
+        } else {
+          setMenuOpen(false);
         }
       }
     };
