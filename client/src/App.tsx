@@ -1,12 +1,13 @@
 import "./App.css";
 import GlobalCanvas from "./Components/GlobalCanvas";
 import Instructions from "./Components/Instructions";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useGardenStore } from "./gardenStore";
 import { Vector3 } from "three";
 import { LinkedList } from "./DataStructures/LinkedList";
 import { CircularlyLinkedListFromArray } from "./DataStructures/DoublyCircularlyLinkedList";
 import { initialState } from "./initialState";
+import { is } from "@react-three/fiber/dist/declarations/src/core/utils";
 
 type PlantDBData = {
   _id: string;
@@ -20,10 +21,10 @@ function App() {
   const {
     isDataMode,
     setIsDataMode,
-    isPointerLock,
-    instructionsVisible,
+    menuOpen,
+    setMenuOpen,
     setPlantCollection,
-    plantCollection,
+    isPointerLock,
   } = useGardenStore();
 
   const convertPlantToData = ({
@@ -36,41 +37,38 @@ function App() {
     _id,
     kind: type,
     data:
-      type === "bambooStalkData"
+      type === "BambooStalkData"
         ? LinkedList.fromArray(data)
         : CircularlyLinkedListFromArray(data),
     position: new Vector3(position[0], position[1], position[2]),
     rotation: new Vector3(rotation[0], rotation[1], rotation[2]),
   });
 
-  useEffect(() => {
-    fetch("/plants")
-      .then((res) => res.json())
-      .then((data) => setPlantCollection(data.map(convertPlantToData)));
-  }, []);
+  // useEffect(() => {
+  //   fetch("/plants")
+  //     .then((res) => res.json())
+  //     .then((data) => setPlantCollection(data.map(convertPlantToData)));
+  // }, []);
 
   useEffect(() => {
-    console.log({ plantCollection });
-  }, [plantCollection]);
-
-  useEffect(() => {
-    document.addEventListener("keypress", handleKeyPress);
-    return () => {
-      document.removeEventListener("keypress", handleKeyPress);
-    };
-  }, [isDataMode]);
+    document.addEventListener("keydown", handleKeyPress);
+    return () => document.removeEventListener("keydown", handleKeyPress);
+  }, [isDataMode, menuOpen]);
 
   const handleKeyPress = (e: KeyboardEvent) => {
-    if (e.key == "m") setIsDataMode(!isDataMode);
+    if (e.key == "m") {
+      setIsDataMode(!isDataMode);
+    } else if (e.key == "e") {
+      setMenuOpen(!menuOpen);
+    }
   };
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
-      {instructionsVisible && <Instructions />}
       <GlobalCanvas />
 
       {/* Invisible screen over the Canvas to enable PointerLockControls */}
-      {!isPointerLock && (
+      {/* {!isPointerLock && (
         <div
           style={{
             top: "0px",
@@ -79,7 +77,7 @@ function App() {
             height: "100vh",
           }}
         ></div>
-      )}
+      )} */}
     </div>
   );
 }

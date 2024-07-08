@@ -115,14 +115,6 @@ const Flower = ({ root, position, rotation, plantIndex }: FlowerProps) => {
       >
         {children}
       </group>
-      {isPlantSelected && (
-        <ControlPanel
-          activeNodeId={activeNode}
-          moveOperations={moveOperations}
-          plantOperations={plantOperations}
-          nodeOperations={nodeOperations}
-        />
-      )}
     </>
   );
 };

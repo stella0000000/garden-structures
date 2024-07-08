@@ -8,7 +8,6 @@ import { cone, cylinder } from "../geometries";
 import { Camera } from "three";
 import { NodeNumber } from "./NodeNumber";
 import { useGardenStore, Direction, PlantName } from "../gardenStore";
-// import { useEffect } from "react";
 
 type BambooStalkProps = {
   root: LinkedList;
@@ -150,15 +149,6 @@ const BambooStalk = ({
       >
         {children}
       </group>
-
-      {isPlantSelected && (
-        <ControlPanel
-          activeNodeId={activeNode}
-          moveOperations={moveOperations}
-          plantOperations={plantOperations}
-          nodeOperations={nodeOperations}
-        />
-      )}
     </>
   );
 };

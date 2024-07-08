@@ -130,24 +130,24 @@ ControlPanelProps) => {
   const [controlsWidth, setControlsWidth] = useState(0);
   const positionRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    setTimeout(() => {
-      const controlsHeight =
-        positionRef.current?.getBoundingClientRect().height || 0;
-      setControlsHeight(controlsHeight);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     const controlsHeight =
+  //       positionRef.current?.getBoundingClientRect().height || 0;
+  //     setControlsHeight(controlsHeight);
 
-      const controlsWidth =
-        positionRef.current?.getBoundingClientRect().width || 0;
-      setControlsWidth(controlsWidth + 25);
-    });
-  }, []);
+  //     const controlsWidth =
+  //       positionRef.current?.getBoundingClientRect().width || 0;
+  //     setControlsWidth(controlsWidth + 25);
+  //   });
+  // }, []);
 
-  useEffect(() => {
-    setIsPointerLock(false);
-    return () => {
-      setIsPointerLock(true);
-    };
-  }, []);
+  // useEffect(() => {
+  //   setIsPointerLock(false);
+  //   return () => {
+  //     setIsPointerLock(true);
+  //   };
+  // }, []);
 
   const handleClick = () => {
     // e.preventDefault();

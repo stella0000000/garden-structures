@@ -3,14 +3,12 @@ import { useFrame } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
 import useFirstPersonControls from "../Hooks/useFirstPersonControls";
 import * as THREE from "three";
-import { useGardenStore } from "../gardenStore";
+import { usePointerLockUnlock } from "../Hooks/usePointerLockUnlock";
 
 type PointerLockCameraControlsProps = {
   cameraRef: React.MutableRefObject<THREE.PerspectiveCamera>;
   planting: boolean;
   deselectAllPlants: () => void;
-  // plane: React.MutableRefObject<THREE.Mesh | null>;
-  // raycaster: React.MutableRefObject<THREE.Raycaster | null>;
   updateRaycaster: () => void;
 };
 
@@ -20,21 +18,12 @@ const PointerLockCameraControls = ({
 }: PointerLockCameraControlsProps) => {
   const pointerLockRef = useRef<any>(null);
   const keyStates = useFirstPersonControls();
-  const { isPointerLock } = useGardenStore();
 
   useFrame(() => {
-    // console.log(raycaster.current, plane.current);
     updateRaycaster();
-    // console.log(raycaster.current?.intersectObject(plane.current!));
   });
 
-  useEffect(() => {
-    if (isPointerLock) {
-      pointerLockRef.current.lock();
-    } else {
-      pointerLockRef.current.unlock();
-    }
-  }, [isPointerLock]);
+  const { handleUnlock } = usePointerLockUnlock(pointerLockRef);
 
   useEffect(() => {
     cameraRef.current.position.setComponent(2, 150);
@@ -62,7 +51,7 @@ const PointerLockCameraControls = ({
     <PointerLockControls
       camera={cameraRef.current}
       ref={pointerLockRef}
-      // onLock={() => deselectAllPlants()}
+      onUnlock={handleUnlock}
     />
   );
 };

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { Canvas, ThreeEvent } from "@react-three/fiber";
 import { Box } from "@react-three/drei";
 import BambooStalk from "./BambooStalk";
@@ -9,7 +9,8 @@ import Ground from "./Ground";
 import GhostPlant from "./GhostPlant";
 import Constellation from "./Constellation";
 import { useGardenStore } from "../gardenStore";
-import { MainMenu } from "./MainMenu";
+import { HUD } from "./HUD/HUD";
+import { Pointer } from "./HUD/Pointer";
 
 export const camera = new THREE.PerspectiveCamera(45, 2, 1, 1000);
 
@@ -18,26 +19,10 @@ const GlobalCanvas = () => {
     activePlant,
     deselectAllPlants,
     plantCollection: plantData,
-    setMenuOpen,
-    menuOpen,
     ghostType,
+    isPointerLock,
+    setIsPointerLock,
   } = useGardenStore();
-
-  useEffect(() => {
-    const handleKeypress = (e: KeyboardEvent) => {
-      if (e.key === "e") {
-        // toggle main menu on off
-        if (!menuOpen) {
-          setMenuOpen(true);
-        } else {
-          setMenuOpen(false);
-        }
-      }
-    };
-
-    addEventListener("keypress", handleKeypress);
-    return () => removeEventListener("keypress", handleKeypress);
-  }, [menuOpen, setMenuOpen]);
 
   const cameraRef = useRef(camera);
   const raycaster = useRef(new THREE.Raycaster());
@@ -47,11 +32,20 @@ const GlobalCanvas = () => {
     raycaster.current?.setFromCamera(new THREE.Vector2(), cameraRef.current);
   };
 
+  const handleMissBoxClick = (e: ThreeEvent<PointerEvent>) => {
+    console.log("miss box clicked");
+    // if (!isPointerLock) {
+    setIsPointerLock(true);
+    // }
+    e.stopPropagation();
+    deselectAllPlants();
+  };
+
   // renders the appropriate JSX for each plant in the PlantData based on type
   const children = () => {
     return plantData.map((plant, index) => {
       switch (plant.kind) {
-        case "BambooStalkData": {
+        case "bamboo": {
           return (
             <BambooStalk
               key={index}
@@ -63,7 +57,7 @@ const GlobalCanvas = () => {
             />
           );
         }
-        case "FlowerData": {
+        case "flower": {
           return (
             <Flower
               key={index}
@@ -75,7 +69,7 @@ const GlobalCanvas = () => {
           );
         }
 
-        case "ConstellationData": {
+        case "constellation": {
           return (
             <Constellation
               key={index}
@@ -106,28 +100,26 @@ const GlobalCanvas = () => {
       <ambientLight intensity={1} />
       <directionalLight intensity={1} />
       {/* World box for missed click events */}
-      <Box
+      {/* <Box
         args={[75, 75, 75]}
         visible={true}
-        onPointerDown={(e: ThreeEvent<PointerEvent>) => {
-          e.stopPropagation();
-          deselectAllPlants();
-        }}
+        onPointerDown={handleMissBoxClick}
         material={
           new THREE.MeshLambertMaterial({
-            color: 0xffffff,
+            color: 0xfffeee,
             transparent: true,
-            opacity: 0,
+            opacity: 0.1,
             side: THREE.BackSide,
           })
         }
-      />
+      /> */}
       <Ground raycaster={raycaster} plane={plane} />
       {ghostType && (
         <GhostPlant raycaster={raycaster} plane={plane} camera={cameraRef} />
       )}
       {children()}
-      {menuOpen && <MainMenu />}
+      {/* <Pointer /> */}
+      <HUD />
     </Canvas>
   );
 };

@@ -25,7 +25,7 @@ export enum Direction {
 export enum PlantName {
   BAMBOO = "bamboo",
   FLOWER = "flower",
-  // TREE = "tree",
+  // CONSTELLATION = "constellation",
 }
 
 export enum OpName {
@@ -42,10 +42,16 @@ const opMap = {
   [OpName.ADDPLANT]: {
     [PlantName.BAMBOO]: newBamboo,
     [PlantName.FLOWER]: newFlower,
+    // [PlantName.CONSTELLATION]: () => {
+    //   console.log("not yet implemented");
+    // },
   },
   [OpName.DELETEATINDEX]: {
     [PlantName.BAMBOO]: deleteAtIdxBamboo,
     [PlantName.FLOWER]: deleteAtIdxFlower,
+    // [PlantName.CONSTELLATION]: () => {
+    //   console.log("not yet implemented");
+    // },
   },
 };
 
