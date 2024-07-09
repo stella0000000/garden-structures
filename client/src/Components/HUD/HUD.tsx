@@ -5,7 +5,6 @@ import { MenuBox } from "./MenuBox";
 import { PlantControls } from "./PlantControls";
 import { MainMenu } from "./MainMenu";
 import { useEffect } from "react";
-import GhostPlant from "../GhostPlant";
 
 /*
 click on node, or plant

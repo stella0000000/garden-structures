@@ -1,12 +1,10 @@
 import "./App.css";
 import GlobalCanvas from "./Components/GlobalCanvas";
-import { useCallback, useEffect, useState } from "react";
-import { MenuMode, useGardenStore } from "./gardenStore";
+import { useEffect } from "react";
+import { useGardenStore } from "./gardenStore";
 import { Vector3 } from "three";
 import { LinkedList } from "./DataStructures/LinkedList";
 import { CircularlyLinkedListFromArray } from "./DataStructures/DoublyCircularlyLinkedList";
-import { initialState } from "./initialState";
-import { is } from "@react-three/fiber/dist/declarations/src/core/utils";
 
 type PlantDBData = {
   _id: string;

@@ -6,7 +6,7 @@ import { defaultBambooMaterial, defaultBambooRootMaterial } from "../materials";
 import { cone, cylinder } from "../geometries";
 import { Camera } from "three";
 import { NodeNumber } from "./NodeNumber";
-import { useGardenStore, Direction, PlantName, MenuMode } from "../gardenStore";
+import { useGardenStore, MenuMode } from "../gardenStore";
 
 type BambooStalkProps = {
   root: LinkedList;

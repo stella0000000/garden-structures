@@ -6,7 +6,7 @@ import {
   defaultFlowerPetalMaterial,
 } from "../materials";
 import { cone, cylinder } from "../geometries";
-import { useGardenStore, Direction, PlantName, MenuMode } from "../gardenStore";
+import { useGardenStore, MenuMode } from "../gardenStore";
 
 type FlowerProps = {
   root: DoublyCircularlyLinkedList;
@@ -19,16 +19,11 @@ const Flower = ({ root, position, rotation, plantIndex }: FlowerProps) => {
   const {
     activePlant,
     setActivePlant,
-    deleteAtIdx,
-    appendNode,
-    movePlant,
     activeNode,
     setActiveNode,
     deselectAllNodes,
     setMenuMode,
   } = useGardenStore();
-  // true if root but no node selected
-  const isPlantSelected = plantIndex === activePlant;
 
   const children: React.ReactNode[] = [];
 
@@ -88,30 +83,6 @@ const Flower = ({ root, position, rotation, plantIndex }: FlowerProps) => {
       />
     );
   });
-
-  const handleMove = (direction: Direction) => {
-    return movePlant(plantIndex, direction);
-  };
-
-  const handleAppend = () => {
-    appendNode(PlantName.FLOWER, plantIndex);
-  };
-
-  const handleDeleteAtIndex = (nodeIdx: number) => {
-    deleteAtIdx(PlantName.FLOWER, plantIndex, nodeIdx);
-  };
-
-  const moveOperations = {
-    move: (direction: Direction) => handleMove(direction),
-  };
-
-  const plantOperations = {
-    append: handleAppend,
-  };
-
-  const nodeOperations = {
-    deleteAtIndex: handleDeleteAtIndex,
-  };
 
   return (
     <>

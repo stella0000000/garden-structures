@@ -1,5 +1,5 @@
 import { useFrame } from "@react-three/fiber";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import GhostFlower from "./GhostFlower";
 
 import { Camera } from "three";

@@ -1,7 +1,6 @@
 import { MenuMode, PlantName, useGardenStore } from "../../gardenStore";
 import { MenuBox } from "./MenuBox";
 import { Button } from "./HUD";
-import { useEffect } from "react";
 
 export const MainMenu = () => {
   const plantNames = Object.values(PlantName);
