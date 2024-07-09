@@ -29,32 +29,32 @@ const BambooStalk = ({
 
     activeNode,
     setActiveNode,
+
     deselectAllNodes,
 
     isDataMode,
-    deleteAtIdx,
-    appendNode,
-    deleteAfterNode,
-    insertNode,
-    popNode,
-    movePlant,
-    setMenuMode,
-  } = useGardenStore();
 
-  // true if the root is selected without a node
-  const isPlantSelected = activePlant === plantIndex;
+    setMenuMode,
+    menuMode,
+  } = useGardenStore();
 
   const children: React.ReactNode[] = [];
   let cumulativeHeight = 0;
 
   const selectThisBamboo = () => {
-    setActivePlant(plantIndex);
-    setMenuMode(MenuMode.PLANT);
+    // ignore clicks from menu-closing actions
+    if (menuMode === MenuMode.NONE) {
+      setActivePlant(plantIndex);
+      setMenuMode(MenuMode.PLANT);
+    }
   };
 
   const selectNode = (nodeIndex: number) => {
-    setActiveNode(nodeIndex);
-    setMenuMode(MenuMode.PLANT);
+    // ignore clicks from menu-closing actions
+    if (menuMode === MenuMode.NONE) {
+      setActiveNode(nodeIndex);
+      setMenuMode(MenuMode.PLANT);
+    }
   };
 
   // root node
@@ -107,45 +107,6 @@ const BambooStalk = ({
     }
     cumulativeHeight += nodeValue;
   });
-
-  const handleMove = (direction: Direction) => {
-    return movePlant(plantIndex, direction);
-  };
-
-  const handleAppend = () => {
-    appendNode(PlantName.BAMBOO, plantIndex);
-  };
-
-  const handlePop = () => {
-    popNode(plantIndex);
-  };
-
-  const handleInsert = (nodeIndex: number) => {
-    insertNode(plantIndex, nodeIndex);
-  };
-
-  const handleDeleteAfterIdx = () => {
-    deleteAfterNode(plantIndex, activeNode);
-  };
-
-  const handleDeleteAtIdx = (nodeIndex: number) => {
-    deleteAtIdx(PlantName.BAMBOO, plantIndex, nodeIndex);
-  };
-
-  const moveOperations = {
-    move: (direction: Direction) => handleMove(direction),
-  };
-
-  const plantOperations = {
-    append: handleAppend,
-    pop: handlePop,
-  };
-
-  const nodeOperations = {
-    insert: handleInsert,
-    deleteAfter: handleDeleteAfterIdx,
-    deleteAtIndex: handleDeleteAtIdx,
-  };
 
   return (
     <>

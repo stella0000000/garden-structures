@@ -1,28 +1,20 @@
-import { PlantName, useGardenStore } from "../../gardenStore";
+import { MenuMode, PlantName, useGardenStore } from "../../gardenStore";
 import { MenuBox } from "./MenuBox";
 import { Button } from "./HUD";
 import { useEffect } from "react";
 
-export const MainMenu = ({
-  onCloseAnyMenu,
-}: {
-  onCloseAnyMenu: () => void;
-}) => {
+export const MainMenu = () => {
   const plantNames = Object.values(PlantName);
-  const { setGhostType } = useGardenStore();
+  const { setGhostType, setMenuMode } = useGardenStore();
 
-  const handlePlantSelectorClick = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    plantName: PlantName
-  ) => {
-    console.log(`clicked ${plantName}`);
+  const handlePlantSelectorClick = (plantName: PlantName) => {
     setGhostType(plantName);
-    onCloseAnyMenu();
+    setMenuMode(MenuMode.NONE);
   };
 
   const handleClose = () => {
     setGhostType(undefined);
-    onCloseAnyMenu();
+    setMenuMode(MenuMode.NONE);
   };
 
   return (
@@ -31,7 +23,7 @@ export const MainMenu = ({
         return (
           <Button
             key={i}
-            onClick={(e) => handlePlantSelectorClick(e, plantName)}
+            onClick={() => handlePlantSelectorClick(plantName)}
             onMouseEnter={() => setGhostType(plantName)}
           >
             {plantName}

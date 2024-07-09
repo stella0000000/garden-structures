@@ -62,18 +62,16 @@ export const HUD = () => {
     ghostType,
   } = useGardenStore();
 
+  // handle side-effects of changing menu mode
   useEffect(() => {
-    console.log(menuMode);
+    if (menuMode !== MenuMode.NONE) {
+      setIsPointerLock(false);
+      setGhostType(undefined);
+    } else {
+      setIsPointerLock(true);
+      setMenuMode(MenuMode.NONE);
+    }
   }, [menuMode]);
-
-  const onCloseAnyMenu = () => {
-    setIsPointerLock(true);
-    setMenuMode(MenuMode.NONE);
-  };
-
-  const onOpenAnyMenu = () => {
-    setIsPointerLock(false);
-  };
 
   // click anywhere to return to pointerlock if no menus are open
   const handleNoMenuScreenClick = () => {
@@ -89,7 +87,8 @@ export const HUD = () => {
     if (e.key === "e") {
       if (menuMode === MenuMode.MAIN) {
         // if MAIN is open, close it
-        onCloseAnyMenu();
+        setIsPointerLock(true);
+        setMenuMode(MenuMode.NONE);
         setGhostType(undefined);
       } else if (ghostType && menuMode === MenuMode.NONE) {
         // if there is a ghost but no menu, clear the ghost
@@ -97,7 +96,6 @@ export const HUD = () => {
       } else {
         // base case: open MAIN
         setMenuMode(MenuMode.MAIN);
-        onOpenAnyMenu();
       }
     } else if (e.key == "m") {
       // handle "m" to toggle data mode
@@ -113,18 +111,14 @@ export const HUD = () => {
       )}
 
       {/* show main menu when active */}
-      {menuMode === MenuMode.MAIN && (
-        <MainMenu onCloseAnyMenu={onCloseAnyMenu} />
-      )}
+      {menuMode === MenuMode.MAIN && <MainMenu />}
 
       {/* show plant controls when a plant is selected */}
-      {menuMode === MenuMode.PLANT && (
-        <PlantControls onCloseAnyMenu={onCloseAnyMenu} />
-      )}
+      {menuMode === MenuMode.PLANT && <PlantControls />}
 
       {/* show instructions when first loaded */}
       {menuMode === MenuMode.INTRO && (
-        <MenuBox onExit={onCloseAnyMenu}>
+        <MenuBox onExit={() => setMenuMode(MenuMode.NONE)}>
           Direction: move mouse<br></br>s Walk: `w, a, s, d` keys<br></br>
           Planting: `g` key<br></br>[ This website is in progress. ]
         </MenuBox>

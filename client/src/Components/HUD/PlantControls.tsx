@@ -1,12 +1,8 @@
-import { PlantName, useGardenStore } from "../../gardenStore";
+import { MenuMode, PlantName, useGardenStore } from "../../gardenStore";
 import { MenuBox } from "./MenuBox";
 import { Button } from "./HUD";
 
-export const PlantControls = ({
-  onCloseAnyMenu,
-}: {
-  onCloseAnyMenu: () => void;
-}) => {
+export const PlantControls = () => {
   const {
     plantCollection,
 
@@ -23,6 +19,8 @@ export const PlantControls = ({
     deleteAtIdx,
 
     setGhostType,
+
+    setMenuMode,
   } = useGardenStore();
 
   const activePlantType = plantCollection[activePlant]?.kind as PlantName;
@@ -30,12 +28,12 @@ export const PlantControls = ({
   const handleClose = () => {
     setActivePlant(-1);
     setActiveNode(-1);
-    onCloseAnyMenu();
+    setMenuMode(MenuMode.NONE);
   };
 
   const handleMoveClick = () => {
     setGhostType(activePlantType);
-    handleClose();
+    setMenuMode(MenuMode.NONE);
   };
 
   const plantOperations =

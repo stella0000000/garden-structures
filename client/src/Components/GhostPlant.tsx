@@ -4,7 +4,7 @@ import GhostFlower from "./GhostFlower";
 
 import { Camera } from "three";
 import GhostBamboo from "./GhostBamboo";
-import { useGardenStore, PlantName } from "../gardenStore";
+import { useGardenStore, PlantName, MenuMode } from "../gardenStore";
 
 type GhostPlantProps = {
   raycaster: React.MutableRefObject<THREE.Raycaster | null>;
@@ -13,7 +13,7 @@ type GhostPlantProps = {
 };
 
 const GhostPlant = ({ raycaster, plane, camera }: GhostPlantProps) => {
-  const { ghostType } = useGardenStore();
+  const { ghostType, menuMode, isPointerLock } = useGardenStore();
   const [position, setPosition] = useState<[number, number, number]>([0, 0, 0]);
   const [rotation, setRotation] = useState<[number, number, number]>([0, 0, 0]);
   const { addPlant: appendPlant } = useGardenStore();
@@ -24,8 +24,12 @@ const GhostPlant = ({ raycaster, plane, camera }: GhostPlantProps) => {
   // convert back to Euler
   // convert back to [number, number, number]
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === "g") handleInsert();
+  const handleClick = () => {
+    // ignore click propagating from a menu-closing action
+    // ignore click propagating from re-enabling pointerlock
+    if (menuMode === MenuMode.NONE && isPointerLock) {
+      handleInsert();
+    }
   };
 
   const handleInsert = () => {
@@ -38,15 +42,6 @@ const GhostPlant = ({ raycaster, plane, camera }: GhostPlantProps) => {
     }
   };
 
-  useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("click", handleInsert);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("click", handleInsert);
-    };
-  }, [position]);
-
   useFrame(() => {
     updateGhostPlantRotation();
     // console.log(raycaster.current!.intersectObject(plane.current!)[0].point);
@@ -54,7 +49,7 @@ const GhostPlant = ({ raycaster, plane, camera }: GhostPlantProps) => {
     if (intersections.length) {
       setPosition([
         intersections[0].point.x,
-        intersections[0].point.y,
+        intersections[0].point.y - 5,
         intersections[0].point.z,
       ]);
     }
@@ -77,11 +72,13 @@ const GhostPlant = ({ raycaster, plane, camera }: GhostPlantProps) => {
     <>
       {ghostType === PlantName.FLOWER ? (
         <GhostFlower
+          onClick={handleClick}
           position={[position[0], position[1] + 5, position[2]]}
           rotation={[rotation[0], rotation[1], rotation[2]]}
         />
       ) : (
         <GhostBamboo
+          onClick={handleClick}
           position={[position[0], position[1] + 5, position[2]]}
           rotation={[rotation[0], rotation[1], rotation[2]]}
         />

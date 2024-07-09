@@ -1,14 +1,15 @@
 import { Cylinder } from "@react-three/drei";
 import { ghostMaterial } from "../materials";
 import { Euler } from "three";
+import { ThreeEvent } from "@react-three/fiber";
 
 type GhostFlowerProps = {
   position: [number, number, number];
   rotation: [number, number, number];
-  // onClick: (e: any) => void;
+  onClick?: (e: ThreeEvent<MouseEvent>) => void;
 };
 
-const GhostFlower = ({ position, rotation }: GhostFlowerProps) => {
+const GhostFlower = ({ position, rotation, onClick }: GhostFlowerProps) => {
   const root = [2, 2, 2, 2, 2, 2];
   const children = [];
 
@@ -29,7 +30,7 @@ const GhostFlower = ({ position, rotation }: GhostFlowerProps) => {
       args={[1, 2, 0.5]}
       material={ghostMaterial}
       rotation={new Euler(1.5, 0, 0)}
-      // onClick={onClick}
+      onClick={onClick}
     />
   );
 
@@ -48,7 +49,7 @@ const GhostFlower = ({ position, rotation }: GhostFlowerProps) => {
         ]}
         args={[nodeValue, nodeValue, 0.1]}
         material={ghostMaterial}
-        // onClick={onClick}
+        onClick={onClick}
       />
     );
   });

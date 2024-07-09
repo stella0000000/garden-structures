@@ -34,14 +34,10 @@ const GlobalCanvas = () => {
 
   const handleMissBoxClick = (e: ThreeEvent<PointerEvent>) => {
     console.log("miss box clicked");
-    if (!isPointerLock) {
-      setIsPointerLock(true);
-    }
+    // if (!isPointerLock) {
+    //   setIsPointerLock(true);
+    // }
   };
-
-  useEffect(() => {
-    console.log(plantData);
-  }, [plantData]);
 
   // renders the appropriate JSX for each plant in the PlantData based on type
   const children = () => {
