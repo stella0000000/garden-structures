@@ -1,7 +1,7 @@
 import "./App.css";
 import GlobalCanvas from "./Components/GlobalCanvas";
 import { useCallback, useEffect, useState } from "react";
-import { useGardenStore } from "./gardenStore";
+import { MenuMode, useGardenStore } from "./gardenStore";
 import { Vector3 } from "three";
 import { LinkedList } from "./DataStructures/LinkedList";
 import { CircularlyLinkedListFromArray } from "./DataStructures/DoublyCircularlyLinkedList";
@@ -17,14 +17,7 @@ type PlantDBData = {
 };
 
 function App() {
-  const {
-    isDataMode,
-    setIsDataMode,
-    menuOpen,
-    setMenuOpen,
-    setPlantCollection,
-    isPointerLock,
-  } = useGardenStore();
+  const { setPlantCollection } = useGardenStore();
 
   const convertPlantToData = ({
     _id,
@@ -36,31 +29,18 @@ function App() {
     _id,
     kind: type,
     data:
-      type === "BambooStalkData"
+      type === "bamboo"
         ? LinkedList.fromArray(data)
         : CircularlyLinkedListFromArray(data),
     position: new Vector3(position[0], position[1], position[2]),
     rotation: new Vector3(rotation[0], rotation[1], rotation[2]),
   });
 
-  // useEffect(() => {
-  //   fetch("/plants")
-  //     .then((res) => res.json())
-  //     .then((data) => setPlantCollection(data.map(convertPlantToData)));
-  // }, []);
-
   useEffect(() => {
-    document.addEventListener("keydown", handleKeyPress);
-    return () => document.removeEventListener("keydown", handleKeyPress);
-  }, [isDataMode, menuOpen]);
-
-  const handleKeyPress = (e: KeyboardEvent) => {
-    if (e.key == "m") {
-      setIsDataMode(!isDataMode);
-    } else if (e.key == "e") {
-      setMenuOpen(!menuOpen);
-    }
-  };
+    fetch("/plants")
+      .then((res) => res.json())
+      .then((data) => setPlantCollection(data.map(convertPlantToData)));
+  }, []);
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>

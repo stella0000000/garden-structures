@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Canvas, ThreeEvent } from "@react-three/fiber";
 import { Box } from "@react-three/drei";
 import BambooStalk from "./BambooStalk";
@@ -38,6 +38,10 @@ const GlobalCanvas = () => {
       setIsPointerLock(true);
     }
   };
+
+  useEffect(() => {
+    console.log(plantData);
+  }, [plantData]);
 
   // renders the appropriate JSX for each plant in the PlantData based on type
   const children = () => {
@@ -98,7 +102,7 @@ const GlobalCanvas = () => {
       <ambientLight intensity={1} />
       <directionalLight intensity={1} />
       {/* World box for missed click events */}
-      <Box
+      {/* <Box
         args={[75, 75, 75]}
         visible={true}
         onPointerDown={handleMissBoxClick}
@@ -110,7 +114,7 @@ const GlobalCanvas = () => {
             side: THREE.BackSide,
           })
         }
-      />
+      /> */}
       <Ground raycaster={raycaster} plane={plane} />
       {ghostType && (
         <GhostPlant raycaster={raycaster} plane={plane} camera={cameraRef} />

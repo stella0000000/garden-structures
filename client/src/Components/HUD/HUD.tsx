@@ -1,30 +1,33 @@
 import { Html } from "@react-three/drei";
 import styled from "styled-components";
-import { PlantName, useGardenStore } from "../../gardenStore";
+import { MenuMode, useGardenStore } from "../../gardenStore";
 import { MenuBox } from "./MenuBox";
 import { PlantControls } from "./PlantControls";
 import { MainMenu } from "./MainMenu";
 import { useEffect } from "react";
+import GhostPlant from "../GhostPlant";
 
-export const MenuWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
+/*
+click on node, or plant
+- delete, append, pop, etc buttons
+- lose pointerLock
+- move button
+  - engage pointerlock
+  - lock plant with "mouse"
+  - click to place plant in new location
+*/
+
+const Pointer = styled.div`
+  position: fixed;
   width: 100vw;
   height: 100vh;
-  padding-bottom: 20px;
-  box-sizing: border-box;
+  display: grid;
+  place-content: center;
 
-  /* pointer-events: none; */
-`;
-
-const Scrim = styled.div`
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-
-  /* pointer-events: none; */
+  &:after {
+    color: white;
+    content: "+";
+  }
 `;
 
 export const Button = styled.button`
@@ -48,127 +51,84 @@ export const Button = styled.button`
   }
 `;
 
-const Pointer = styled.div`
-  display: block;
-  color: white;
-  position: absolute;
-  top: 50vh;
-  left: 50vw;
-  transform: translate(-50%, -50%);
-
-  &:after {
-    content: "+";
-  }
-`;
-
 export const HUD = () => {
   const {
-    plantCollection,
     setIsPointerLock,
-    instructionsVisible,
-    setInstructionsVisible,
-    menuOpen: mainMenuOpen,
-    setMenuOpen: setMainMenuOpen,
-
-    activeNode,
-    activePlant,
-    setActiveNode,
-    setActivePlant,
-    deselectAllPlants,
-    deselectAllNodes,
-    //
-    appendNode,
-    popNode,
-    insertNode,
-    deleteAfterNode,
-    deleteAtIdx,
+    menuMode,
+    setMenuMode,
+    setIsDataMode,
+    isDataMode,
+    setGhostType,
+    ghostType,
   } = useGardenStore();
-  const activePlantType = plantCollection[activePlant]?.kind as PlantName;
-  const menuHasContent = activePlantType || instructionsVisible || mainMenuOpen;
 
-  const closeMenus = () => {
-    setInstructionsVisible(false);
-    deselectAllPlants();
-    deselectAllNodes();
+  useEffect(() => {
+    console.log(menuMode);
+  }, [menuMode]);
+
+  const onCloseAnyMenu = () => {
     setIsPointerLock(true);
-    setMainMenuOpen(false);
+    setMenuMode(MenuMode.NONE);
+  };
+
+  const onOpenAnyMenu = () => {
+    setIsPointerLock(false);
+  };
+
+  // click anywhere to return to pointerlock if no menus are open
+  const handleNoMenuScreenClick = () => {
+    setIsPointerLock(true);
   };
 
   useEffect(() => {
-    if (mainMenuOpen) {
-      setIsPointerLock(false);
+    document.addEventListener("keydown", handleKeyPress);
+    return () => document.removeEventListener("keydown", handleKeyPress);
+  }, [isDataMode, menuMode, ghostType]);
+
+  const handleKeyPress = (e: KeyboardEvent) => {
+    if (e.key === "e") {
+      if (menuMode === MenuMode.MAIN) {
+        // if MAIN is open, close it
+        onCloseAnyMenu();
+        setGhostType(undefined);
+      } else if (ghostType && menuMode === MenuMode.NONE) {
+        // if there is a ghost but no menu, clear the ghost
+        setGhostType(undefined);
+      } else {
+        // base case: open MAIN
+        setMenuMode(MenuMode.MAIN);
+        onOpenAnyMenu();
+      }
+    } else if (e.key == "m") {
+      // handle "m" to toggle data mode
+      setIsDataMode(!isDataMode);
     }
-  }, [mainMenuOpen]);
+  };
 
   return (
-    <Html
-      calculatePosition={() => [0, 0, 0]}
-      // style={{ pointerEvents: "none" }}
-    >
-      {menuHasContent ? (
-        <>
-          <Scrim onClick={closeMenus} />
-          <MenuWrapper>
-            {/* show instructions when first loaded */}
-            {instructionsVisible && (
-              <MenuBox onExit={closeMenus}>
-                Direction: move mouse<br></br>s Walk: `w, a, s, d` keys<br></br>
-                Planting: `g` key<br></br>[ This website is in progress. ]
-              </MenuBox>
-            )}
+    <Html calculatePosition={() => [0, 0, 0]}>
+      {/* show pointerlock pointer if no menus open */}
+      {menuMode === MenuMode.NONE && (
+        <Pointer onClick={handleNoMenuScreenClick} />
+      )}
 
-            {/* show main menu when active */}
-            {mainMenuOpen && <MainMenu closeMenus={closeMenus} />}
+      {/* show main menu when active */}
+      {menuMode === MenuMode.MAIN && (
+        <MainMenu onCloseAnyMenu={onCloseAnyMenu} />
+      )}
 
-            {/* show plant controls when a plant is selected */}
-            {activePlant !== -1 && (
-              <PlantControls
-                activePlantType={activePlantType}
-                closeMenus={closeMenus}
-              />
-            )}
-          </MenuWrapper>
-        </>
-      ) : (
-        <Pointer />
+      {/* show plant controls when a plant is selected */}
+      {menuMode === MenuMode.PLANT && (
+        <PlantControls onCloseAnyMenu={onCloseAnyMenu} />
+      )}
+
+      {/* show instructions when first loaded */}
+      {menuMode === MenuMode.INTRO && (
+        <MenuBox onExit={onCloseAnyMenu}>
+          Direction: move mouse<br></br>s Walk: `w, a, s, d` keys<br></br>
+          Planting: `g` key<br></br>[ This website is in progress. ]
+        </MenuBox>
       )}
     </Html>
   );
 };
-
-// const operations = {
-//   bamboo: {
-//     plant: {
-//       append: () => appendNode(PlantName.BAMBOO, activePlant),
-//       pop: () => popNode(activePlant),
-//     },
-//     node:
-//       activeNode !== -1
-//         ? {
-//             insert: () => insertNode(activePlant, activeNode),
-//             deleteAfter: () => deleteAfterNode(activePlant, activeNode),
-//             deleteAtIndex: () =>
-//               deleteAtIdx(PlantName.BAMBOO, activePlant, activeNode),
-//           }
-//         : {},
-//   },
-//   flower: {
-//     plant: {},
-//     node: {},
-//   },
-// };
-
-// const buttons = [
-//   {
-//     id: "appendNode",
-//     label: "Append Node",
-//     plantTypes: ["bamboo", "flower"],
-//     does: (plantName: PlantName) => appendNode(plantName, activePlant),
-//   },
-//   {
-//     id: "popNode",
-//     label: "Pop Node",
-//     plantTypes: ["bamboo"],
-//     does: () => popNode(activePlant),
-//   },
-// ];

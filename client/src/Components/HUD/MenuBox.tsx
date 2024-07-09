@@ -1,5 +1,16 @@
 import styled from "styled-components";
 
+export const MenuWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  padding-bottom: 20px;
+  box-sizing: border-box;
+`;
+
 const Container = styled.div`
   position: relative;
   border: 1px solid black;
@@ -28,6 +39,12 @@ const CloseX = styled.div`
   pointer-events: auto;
 `;
 
+const Scrim = styled.div`
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+`;
+
 type MenuBoxProps = {
   children: React.ReactNode;
   onExit: () => void;
@@ -35,9 +52,12 @@ type MenuBoxProps = {
 
 export const MenuBox = ({ children, onExit }: MenuBoxProps) => {
   return (
-    <Container>
-      <CloseX onClick={onExit}>X</CloseX>
-      {children}
-    </Container>
+    <MenuWrapper>
+      <Scrim onClick={onExit} />
+      <Container>
+        <CloseX onClick={onExit}>X</CloseX>
+        {children}
+      </Container>
+    </MenuWrapper>
   );
 };

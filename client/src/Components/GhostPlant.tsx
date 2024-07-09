@@ -13,7 +13,7 @@ type GhostPlantProps = {
 };
 
 const GhostPlant = ({ raycaster, plane, camera }: GhostPlantProps) => {
-  const { ghostType, menuOpen, setGhostType } = useGardenStore();
+  const { ghostType } = useGardenStore();
   const [position, setPosition] = useState<[number, number, number]>([0, 0, 0]);
   const [rotation, setRotation] = useState<[number, number, number]>([0, 0, 0]);
   const { addPlant: appendPlant } = useGardenStore();
@@ -24,15 +24,26 @@ const GhostPlant = ({ raycaster, plane, camera }: GhostPlantProps) => {
   // convert back to Euler
   // convert back to [number, number, number]
 
-  const handleClick = (e: any) => {
-    console.log("clickity clack");
-    handleInsert();
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "g") handleInsert();
+  };
+
+  const handleInsert = () => {
+    if (ghostType) {
+      appendPlant(
+        ghostType,
+        [position[0], position[1] + 5, position[2]],
+        rotation
+      );
+    }
   };
 
   useEffect(() => {
-    window.addEventListener("click", handleClick);
+    document.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("click", handleInsert);
     return () => {
-      window.removeEventListener("click", handleClick);
+      document.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("click", handleInsert);
     };
   }, [position]);
 
@@ -62,17 +73,6 @@ const GhostPlant = ({ raycaster, plane, camera }: GhostPlantProps) => {
     }
   };
 
-  const handleInsert = () => {
-    if (ghostType && !menuOpen) {
-      appendPlant(
-        ghostType,
-        [position[0], position[1] + 5, position[2]],
-        rotation
-      );
-    }
-    setGhostType(undefined);
-  };
-
   return (
     <>
       {ghostType === PlantName.FLOWER ? (
@@ -91,23 +91,3 @@ const GhostPlant = ({ raycaster, plane, camera }: GhostPlantProps) => {
 };
 
 export default GhostPlant;
-
-/**
- * <Carousel /> takes in <GhostFlower />, <GhostBamboo />
- *
- * armementarium: flower, bamboo
- *  array of preconstructed models
- *    including meshes, materials, etc
- *
- * carousel of choices
- *  display single type
- *
- * scroll behavior to go through choices
- *  scroll changes index in array, probably need %
- *
- *
- * click to select + plant that type
- *
- *
- *
- */

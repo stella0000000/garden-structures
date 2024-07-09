@@ -38,6 +38,13 @@ export enum OpName {
   UPDATE = "update",
 }
 
+export enum MenuMode {
+  INTRO = "intro",
+  MAIN = "main",
+  PLANT = "plant",
+  NONE = "none",
+}
+
 const opMap = {
   [OpName.ADDPLANT]: {
     [PlantName.BAMBOO]: newBamboo,
@@ -56,17 +63,14 @@ const opMap = {
 };
 
 interface StoreState {
-  instructionsVisible: boolean;
-  setInstructionsVisible: (arg: boolean) => void;
+  menuMode: MenuMode;
+  setMenuMode: (arg: MenuMode) => void;
 
   ghostType: PlantName | undefined;
   setGhostType: (arg: PlantName | undefined) => void;
 
   isPointerLock: boolean;
   setIsPointerLock: (arg: boolean) => void;
-
-  menuOpen: boolean;
-  setMenuOpen: (arg: boolean) => void;
 
   activePlant: number;
   setActivePlant: (num: number) => void;
@@ -106,14 +110,11 @@ interface StoreState {
 }
 
 export const useGardenStore = create<StoreState>((set) => ({
-  instructionsVisible: true,
-  setInstructionsVisible: (arg) => set(() => ({ instructionsVisible: arg })),
+  menuMode: MenuMode.INTRO,
+  setMenuMode: (arg) => set(() => ({ menuMode: arg })),
 
   isPointerLock: false,
   setIsPointerLock: (arg) => set(() => ({ isPointerLock: arg })),
-
-  menuOpen: false,
-  setMenuOpen: (arg) => set(() => ({ menuOpen: arg })),
 
   ghostType: undefined,
   setGhostType: (arg) => set(() => ({ ghostType: arg })),

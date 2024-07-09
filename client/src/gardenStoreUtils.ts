@@ -29,8 +29,9 @@ export const getGardenWithMovedPlant = (
     currentPosition.add(new Vector3(1, 0, 0));
   }
 
-  if (currentPlant.kind === "BambooStalkData") {
+  if (currentPlant.kind === "bamboo") {
     const newPlant: BambooStalkData = {
+      _id: currentPlant._id,
       kind: currentPlant.kind,
       data: currentPlant.data,
       position: currentPosition,
@@ -39,8 +40,9 @@ export const getGardenWithMovedPlant = (
     plantCollection[plantIdx] = newPlant;
 
     return [...plantCollection];
-  } else if (currentPlant.kind === "FlowerData") {
+  } else if (currentPlant.kind === "flower") {
     const newPlant: FlowerData = {
+      _id: currentPlant._id,
       kind: currentPlant.kind,
       data: currentPlant.data,
       position: currentPosition,
@@ -118,7 +120,8 @@ export const newBamboo = (
   rotation: [number, number, number]
 ) => {
   return {
-    kind: "BambooStalkData",
+    _id: crypto.randomUUID(),
+    kind: "bamboo",
     data: LinkedList.fromArray([2, 2, 2, 2, 2, 2]),
     position: new Vector3(position[0], position[1], position[2]),
     rotation: new Vector3(rotation[0], rotation[1], rotation[2]),
@@ -130,7 +133,8 @@ export const newFlower = (
   rotation: [number, number, number]
 ) => {
   return {
-    kind: "FlowerData",
+    _id: crypto.randomUUID(),
+    kind: "flower",
     data: CircularlyLinkedListFromArray([2, 2, 2, 2, 2, 2]),
     position: new Vector3(position[0], position[1], position[2]),
     rotation: new Vector3(rotation[0], rotation[1], rotation[2]),

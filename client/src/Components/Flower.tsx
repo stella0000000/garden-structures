@@ -1,13 +1,12 @@
 import { DoublyCircularlyLinkedList } from "../DataStructures/DoublyCircularlyLinkedList";
 import Node3D from "./Node3D";
-import ControlPanel from "./ControlPanel";
 import { Euler, Vector3 } from "three";
 import {
   defaultFlowerHubMaterial,
   defaultFlowerPetalMaterial,
 } from "../materials";
 import { cone, cylinder } from "../geometries";
-import { useGardenStore, Direction, PlantName } from "../gardenStore";
+import { useGardenStore, Direction, PlantName, MenuMode } from "../gardenStore";
 
 type FlowerProps = {
   root: DoublyCircularlyLinkedList;
@@ -26,6 +25,7 @@ const Flower = ({ root, position, rotation, plantIndex }: FlowerProps) => {
     activeNode,
     setActiveNode,
     deselectAllNodes,
+    setMenuMode,
   } = useGardenStore();
   // true if root but no node selected
   const isPlantSelected = plantIndex === activePlant;
@@ -34,6 +34,12 @@ const Flower = ({ root, position, rotation, plantIndex }: FlowerProps) => {
 
   const selectThisFlower = () => {
     setActivePlant(plantIndex);
+    setMenuMode(MenuMode.PLANT);
+  };
+
+  const selectNode = (nodeIndex: number) => {
+    setActiveNode(nodeIndex);
+    setMenuMode(MenuMode.PLANT);
   };
 
   // central hub node of the flower
@@ -76,7 +82,7 @@ const Flower = ({ root, position, rotation, plantIndex }: FlowerProps) => {
         cylinderArgs={[nodeValue, nodeValue, 0.1]}
         isSelected={isNodeSelected}
         deselectAllNodes={deselectAllNodes}
-        selectNode={() => setActiveNode(nodeIndex)}
+        selectNode={() => selectNode(nodeIndex)}
         defaultMaterial={defaultFlowerPetalMaterial}
         selectParentPlant={selectThisFlower}
       />

@@ -1,13 +1,12 @@
 import { LinkedList } from "../DataStructures/LinkedList";
 import Node3D from "./Node3D";
-import ControlPanel from "./ControlPanel";
 
 import { Euler, Vector3 } from "three";
 import { defaultBambooMaterial, defaultBambooRootMaterial } from "../materials";
 import { cone, cylinder } from "../geometries";
 import { Camera } from "three";
 import { NodeNumber } from "./NodeNumber";
-import { useGardenStore, Direction, PlantName } from "../gardenStore";
+import { useGardenStore, Direction, PlantName, MenuMode } from "../gardenStore";
 
 type BambooStalkProps = {
   root: LinkedList;
@@ -39,6 +38,7 @@ const BambooStalk = ({
     insertNode,
     popNode,
     movePlant,
+    setMenuMode,
   } = useGardenStore();
 
   // true if the root is selected without a node
@@ -49,6 +49,12 @@ const BambooStalk = ({
 
   const selectThisBamboo = () => {
     setActivePlant(plantIndex);
+    setMenuMode(MenuMode.PLANT);
+  };
+
+  const selectNode = (nodeIndex: number) => {
+    setActiveNode(nodeIndex);
+    setMenuMode(MenuMode.PLANT);
   };
 
   // root node
@@ -85,7 +91,7 @@ const BambooStalk = ({
           selectParentPlant={selectThisBamboo}
           defaultMaterial={defaultBambooMaterial}
           deselectAllNodes={deselectAllNodes}
-          selectNode={() => setActiveNode(nodeIndex)}
+          selectNode={() => selectNode(nodeIndex)}
         />
       );
     } else {

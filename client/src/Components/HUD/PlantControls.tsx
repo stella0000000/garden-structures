@@ -3,22 +3,40 @@ import { MenuBox } from "./MenuBox";
 import { Button } from "./HUD";
 
 export const PlantControls = ({
-  activePlantType,
-  closeMenus,
+  onCloseAnyMenu,
 }: {
-  activePlantType?: PlantName;
-  closeMenus: () => void;
+  onCloseAnyMenu: () => void;
 }) => {
   const {
+    plantCollection,
+
     activePlant,
     activeNode,
+
+    setActivePlant,
+    setActiveNode,
 
     appendNode,
     popNode,
     insertNode,
     deleteAfterNode,
     deleteAtIdx,
+
+    setGhostType,
   } = useGardenStore();
+
+  const activePlantType = plantCollection[activePlant]?.kind as PlantName;
+
+  const handleClose = () => {
+    setActivePlant(-1);
+    setActiveNode(-1);
+    onCloseAnyMenu();
+  };
+
+  const handleMoveClick = () => {
+    setGhostType(activePlantType);
+    handleClose();
+  };
 
   const plantOperations =
     activePlantType == "bamboo"
@@ -48,20 +66,13 @@ export const PlantControls = ({
       : {};
 
   return (
-    <MenuBox onExit={closeMenus}>
+    <MenuBox onExit={handleClose}>
       {Object.keys(plantOperations).map((opName, index) => {
         const operation =
           plantOperations[opName as keyof typeof plantOperations];
         if (operation)
           return (
-            <Button
-              key={index}
-              onPointerDown={(e) => {
-                e.stopPropagation();
-                operation();
-              }}
-              onDoubleClick={(e) => e.stopPropagation()}
-            >
+            <Button key={index} onClick={operation}>
               {opName}
             </Button>
           );
@@ -73,16 +84,14 @@ export const PlantControls = ({
             <Button
               disabled={activeNode === -1}
               key={index}
-              onPointerDown={(e) => {
-                e.stopPropagation();
-                operation();
-              }}
-              onDoubleClick={(e) => e.stopPropagation()}
+              onClick={operation}
             >
               {opName}
             </Button>
           );
       })}
+
+      <Button onClick={handleMoveClick}>move!?</Button>
     </MenuBox>
   );
 };
