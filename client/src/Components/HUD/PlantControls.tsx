@@ -47,14 +47,6 @@ export const PlantControls = ({
         }
       : {};
 
-  // const flowerPlantOperations = {
-  //   append: handleAppend,
-  // };
-
-  // const flowerNodeOperations = {
-  //   deleteAtIndex: handleDeleteAtIndex,
-  // };
-
   return (
     <MenuBox onExit={closeMenus}>
       {Object.keys(plantOperations).map((opName, index) => {

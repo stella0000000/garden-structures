@@ -34,11 +34,9 @@ const GlobalCanvas = () => {
 
   const handleMissBoxClick = (e: ThreeEvent<PointerEvent>) => {
     console.log("miss box clicked");
-    // if (!isPointerLock) {
-    setIsPointerLock(true);
-    // }
-    e.stopPropagation();
-    deselectAllPlants();
+    if (!isPointerLock) {
+      setIsPointerLock(true);
+    }
   };
 
   // renders the appropriate JSX for each plant in the PlantData based on type
@@ -100,7 +98,7 @@ const GlobalCanvas = () => {
       <ambientLight intensity={1} />
       <directionalLight intensity={1} />
       {/* World box for missed click events */}
-      {/* <Box
+      <Box
         args={[75, 75, 75]}
         visible={true}
         onPointerDown={handleMissBoxClick}
@@ -112,7 +110,7 @@ const GlobalCanvas = () => {
             side: THREE.BackSide,
           })
         }
-      /> */}
+      />
       <Ground raycaster={raycaster} plane={plane} />
       {ghostType && (
         <GhostPlant raycaster={raycaster} plane={plane} camera={cameraRef} />

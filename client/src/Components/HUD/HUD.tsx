@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { PlantName, useGardenStore } from "../../gardenStore";
 import { MenuBox } from "./MenuBox";
 import { PlantControls } from "./PlantControls";
+import { MainMenu } from "./MainMenu";
+import { useEffect } from "react";
 
 export const MenuWrapper = styled.div`
   display: flex;
@@ -13,12 +15,16 @@ export const MenuWrapper = styled.div`
   height: 100vh;
   padding-bottom: 20px;
   box-sizing: border-box;
+
+  /* pointer-events: none; */
 `;
 
 const Scrim = styled.div`
   position: absolute;
   width: 100vw;
   height: 100vh;
+
+  /* pointer-events: none; */
 `;
 
 export const Button = styled.button`
@@ -61,6 +67,8 @@ export const HUD = () => {
     setIsPointerLock,
     instructionsVisible,
     setInstructionsVisible,
+    menuOpen: mainMenuOpen,
+    setMenuOpen: setMainMenuOpen,
 
     activeNode,
     activePlant,
@@ -75,19 +83,28 @@ export const HUD = () => {
     deleteAfterNode,
     deleteAtIdx,
   } = useGardenStore();
-
   const activePlantType = plantCollection[activePlant]?.kind as PlantName;
-  const menuHasContent = activePlantType || instructionsVisible;
+  const menuHasContent = activePlantType || instructionsVisible || mainMenuOpen;
 
   const closeMenus = () => {
     setInstructionsVisible(false);
     deselectAllPlants();
     deselectAllNodes();
     setIsPointerLock(true);
+    setMainMenuOpen(false);
   };
 
+  useEffect(() => {
+    if (mainMenuOpen) {
+      setIsPointerLock(false);
+    }
+  }, [mainMenuOpen]);
+
   return (
-    <Html calculatePosition={() => [0, 0, 0]}>
+    <Html
+      calculatePosition={() => [0, 0, 0]}
+      // style={{ pointerEvents: "none" }}
+    >
       {menuHasContent ? (
         <>
           <Scrim onClick={closeMenus} />
@@ -100,31 +117,16 @@ export const HUD = () => {
               </MenuBox>
             )}
 
+            {/* show main menu when active */}
+            {mainMenuOpen && <MainMenu closeMenus={closeMenus} />}
+
+            {/* show plant controls when a plant is selected */}
             {activePlant !== -1 && (
               <PlantControls
                 activePlantType={activePlantType}
                 closeMenus={closeMenus}
               />
             )}
-
-            {/* show menu for the active plant when one is selected
-            {activePlantType === "BambooStalkData" && (
-              <MenuBox onExit={closeMenus}>
-                <Button>I'm some bamboo controls!</Button>
-                {activeNode !== -1 && (
-                  <Button>And also some node controls</Button>
-                )}
-              </MenuBox>
-            )}
-
-            {activePlantType === "FlowerData" && (
-              <MenuBox onExit={closeMenus}>
-                <Button>I'm some Flower controls!</Button>
-                {activeNode !== -1 && (
-                  <Button>And also some node controls</Button>
-                )}
-              </MenuBox>
-            )} */}
           </MenuWrapper>
         </>
       ) : (

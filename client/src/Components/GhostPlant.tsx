@@ -30,9 +30,9 @@ const GhostPlant = ({ raycaster, plane, camera }: GhostPlantProps) => {
   };
 
   useEffect(() => {
-    window.addEventListener("mousedown", handleClick);
+    window.addEventListener("click", handleClick);
     return () => {
-      window.removeEventListener("mousedown", handleClick);
+      window.removeEventListener("click", handleClick);
     };
   }, [position]);
 

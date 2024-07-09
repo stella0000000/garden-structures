@@ -118,13 +118,8 @@ const ControlPanel = ({
   nodeOperations,
 }: // data,
 ControlPanelProps) => {
-  const {
-    setIsPointerLock,
-    setActiveNode,
-    setActivePlant,
-    menuOpen,
-    setMenuOpen,
-  } = useGardenStore();
+  const { setActiveNode, setActivePlant, menuOpen, setMenuOpen } =
+    useGardenStore();
 
   const [controlsHeight, setControlsHeight] = useState(0);
   const [controlsWidth, setControlsWidth] = useState(0);
