@@ -59,6 +59,8 @@ export const HUD = () => {
     isDataMode,
     setGhostType,
     ghostType,
+    activeNode,
+    activePlant,
   } = useGardenStore();
 
   // handle side-effects of changing menu mode
@@ -71,6 +73,10 @@ export const HUD = () => {
       setMenuMode(MenuMode.NONE);
     }
   }, [menuMode]);
+
+  useEffect(() => {
+    console.log({ activeNode, activePlant, menuMode });
+  }, [activeNode, activePlant, menuMode]);
 
   // click anywhere to return to pointerlock if no menus are open
   const handleNoMenuScreenClick = () => {
@@ -118,7 +124,7 @@ export const HUD = () => {
       {/* show instructions when first loaded */}
       {menuMode === MenuMode.INTRO && (
         <MenuBox onExit={() => setMenuMode(MenuMode.NONE)}>
-          Direction: move mouse<br></br>s Walk: `w, a, s, d` keys<br></br>
+          Direction: move mouse<br></br>Walk: `w, a, s, d` keys<br></br>
           Planting: `g` key<br></br>[ This website is in progress. ]
         </MenuBox>
       )}

@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import * as THREE from "three";
 import { Euler, Vector3 } from "three";
 import { selectedMaterial, hoveredMaterial } from "../materials";
-import { useGardenStore } from "../gardenStore";
+import { MenuMode, useGardenStore } from "../gardenStore";
 
 export type Node3DProps = {
   value: number;
@@ -33,7 +33,7 @@ const Node3D = ({
 }: Node3DProps) => {
   const meshRef = useRef<THREE.Mesh>(null!);
   const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
-  const { deselectAllPlants } = useGardenStore();
+  const { deselectAllPlants, menuMode } = useGardenStore();
 
   return (
     <mesh
@@ -58,9 +58,12 @@ const Node3D = ({
         setIsHighlighted(false);
       }}
       onPointerMissed={(e: MouseEvent) => {
-        e.stopPropagation();
-        isSelected && deselectAllPlants();
-        isSelected && deselectAllNodes();
+        console.log({ menuMode });
+        if (menuMode === MenuMode.NONE) {
+          e.stopPropagation();
+          isSelected && deselectAllPlants();
+          isSelected && deselectAllNodes();
+        }
       }}
       onPointerDown={(e: ThreeEvent<PointerEvent>) => {
         e.stopPropagation();

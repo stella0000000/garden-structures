@@ -34,27 +34,15 @@ function App() {
     rotation: new Vector3(rotation[0], rotation[1], rotation[2]),
   });
 
-  useEffect(() => {
-    fetch("/plants")
-      .then((res) => res.json())
-      .then((data) => setPlantCollection(data.map(convertPlantToData)));
-  }, []);
+  // useEffect(() => {
+  //   fetch("/plants")
+  //     .then((res) => res.json())
+  //     .then((data) => setPlantCollection(data.map(convertPlantToData)));
+  // }, []);
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
       <GlobalCanvas />
-
-      {/* Invisible screen over the Canvas to enable PointerLockControls */}
-      {/* {!isPointerLock && (
-        <div
-          style={{
-            top: "0px",
-            position: "absolute",
-            width: "100vw",
-            height: "100vh",
-          }}
-        ></div>
-      )} */}
     </div>
   );
 }

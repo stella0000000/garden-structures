@@ -1,15 +1,18 @@
-import { useFrame } from "@react-three/fiber";
+import { ThreeEvent, useFrame } from "@react-three/fiber";
 import { useState } from "react";
 import GhostFlower from "./GhostFlower";
 
 import { Camera } from "three";
 import GhostBamboo from "./GhostBamboo";
 import { useGardenStore, PlantName, MenuMode } from "../gardenStore";
+import { Box } from "@react-three/drei";
+import * as THREE from "three";
 
 type GhostPlantProps = {
   raycaster: React.MutableRefObject<THREE.Raycaster | null>;
   plane: React.MutableRefObject<THREE.Mesh | null>;
   camera: React.MutableRefObject<Camera | null>;
+  // handleMissBoxClick: (e: ThreeEvent<PointerEvent>) => void;
 };
 
 const GhostPlant = ({ raycaster, plane, camera }: GhostPlantProps) => {
@@ -49,7 +52,7 @@ const GhostPlant = ({ raycaster, plane, camera }: GhostPlantProps) => {
     if (intersections.length) {
       setPosition([
         intersections[0].point.x,
-        intersections[0].point.y - 5,
+        intersections[0].point.y - 5, // change this, but then doesn't work!
         intersections[0].point.z,
       ]);
     }
@@ -72,17 +75,28 @@ const GhostPlant = ({ raycaster, plane, camera }: GhostPlantProps) => {
     <>
       {ghostType === PlantName.FLOWER ? (
         <GhostFlower
-          onClick={handleClick}
           position={[position[0], position[1] + 5, position[2]]}
           rotation={[rotation[0], rotation[1], rotation[2]]}
         />
       ) : (
         <GhostBamboo
-          onClick={handleClick}
           position={[position[0], position[1] + 5, position[2]]}
           rotation={[rotation[0], rotation[1], rotation[2]]}
         />
       )}
+      <Box
+        args={[1000, 1000, 1000]}
+        visible={true}
+        onClick={handleClick}
+        material={
+          new THREE.MeshLambertMaterial({
+            color: 0xfffeee,
+            transparent: true,
+            opacity: 0.01,
+            side: THREE.BackSide,
+          })
+        }
+      />
     </>
   );
 };

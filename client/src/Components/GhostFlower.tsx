@@ -2,6 +2,7 @@ import { Cylinder } from "@react-three/drei";
 import { ghostMaterial } from "../materials";
 import { Euler } from "three";
 import { ThreeEvent } from "@react-three/fiber";
+import { yPosOffset } from "./Flower";
 
 type GhostFlowerProps = {
   position: [number, number, number];
@@ -28,6 +29,7 @@ const GhostFlower = ({ position, rotation, onClick }: GhostFlowerProps) => {
     <Cylinder
       key={-1}
       args={[1, 2, 0.5]}
+      position={[0, yPosOffset, 0]}
       material={ghostMaterial}
       rotation={new Euler(1.5, 0, 0)}
       onClick={onClick}
@@ -44,7 +46,8 @@ const GhostFlower = ({ position, rotation, onClick }: GhostFlowerProps) => {
           (nodeValue * 2 - 1.5) *
             Math.cos(((2 * Math.PI) / root.length) * index),
           (nodeValue * 2 - 1.5) *
-            Math.sin(((2 * Math.PI) / root.length) * index),
+            Math.sin(((2 * Math.PI) / root.length) * index) +
+            yPosOffset,
           index % 2 === 0 ? 0.05 : -0.05,
         ]}
         args={[nodeValue, nodeValue, 0.1]}

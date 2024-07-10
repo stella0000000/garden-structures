@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { Canvas, ThreeEvent } from "@react-three/fiber";
-import { Box } from "@react-three/drei";
+// import { Box } from "@react-three/drei";
 import BambooStalk from "./BambooStalk";
 import Flower from "./Flower";
 import * as THREE from "three";
@@ -10,7 +10,6 @@ import GhostPlant from "./GhostPlant";
 import Constellation from "./Constellation";
 import { useGardenStore } from "../gardenStore";
 import { HUD } from "./HUD/HUD";
-import { Pointer } from "./HUD/Pointer";
 
 export const camera = new THREE.PerspectiveCamera(45, 2, 1, 1000);
 
@@ -20,8 +19,6 @@ const GlobalCanvas = () => {
     deselectAllPlants,
     plantCollection: plantData,
     ghostType,
-    isPointerLock,
-    setIsPointerLock,
   } = useGardenStore();
 
   const cameraRef = useRef(camera);
@@ -99,21 +96,26 @@ const GlobalCanvas = () => {
       <directionalLight intensity={1} />
       {/* World box for missed click events */}
       {/* <Box
-        args={[75, 75, 75]}
+        args={[1000, 1000, 1000]}
         visible={true}
         onPointerDown={handleMissBoxClick}
         material={
           new THREE.MeshLambertMaterial({
             color: 0xfffeee,
             transparent: true,
-            opacity: 0.1,
+            opacity: 1,
             side: THREE.BackSide,
           })
         }
       /> */}
       <Ground raycaster={raycaster} plane={plane} />
       {ghostType && (
-        <GhostPlant raycaster={raycaster} plane={plane} camera={cameraRef} />
+        <GhostPlant
+          raycaster={raycaster}
+          plane={plane}
+          camera={cameraRef}
+          // handleMissBoxClick={handleMissBoxClick}
+        />
       )}
       {children()}
       {/* <Pointer /> */}

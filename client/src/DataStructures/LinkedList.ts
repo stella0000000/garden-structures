@@ -92,6 +92,10 @@ export class LinkedList {
     current.next = null;
   }
 
+  // [ 0 1 2 3 4 5 *6 7 8 9* ]
+  // length = 10
+  // delete @ idx 5
+
   // update node at index
   intoArray(): number[] {
     const out = [];

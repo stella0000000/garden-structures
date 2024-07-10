@@ -118,6 +118,10 @@ export class DoublyCircularlyLinkedList {
     this.length--;
   }
 
+  getLength() {
+    return this.length;
+  }
+
   // update node at index
   intoArray(): number[] {
     let curr = this.dummyHead.next;

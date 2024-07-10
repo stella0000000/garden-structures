@@ -15,6 +15,8 @@ type FlowerProps = {
   rotation: Vector3;
 };
 
+export const yPosOffset = 5;
+
 const Flower = ({ root, position, rotation, plantIndex }: FlowerProps) => {
   const {
     activePlant,
@@ -42,7 +44,7 @@ const Flower = ({ root, position, rotation, plantIndex }: FlowerProps) => {
     <Node3D
       value={2}
       key={-1}
-      position={new Vector3(0, 0, 0.3)}
+      position={new Vector3(0, yPosOffset, 0.3)}
       rotation={new Vector3(1.5, 0, 0)}
       geometry={cone}
       cylinderArgs={[1, 2, 0.5]}
@@ -68,7 +70,8 @@ const Flower = ({ root, position, rotation, plantIndex }: FlowerProps) => {
             (nodeValue * 2 - 1.5) *
               Math.cos(((2 * Math.PI) / root.length) * nodeIndex),
             (nodeValue * 2 - 1.5) *
-              Math.sin(((2 * Math.PI) / root.length) * nodeIndex),
+              Math.sin(((2 * Math.PI) / root.length) * nodeIndex) +
+              yPosOffset,
             nodeIndex % 2 === 0 ? 0.05 : -0.05
           )
         }

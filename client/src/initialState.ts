@@ -65,7 +65,7 @@ const testingFlower1: FlowerData = {
   _id: "prettyflower1",
   kind: "flower",
   data: CircularlyLinkedListFromArray([2, 2, 2, 2, 2, 2]),
-  position: new Vector3(12, 4, 2),
+  position: new Vector3(12, 0, 2),
   rotation: new Vector3(0, 0, 0),
 };
 
