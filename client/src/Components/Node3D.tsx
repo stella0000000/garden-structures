@@ -58,12 +58,9 @@ const Node3D = ({
         setIsHighlighted(false);
       }}
       onPointerMissed={(e: MouseEvent) => {
-        console.log({ menuMode });
-        if (menuMode === MenuMode.NONE) {
-          e.stopPropagation();
-          isSelected && deselectAllPlants();
-          isSelected && deselectAllNodes();
-        }
+        e.stopPropagation();
+        isSelected && deselectAllPlants();
+        isSelected && deselectAllNodes();
       }}
       onPointerDown={(e: ThreeEvent<PointerEvent>) => {
         e.stopPropagation();
