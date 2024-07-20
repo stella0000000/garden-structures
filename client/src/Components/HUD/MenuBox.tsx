@@ -54,7 +54,7 @@ export const MenuBox = ({ children, onExit }: MenuBoxProps) => {
   return (
     <MenuWrapper>
       <Scrim onClick={onExit} />
-      <Container>
+      <Container onClick={(e) => e.stopPropagation()}>
         <CloseX onClick={onExit}>X</CloseX>
         {children}
       </Container>

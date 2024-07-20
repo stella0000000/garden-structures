@@ -50,7 +50,6 @@ const Flower = ({ root, position, rotation, plantIndex }: FlowerProps) => {
       cylinderArgs={[1, 2, 0.5]}
       isSelected={false}
       defaultMaterial={defaultFlowerHubMaterial}
-      deselectAllNodes={deselectAllNodes}
       selectParentPlant={selectThisFlower}
       selectNode={deselectAllNodes}
     />
@@ -79,7 +78,6 @@ const Flower = ({ root, position, rotation, plantIndex }: FlowerProps) => {
         geometry={cylinder}
         cylinderArgs={[nodeValue, nodeValue, 0.1]}
         isSelected={isNodeSelected}
-        deselectAllNodes={deselectAllNodes}
         selectNode={() => selectNode(nodeIndex)}
         defaultMaterial={defaultFlowerPetalMaterial}
         selectParentPlant={selectThisFlower}

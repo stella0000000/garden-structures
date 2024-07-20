@@ -68,7 +68,6 @@ const BambooStalk = ({
       cylinderArgs={[1, 2, 1]}
       isSelected={false}
       defaultMaterial={defaultBambooRootMaterial}
-      deselectAllNodes={deselectAllNodes}
       selectParentPlant={selectThisBamboo}
       selectNode={deselectAllNodes}
     />
@@ -90,7 +89,6 @@ const BambooStalk = ({
           isSelected={isNodeSelected}
           selectParentPlant={selectThisBamboo}
           defaultMaterial={defaultBambooMaterial}
-          deselectAllNodes={deselectAllNodes}
           selectNode={() => selectNode(nodeIndex)}
         />
       );

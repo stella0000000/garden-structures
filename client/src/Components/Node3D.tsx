@@ -13,7 +13,6 @@ export type Node3DProps = {
   cylinderArgs: [number, number, number];
   isSelected: boolean;
   defaultMaterial: THREE.Material;
-  deselectAllNodes: () => void;
   selectNode: () => void;
   selectParentPlant: () => void;
   opacity?: number;
@@ -23,7 +22,6 @@ export type Node3DProps = {
 const Node3D = ({
   position,
   rotation,
-  deselectAllNodes,
   selectNode,
   selectParentPlant,
   isSelected,
@@ -32,8 +30,18 @@ const Node3D = ({
   defaultMaterial,
 }: Node3DProps) => {
   const meshRef = useRef<THREE.Mesh>(null!);
-  const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
-  const { deselectAllPlants, menuMode } = useGardenStore();
+  const [isHovered, setIsHovered] = useState<boolean>(false);
+  const { menuMode, ghostType } = useGardenStore();
+
+  const acceptingPointerActions = menuMode == MenuMode.NONE && !ghostType;
+
+  const handleNodeClick = (e: ThreeEvent<MouseEvent>) => {
+    if (acceptingPointerActions) {
+      e.stopPropagation();
+      selectParentPlant();
+      selectNode();
+    }
+  };
 
   return (
     <mesh
@@ -44,29 +52,20 @@ const Node3D = ({
       material={
         isSelected
           ? selectedMaterial
-          : isHighlighted
+          : isHovered && acceptingPointerActions
           ? hoveredMaterial
           : defaultMaterial
       }
       geometry={geometry}
       onPointerEnter={(e: ThreeEvent<PointerEvent>) => {
         e.stopPropagation();
-        setIsHighlighted(true);
+        setIsHovered(true);
       }}
       onPointerLeave={(e: ThreeEvent<PointerEvent>) => {
         e.stopPropagation();
-        setIsHighlighted(false);
+        setIsHovered(false);
       }}
-      onPointerMissed={(e: MouseEvent) => {
-        e.stopPropagation();
-        isSelected && deselectAllPlants();
-        isSelected && deselectAllNodes();
-      }}
-      onPointerDown={(e: ThreeEvent<PointerEvent>) => {
-        e.stopPropagation();
-        selectParentPlant();
-        selectNode();
-      }}
+      onPointerDown={handleNodeClick}
     ></mesh>
   );
 };

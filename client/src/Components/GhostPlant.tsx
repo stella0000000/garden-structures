@@ -84,6 +84,8 @@ const GhostPlant = ({ raycaster, plane, camera }: GhostPlantProps) => {
           rotation={[rotation[0], rotation[1], rotation[2]]}
         />
       )}
+
+      {/* background click-catcher */}
       <Box
         args={[1000, 1000, 1000]}
         visible={true}
