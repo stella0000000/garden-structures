@@ -9,14 +9,20 @@ import { Box } from "@react-three/drei";
 import * as THREE from "three";
 
 type GhostPlantProps = {
+  ghostType: PlantName;
   raycaster: React.MutableRefObject<THREE.Raycaster | null>;
   plane: React.MutableRefObject<THREE.Mesh | null>;
   camera: React.MutableRefObject<Camera | null>;
   // handleMissBoxClick: (e: ThreeEvent<PointerEvent>) => void;
 };
 
-const GhostPlant = ({ raycaster, plane, camera }: GhostPlantProps) => {
-  const { ghostType, menuMode, isPointerLock } = useGardenStore();
+const GhostPlant = ({
+  ghostType,
+  raycaster,
+  plane,
+  camera,
+}: GhostPlantProps) => {
+  const { menuMode, isPointerLock } = useGardenStore();
   const [position, setPosition] = useState<[number, number, number]>([0, 0, 0]);
   const [rotation, setRotation] = useState<[number, number, number]>([0, 0, 0]);
   const { addPlant: appendPlant } = useGardenStore();
@@ -36,13 +42,11 @@ const GhostPlant = ({ raycaster, plane, camera }: GhostPlantProps) => {
   };
 
   const handleInsert = () => {
-    if (ghostType) {
-      appendPlant(
-        ghostType,
-        [position[0], position[1] + 5, position[2]],
-        rotation
-      );
-    }
+    appendPlant(
+      ghostType,
+      [position[0], position[1] + 5, position[2]],
+      rotation
+    );
   };
 
   useFrame(() => {

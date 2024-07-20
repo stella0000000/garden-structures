@@ -32,6 +32,7 @@ export const PlantControls = () => {
   };
 
   const handleMoveClick = () => {
+    setActiveNode(-1);
     setGhostType(activePlantType);
     setMenuMode(MenuMode.NONE);
   };

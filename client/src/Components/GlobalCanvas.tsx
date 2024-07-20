@@ -114,6 +114,7 @@ const GlobalCanvas = () => {
           raycaster={raycaster}
           plane={plane}
           camera={cameraRef}
+          ghostType={ghostType}
           // handleMissBoxClick={handleMissBoxClick}
         />
       )}
