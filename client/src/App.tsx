@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useGardenStore } from "./gardenStore";
 import { Vector3 } from "three";
 import { LinkedList } from "./DataStructures/LinkedList";
-import { CircularlyLinkedListFromArray } from "./DataStructures/DoublyCircularlyLinkedList";
+import { DoublyCircularlyLinkedListFromArray } from "./DataStructures/DoublyCircularlyLinkedList";
 
 type PlantDBData = {
   _id: string;
@@ -29,7 +29,7 @@ function App() {
     data:
       type === "bamboo"
         ? LinkedList.fromArray(data)
-        : CircularlyLinkedListFromArray(data),
+        : DoublyCircularlyLinkedListFromArray(data),
     position: new Vector3(position[0], position[1], position[2]),
     rotation: new Vector3(rotation[0], rotation[1], rotation[2]),
   });

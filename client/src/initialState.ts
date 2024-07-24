@@ -1,7 +1,7 @@
 import { Vector3 } from "three";
 import {
   DoublyCircularlyLinkedList,
-  CircularlyLinkedListFromArray,
+  DoublyCircularlyLinkedListFromArray,
 } from "./DataStructures/DoublyCircularlyLinkedList";
 import { FlattenedGraph, buildGraph } from "./DataStructures/Graph";
 import { LinkedList } from "./DataStructures/LinkedList";
@@ -64,7 +64,7 @@ const testingBamboo3: BambooStalkData = {
 const testingFlower1: FlowerData = {
   _id: "prettyflower1",
   kind: "flower",
-  data: CircularlyLinkedListFromArray([2, 2, 2, 2, 2, 2]),
+  data: DoublyCircularlyLinkedListFromArray([2, 2, 2, 2, 2, 2]),
   position: new Vector3(12, 0, 2),
   rotation: new Vector3(0, 0, 0),
 };

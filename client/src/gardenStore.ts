@@ -243,18 +243,27 @@ export const useGardenStore = create<StoreState>((set) => ({
   },
 
   deleteAtIdx: (plantType, plantIdx, nodeIdx) => {
-    set(({ plantCollection }) => {
-      let newPlant, newActiveNode;
+    set(({ plantCollection, activeNode }) => {
+      let newPlant;
+      let newActiveNode = activeNode
       if (plantType === PlantName.BAMBOO) {
         const plant = plantCollection[plantIdx] as BambooStalkData;
+
         if (nodeIdx === plant.data.intoArray().length - 1) {
           newActiveNode = plant.data.intoArray().length - 2;
         }
+
         newPlant = deleteAtIdxBamboo(
           plantCollection[plantIdx] as BambooStalkData,
           nodeIdx
         );
       } else {
+        const plant = plantCollection[plantIdx] as FlowerData;
+
+        if (nodeIdx === plant.data.intoArray().length - 1) {
+          newActiveNode = plant.data.intoArray().length - 2;
+        }
+
         newPlant = deleteAtIdxFlower(
           plantCollection[plantIdx] as FlowerData,
           nodeIdx
@@ -268,12 +277,7 @@ export const useGardenStore = create<StoreState>((set) => ({
           data: newPlant,
         },
       };
-
-      // console.log("return", newActiveNode);
-      console.log({
-        plantCollection: Object.values(newState) as PlantCollection,
-        activeNode: newActiveNode,
-      });
+      
       return {
         plantCollection: Object.values(newState) as PlantCollection,
         activeNode: newActiveNode,

@@ -10,6 +10,7 @@ import GhostPlant from "./GhostPlant";
 import Constellation from "./Constellation";
 import { useGardenStore } from "../gardenStore";
 import { HUD } from "./HUD/HUD";
+import { LinkedList } from "../DataStructures/LinkedList";
 
 export const camera = new THREE.PerspectiveCamera(45, 2, 1, 1000);
 
@@ -28,6 +29,8 @@ const GlobalCanvas = () => {
   const updateRaycaster = () => {
     raycaster.current?.setFromCamera(new THREE.Vector2(), cameraRef.current);
   };
+
+  const ghostPlantData = plantData[activePlant];
 
   const handleMissBoxClick = (e: ThreeEvent<PointerEvent>) => {
     console.log("miss box clicked");
@@ -111,6 +114,7 @@ const GlobalCanvas = () => {
       <Ground raycaster={raycaster} plane={plane} />
       {ghostType && (
         <GhostPlant
+          // dataStructure={ghostPlantData}
           raycaster={raycaster}
           plane={plane}
           camera={cameraRef}

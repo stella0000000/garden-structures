@@ -7,8 +7,11 @@ import GhostBamboo from "./GhostBamboo";
 import { useGardenStore, PlantName, MenuMode } from "../gardenStore";
 import { Box } from "@react-three/drei";
 import * as THREE from "three";
+import { LinkedList } from "../DataStructures/LinkedList";
+import { DoublyCircularlyLinkedList } from "../DataStructures/DoublyCircularlyLinkedList";
 
 type GhostPlantProps = {
+  // dataStructure: LinkedList | DoublyCircularlyLinkedList ;
   ghostType: PlantName;
   raycaster: React.MutableRefObject<THREE.Raycaster | null>;
   plane: React.MutableRefObject<THREE.Mesh | null>;
@@ -17,6 +20,7 @@ type GhostPlantProps = {
 };
 
 const GhostPlant = ({
+  // dataStructure,
   ghostType,
   raycaster,
   plane,
@@ -79,11 +83,13 @@ const GhostPlant = ({
     <>
       {ghostType === PlantName.FLOWER ? (
         <GhostFlower
+          // dataStructure={dataStructure as DoublyCircularlyLinkedList}
           position={[position[0], position[1] + 5, position[2]]}
           rotation={[rotation[0], rotation[1], rotation[2]]}
         />
       ) : (
         <GhostBamboo
+          // dataStructure={dataStructure as LinkedList}
           position={[position[0], position[1] + 5, position[2]]}
           rotation={[rotation[0], rotation[1], rotation[2]]}
         />

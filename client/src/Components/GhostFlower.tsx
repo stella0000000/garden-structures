@@ -3,16 +3,26 @@ import { ghostMaterial } from "../materials";
 import { Euler } from "three";
 import { ThreeEvent } from "@react-three/fiber";
 import { yPosOffset } from "./Flower";
+import {
+  DoublyCircularlyLinkedListFromArray,
+  DoublyCircularlyLinkedList,
+} from "../DataStructures/DoublyCircularlyLinkedList";
 
 type GhostFlowerProps = {
+  dataStructure?: DoublyCircularlyLinkedList;
   position: [number, number, number];
   rotation: [number, number, number];
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
 };
 
-const GhostFlower = ({ position, rotation, onClick }: GhostFlowerProps) => {
-  const root = [2, 2, 2, 2, 2, 2];
+const GhostFlower = ({
+  dataStructure = DoublyCircularlyLinkedListFromArray([2, 2, 2, 2, 2, 2]),
+  position,
+  rotation,
+  onClick,
+}: GhostFlowerProps) => {
   const children = [];
+  const dataArray = dataStructure.intoArray();
 
   // const rotationEuler = new Euler(rotation[0], rotation[1], rotation[2]);
   // const rotationQuat = new Quaternion().setFromEuler(rotationEuler);
@@ -37,16 +47,16 @@ const GhostFlower = ({ position, rotation, onClick }: GhostFlowerProps) => {
   );
 
   // petal nodes of the flower
-  root.forEach((nodeValue, index) => {
+  dataArray.forEach((nodeValue, index) => {
     children.push(
       <Cylinder
         key={index}
         rotation={new Euler(1.5, 0, 0)}
         position={[
           (nodeValue * 2 - 1.5) *
-            Math.cos(((2 * Math.PI) / root.length) * index),
+            Math.cos(((2 * Math.PI) / dataArray.length) * index),
           (nodeValue * 2 - 1.5) *
-            Math.sin(((2 * Math.PI) / root.length) * index) +
+            Math.sin(((2 * Math.PI) / dataArray.length) * index) +
             yPosOffset,
           index % 2 === 0 ? 0.05 : -0.05,
         ]}

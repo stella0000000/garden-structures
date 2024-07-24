@@ -2,7 +2,7 @@ import { Vector3 } from "three";
 import { LinkedList } from "./DataStructures/LinkedList";
 import { BambooStalkData, FlowerData, PlantCollection } from "./initialState";
 import {
-  CircularlyLinkedListFromArray,
+  DoublyCircularlyLinkedListFromArray,
   DoublyCircularlyLinkedList,
 } from "./DataStructures/DoublyCircularlyLinkedList";
 import { Direction } from "./gardenStore";
@@ -135,7 +135,7 @@ export const newFlower = (
   return {
     _id: crypto.randomUUID(),
     kind: "flower",
-    data: CircularlyLinkedListFromArray([2, 2, 2, 2, 2, 2]),
+    data: DoublyCircularlyLinkedListFromArray([2, 2, 2, 2, 2, 2]),
     position: new Vector3(position[0], position[1], position[2]),
     rotation: new Vector3(rotation[0], rotation[1], rotation[2]),
   } as FlowerData;

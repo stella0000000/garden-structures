@@ -144,11 +144,11 @@ export class DoublyCircularlyLinkedList {
   }
 
   clone(): DoublyCircularlyLinkedList {
-    return CircularlyLinkedListFromArray(this.intoArray());
+    return DoublyCircularlyLinkedListFromArray(this.intoArray());
   }
 }
 
-export const CircularlyLinkedListFromArray = (
+export const DoublyCircularlyLinkedListFromArray = (
   inputArray: number[]
 ): DoublyCircularlyLinkedList => {
   const list = new DoublyCircularlyLinkedList();
