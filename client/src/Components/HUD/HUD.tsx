@@ -74,9 +74,7 @@ export const HUD = () => {
     }
   }, [menuMode]);
 
-  useEffect(() => {
-    console.log({ activeNode, activePlant, menuMode });
-  }, [activeNode, activePlant, menuMode]);
+  useEffect(() => {}, [activeNode, activePlant, menuMode]);
 
   // click anywhere to return to pointerlock if no menus are open
   const handleNoMenuScreenClick = () => {

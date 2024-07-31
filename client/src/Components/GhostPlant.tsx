@@ -1,4 +1,5 @@
-import { ThreeEvent, useFrame } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
+import { Vector3 } from "three";
 import { useState } from "react";
 import GhostFlower from "./GhostFlower";
 
@@ -11,7 +12,7 @@ import { LinkedList } from "../DataStructures/LinkedList";
 import { DoublyCircularlyLinkedList } from "../DataStructures/DoublyCircularlyLinkedList";
 
 type GhostPlantProps = {
-  // dataStructure: LinkedList | DoublyCircularlyLinkedList ;
+  dataStructure: LinkedList | DoublyCircularlyLinkedList | undefined;
   ghostType: PlantName;
   raycaster: React.MutableRefObject<THREE.Raycaster | null>;
   plane: React.MutableRefObject<THREE.Mesh | null>;
@@ -20,13 +21,23 @@ type GhostPlantProps = {
 };
 
 const GhostPlant = ({
-  // dataStructure,
+  dataStructure,
   ghostType,
   raycaster,
   plane,
   camera,
 }: GhostPlantProps) => {
-  const { menuMode, isPointerLock } = useGardenStore();
+  const {
+    menuMode,
+    isPointerLock,
+    deselectAllPlants,
+    setGhostType,
+    isMoveMode,
+    isDataMode,
+    setIsMoveMode,
+    movePlant,
+    activePlant,
+  } = useGardenStore();
   const [position, setPosition] = useState<[number, number, number]>([0, 0, 0]);
   const [rotation, setRotation] = useState<[number, number, number]>([0, 0, 0]);
   const { addPlant: appendPlant } = useGardenStore();
@@ -41,16 +52,23 @@ const GhostPlant = ({
     // ignore click propagating from a menu-closing action
     // ignore click propagating from re-enabling pointerlock
     if (menuMode === MenuMode.NONE && isPointerLock) {
-      handleInsert();
+      if (!isMoveMode) {
+        createNewPlant();
+      } else {
+        dropPlant();
+      }
     }
   };
 
-  const handleInsert = () => {
-    appendPlant(
-      ghostType,
-      [position[0], position[1] + 5, position[2]],
-      rotation
-    );
+  const createNewPlant = () => {
+    appendPlant(ghostType, [position[0], position[1], position[2]], rotation);
+  };
+
+  const dropPlant = () => {
+    movePlant(activePlant, new Vector3(position[0], position[1], position[2]));
+    deselectAllPlants();
+    setGhostType(undefined);
+    setIsMoveMode(false);
   };
 
   useFrame(() => {
@@ -60,7 +78,7 @@ const GhostPlant = ({
     if (intersections.length) {
       setPosition([
         intersections[0].point.x,
-        intersections[0].point.y - 5, // change this, but then doesn't work!
+        intersections[0].point.y,
         intersections[0].point.z,
       ]);
     }
@@ -84,13 +102,13 @@ const GhostPlant = ({
       {ghostType === PlantName.FLOWER ? (
         <GhostFlower
           // dataStructure={dataStructure as DoublyCircularlyLinkedList}
-          position={[position[0], position[1] + 5, position[2]]}
+          position={[position[0], position[1], position[2]]}
           rotation={[rotation[0], rotation[1], rotation[2]]}
         />
       ) : (
         <GhostBamboo
-          // dataStructure={dataStructure as LinkedList}
-          position={[position[0], position[1] + 5, position[2]]}
+          dataStructure={dataStructure as LinkedList}
+          position={[position[0], position[1], position[2]]}
           rotation={[rotation[0], rotation[1], rotation[2]]}
         />
       )}

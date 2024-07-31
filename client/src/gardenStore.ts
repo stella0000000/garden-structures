@@ -11,16 +11,20 @@ import {
   deleteAfterNodeBamboo,
   popBamboo,
   insertNodeBamboo,
-  getGardenWithMovedPlant,
+  movePlantUtil,
+  // getGardenWithMovedPlant,
   // deleteAfterNodeFlower,
 } from "./gardenStoreUtils";
+import { Vector3 } from "three";
 
-export enum Direction {
-  UP,
-  DOWN,
-  LEFT,
-  RIGHT,
-}
+// export enum Direction {
+//   UP,
+//   DOWN,
+//   LEFT,
+//   RIGHT,
+// }
+
+export const newBambooVals = [3];
 
 export enum PlantName {
   BAMBOO = "bamboo",
@@ -83,10 +87,13 @@ interface StoreState {
   isDataMode: boolean;
   setIsDataMode: (arg: boolean) => void;
 
+  isMoveMode: boolean;
+  setIsMoveMode: (arg: boolean) => void;
+
   plantCollection: PlantCollection;
   setPlantCollection: (allPlants: PlantCollection) => void;
 
-  movePlant: (plantIdx: number, direction: Direction) => void;
+  movePlant: (plantIdx: number, newPosition: Vector3) => void;
 
   addPlant: (
     plantType: PlantName,
@@ -129,26 +136,39 @@ export const useGardenStore = create<StoreState>((set) => ({
     set(() => ({ activeNode: idx, isPointerLock: idx !== -1 && false })),
   deselectAllNodes: () => {
     set(() => ({ activeNode: -1 }));
-    console.log("deselecting all nodes!");
   },
 
   isDataMode: false,
   setIsDataMode: (arg) => set(() => ({ isDataMode: arg })),
 
+  isMoveMode: false,
+  setIsMoveMode: (arg) => set(() => ({ isMoveMode: arg })),
+
   plantCollection: initialState,
   setPlantCollection: (allPlants) => set({ plantCollection: allPlants }),
 
-  movePlant: (plantIdx, direction) => {
+  // movePlant: (plantIdx, direction) => {
+  //   set(({ plantCollection }) => {
+  //     const newPlantCollection = getGardenWithMovedPlant(
+  //       plantCollection,
+  //       plantIdx,
+  //       direction
+  //     );
+
+  //     return {
+  //       plantCollection: newPlantCollection,
+  //     };
+  //   });
+  // },
+
+  movePlant: (plantIdx, newPosition) => {
     set(({ plantCollection }) => {
-      const newPlantCollection = getGardenWithMovedPlant(
+      const newPlantCollection = movePlantUtil(
         plantCollection,
         plantIdx,
-        direction
+        newPosition
       );
-
-      return {
-        plantCollection: newPlantCollection,
-      };
+      return { plantCollection: newPlantCollection };
     });
   },
 
@@ -245,7 +265,7 @@ export const useGardenStore = create<StoreState>((set) => ({
   deleteAtIdx: (plantType, plantIdx, nodeIdx) => {
     set(({ plantCollection, activeNode }) => {
       let newPlant;
-      let newActiveNode = activeNode
+      let newActiveNode = activeNode;
       if (plantType === PlantName.BAMBOO) {
         const plant = plantCollection[plantIdx] as BambooStalkData;
 
@@ -277,7 +297,7 @@ export const useGardenStore = create<StoreState>((set) => ({
           data: newPlant,
         },
       };
-      
+
       return {
         plantCollection: Object.values(newState) as PlantCollection,
         activeNode: newActiveNode,

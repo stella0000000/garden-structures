@@ -21,6 +21,9 @@ export const PlantControls = () => {
     setGhostType,
 
     setMenuMode,
+
+    // isMoveMode,
+    setIsMoveMode,
   } = useGardenStore();
 
   const activePlantType = plantCollection[activePlant]?.kind as PlantName;
@@ -34,6 +37,7 @@ export const PlantControls = () => {
   const handleMoveClick = () => {
     setActiveNode(-1);
     setGhostType(activePlantType);
+    setIsMoveMode(true);
     setMenuMode(MenuMode.NONE);
   };
 

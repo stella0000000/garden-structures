@@ -5,56 +5,69 @@ import {
   DoublyCircularlyLinkedListFromArray,
   DoublyCircularlyLinkedList,
 } from "./DataStructures/DoublyCircularlyLinkedList";
-import { Direction } from "./gardenStore";
+import { newBambooVals } from "./gardenStore";
+// import { Direction } from "./gardenStore";
 
-export const getGardenWithMovedPlant = (
+export const movePlantUtil = (
   plantCollection: PlantCollection,
   plantIdx: number,
-  direction: Direction
-): PlantCollection => {
+  newPosition: Vector3
+) => {
   if (plantIdx === undefined) {
     throw Error("Please select a plant to move a plant.");
   }
-
-  const currentPlant = plantCollection[plantIdx];
-  let currentPosition = currentPlant.position.clone();
-
-  if (direction === Direction.UP) {
-    currentPosition.add(new Vector3(0, 0, -1));
-  } else if (direction === Direction.DOWN) {
-    currentPosition.add(new Vector3(0, 0, 1));
-  } else if (direction === Direction.LEFT) {
-    currentPosition.add(new Vector3(-1, 0, 0));
-  } else if (direction === Direction.RIGHT) {
-    currentPosition.add(new Vector3(1, 0, 0));
-  }
-
-  if (currentPlant.kind === "bamboo") {
-    const newPlant: BambooStalkData = {
-      _id: currentPlant._id,
-      kind: currentPlant.kind,
-      data: currentPlant.data,
-      position: currentPosition,
-      rotation: currentPlant.rotation,
-    };
-    plantCollection[plantIdx] = newPlant;
-
-    return [...plantCollection];
-  } else if (currentPlant.kind === "flower") {
-    const newPlant: FlowerData = {
-      _id: currentPlant._id,
-      kind: currentPlant.kind,
-      data: currentPlant.data,
-      position: currentPosition,
-      rotation: currentPlant.rotation,
-    };
-    plantCollection[plantIdx] = newPlant;
-
-    return [...plantCollection];
-  } else {
-    throw Error("Invalid action - plant accessed by index is wrong type.");
-  }
+  plantCollection[plantIdx].position = newPosition;
+  return [...plantCollection];
 };
+
+// export const getGardenWithMovedPlant = (
+//   plantCollection: PlantCollection,
+//   plantIdx: number,
+//   direction: Direction
+// ): PlantCollection => {
+//   if (plantIdx === undefined) {
+//     throw Error("Please select a plant to move a plant.");
+//   }
+
+//   const currentPlant = plantCollection[plantIdx];
+//   let currentPosition = currentPlant.position.clone();
+
+//   if (direction === Direction.UP) {
+//     currentPosition.add(new Vector3(0, 0, -1));
+//   } else if (direction === Direction.DOWN) {
+//     currentPosition.add(new Vector3(0, 0, 1));
+//   } else if (direction === Direction.LEFT) {
+//     currentPosition.add(new Vector3(-1, 0, 0));
+//   } else if (direction === Direction.RIGHT) {
+//     currentPosition.add(new Vector3(1, 0, 0));
+//   }
+
+//   if (currentPlant.kind === "bamboo") {
+//     const newPlant: BambooStalkData = {
+//       _id: currentPlant._id,
+//       kind: currentPlant.kind,
+//       data: currentPlant.data,
+//       position: currentPosition,
+//       rotation: currentPlant.rotation,
+//     };
+//     plantCollection[plantIdx] = newPlant;
+
+//     return [...plantCollection];
+//   } else if (currentPlant.kind === "flower") {
+//     const newPlant: FlowerData = {
+//       _id: currentPlant._id,
+//       kind: currentPlant.kind,
+//       data: currentPlant.data,
+//       position: currentPosition,
+//       rotation: currentPlant.rotation,
+//     };
+//     plantCollection[plantIdx] = newPlant;
+
+//     return [...plantCollection];
+//   } else {
+//     throw Error("Invalid action - plant accessed by index is wrong type.");
+//   }
+// };
 
 export const popBamboo = (bamboo: BambooStalkData) => {
   const oldBambooData = bamboo.data as LinkedList;
@@ -122,7 +135,7 @@ export const newBamboo = (
   return {
     _id: crypto.randomUUID(),
     kind: "bamboo",
-    data: LinkedList.fromArray([2, 2, 2, 2, 2, 2]),
+    data: LinkedList.fromArray(newBambooVals),
     position: new Vector3(position[0], position[1], position[2]),
     rotation: new Vector3(rotation[0], rotation[1], rotation[2]),
   } as BambooStalkData;

@@ -1,6 +1,5 @@
 import "./App.css";
 import GlobalCanvas from "./Components/GlobalCanvas";
-import { useEffect } from "react";
 import { useGardenStore } from "./gardenStore";
 import { Vector3 } from "three";
 import { LinkedList } from "./DataStructures/LinkedList";

@@ -3,6 +3,7 @@ import { ghostMaterial } from "../materials";
 import { Vector3 } from "three";
 import { ThreeEvent } from "@react-three/fiber";
 import { LinkedList } from "../DataStructures/LinkedList";
+import { newBambooVals } from "../gardenStore";
 
 type GhostBambooProps = {
   dataStructure?: LinkedList;
@@ -12,19 +13,21 @@ type GhostBambooProps = {
 };
 
 const GhostBamboo = ({
-  dataStructure = LinkedList.fromArray([2, 2, 2, 2, 2]),
+  dataStructure = LinkedList.fromArray(newBambooVals),
   position,
   rotation,
   onClick,
 }: GhostBambooProps) => {
   let cumulativeHeight = 0;
 
+  // console.log({ dataStructure });
+
   const children = [];
   // root
   children.push(
     <Cylinder
       key={-1}
-      position={new Vector3(0, -0.5, 0)}
+      position={new Vector3(0, 0.5, 0)}
       args={[1, 2, 1]}
       material={ghostMaterial}
       onClick={onClick}

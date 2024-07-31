@@ -11,6 +11,7 @@ import Constellation from "./Constellation";
 import { useGardenStore } from "../gardenStore";
 import { HUD } from "./HUD/HUD";
 import { LinkedList } from "../DataStructures/LinkedList";
+import { DoublyCircularlyLinkedList } from "../DataStructures/DoublyCircularlyLinkedList";
 
 export const camera = new THREE.PerspectiveCamera(45, 2, 1, 1000);
 
@@ -20,6 +21,7 @@ const GlobalCanvas = () => {
     deselectAllPlants,
     plantCollection: plantData,
     ghostType,
+    isMoveMode,
   } = useGardenStore();
 
   const cameraRef = useRef(camera);
@@ -30,18 +32,20 @@ const GlobalCanvas = () => {
     raycaster.current?.setFromCamera(new THREE.Vector2(), cameraRef.current);
   };
 
-  const ghostPlantData = plantData[activePlant];
+  const ghostPlantData = isMoveMode ? plantData[activePlant] : undefined;
 
-  const handleMissBoxClick = (e: ThreeEvent<PointerEvent>) => {
-    console.log("miss box clicked");
-    // if (!isPointerLock) {
-    //   setIsPointerLock(true);
-    // }
-  };
+  // const handleMissBoxClick = (e: ThreeEvent<PointerEvent>) => {
+  //   console.log("miss box clicked");
+  //   // if (!isPointerLock) {
+  //   //   setIsPointerLock(true);
+  //   // }
+  // };
 
   // renders the appropriate JSX for each plant in the PlantData based on type
   const children = () => {
     return plantData.map((plant, index) => {
+      if (isMoveMode && index === activePlant) return;
+
       switch (plant.kind) {
         case "bamboo": {
           return (
@@ -114,12 +118,13 @@ const GlobalCanvas = () => {
       <Ground raycaster={raycaster} plane={plane} />
       {ghostType && (
         <GhostPlant
-          // dataStructure={ghostPlantData}
+          dataStructure={
+            ghostPlantData?.data as LinkedList | DoublyCircularlyLinkedList
+          }
           raycaster={raycaster}
           plane={plane}
           camera={cameraRef}
           ghostType={ghostType}
-          // handleMissBoxClick={handleMissBoxClick}
         />
       )}
       {children()}
